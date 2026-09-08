@@ -1,0 +1,42 @@
+import SearchBar from "./SearchBar";
+import Logo from "./Logo";
+import { SettingsIcon, SmileyIcon, LogoutIcon, PlusIcon } from "./icons";
+import { IconButton, Tone } from "./IconButton";
+
+interface HeaderProps {
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+}
+
+export default function Header({ searchValue, onSearchChange }: HeaderProps) {
+
+  return (
+    <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
+      <div className="justify-self-start">
+        <Logo />
+      </div>
+
+      <div className="flex items-center gap-5 justify-center">
+        <IconButton>
+          <SettingsIcon />
+        </IconButton>
+
+        <SearchBar value={searchValue} onChange={onSearchChange} />
+
+        <IconButton tone={Tone.Accent}>
+          <SmileyIcon />
+        </IconButton>
+
+        <IconButton>
+          <LogoutIcon />
+        </IconButton>
+      </div>
+
+      <div className="justify-self-end">
+        <IconButton>
+          <PlusIcon />
+        </IconButton>
+      </div>
+    </header>
+  );
+}
