@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/lib/stores/auth.store';
+import { useAuthStore } from '@/lib/stores';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);

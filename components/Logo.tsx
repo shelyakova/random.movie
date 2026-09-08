@@ -5,10 +5,21 @@ const readexPro = Readex_Pro({
   weight: "600",
 });
 
-export default function Logo() {
+export enum LogoSize {
+  Small = 'small',
+  Large = 'large',
+}
+
+interface LogoProps {
+  size?: LogoSize;
+}
+
+export default function Logo({ size = LogoSize.Small }: LogoProps) {
+  const sizeClasses = size === LogoSize.Large ? 'text-[96px] leading-[83px]' : 'text-[36px] leading-[36px]';
+
   return (
     <h1
-      className={`${readexPro.className} mb-10 text-left text-[96px] leading-[83px] font-semibold text-black dark:text-white`}
+      className={`${readexPro.className} text-left ${sizeClasses} font-semibold text-black dark:text-white`}
     >
       The
       <br />

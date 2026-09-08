@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { FieldErrors, useForm } from "react-hook-form";
-import FormInput from "@/components/FormInput";
-import Button from "@/components/Button";
+import { FormInput, Button } from "@/components";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuthStore } from "@/lib/stores/auth.store";
+import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/api-client";
 
