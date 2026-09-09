@@ -1,6 +1,7 @@
-import FilmCard, { Film } from "./FilmCard";
+import FilmCard from "./FilmCard";
 import EmptyState from "./EmptyState";
 import { ChevronRightIcon } from "./icons";
+import { Film } from "@/lib/types";
 
 interface FilmSectionProps {
   title: string;

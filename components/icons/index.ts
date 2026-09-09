@@ -1,6 +1,9 @@
 export { ChevronRightIcon } from "./ChevronRightIcon";
 export { CloseIcon } from "./CloseIcon";
 export { EditIcon } from "./EditIcon";
+export { EyeIcon } from "./EyeIcon";
+export { EyeOffIcon } from "./EyeOffIcon";
+export { ImagePlaceholderIcon } from "./ImagePlaceholderIcon";
 export { LogoutIcon } from "./LogoutIcon";
 export { NoData } from "./NoData";
 export { PlusIcon } from "./PlusIcon";

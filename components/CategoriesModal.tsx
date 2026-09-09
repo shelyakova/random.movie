@@ -8,6 +8,8 @@ import { IconButton, Tone } from "./IconButton";
 import { PlusIcon, EditIcon } from "./icons";
 import { useCategories, useCreateCategory, useDeleteCategory, useEditCategory } from "@/hooks/useCategories";
 import { Category } from "@/lib/types/category";
+import { ApiError } from "@/lib/api";
+import ErrorModal from "./ErrorModal";
 
 interface CategoriesModalProps {
   onEdit?: () => void;
@@ -17,6 +19,7 @@ interface CategoriesModalProps {
 export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categoryInputValue, setCategoryInputValue] = useState("");
+  const [blockedByFilms, setBlockedByFilms] = useState<string[] | null>(null);
 
   const toggleCategory = (category: Category) => {
     setSelectedCategory((prev) => (prev === category ? null : category));
@@ -33,7 +36,7 @@ export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProp
 
   const handleCreate = () => {
     createCategory.mutate(
-      { name: categoryInputValue },
+      categoryInputValue,
       { onSuccess: () => setCategoryInputValue("") },
     );
   };
@@ -53,8 +56,9 @@ export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProp
   const handleDelete = () => {
     selectedCategory && deleteCategory.mutate(selectedCategory.id, {
       onError: (error) => {
-        if (error.status === 403) {
-          // тут покажете повідомлення про прив'язані фільми
+        if (error instanceof ApiError && error.status === 403) {
+          const films = (error.body as { films?: string[] })?.films ?? [];
+          setBlockedByFilms(films);
         }
       },
     });
@@ -111,6 +115,13 @@ export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProp
           <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60">
             <LoadingSpinner />
           </div>
+        )}
+        {blockedByFilms && (
+          <ErrorModal
+            title={'You have a film(s) in this category. Please delete this category from the film(s) first.'}
+            description={blockedByFilms.join(', ')}
+            onClose={() => setBlockedByFilms(null)}
+          />
         )}
       </>
     </Modal>
