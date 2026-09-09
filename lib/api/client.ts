@@ -2,11 +2,13 @@ import { useAuthStore } from "../stores";
 
 export class ApiError extends Error {
     status: number;
+    body?: unknown;
 
-    constructor(status: number, message: string) {
+    constructor(status: number, message: string, body?: unknown) {
         super(message);
         this.name = "ApiError";
         this.status = status;
+        this.body = body;
     }
 }
 
@@ -43,7 +45,8 @@ export async function authorizedFetch<TResponse>(path: string, options: RequestI
     }
 
     if (!response.ok) {
-        throw new ApiError(response.status, `Request to ${path} failed with status ${response.status}`);
+        const body = await response.json().catch(() => null);
+        throw new ApiError(response.status, body?.message ?? `Request to ${path} failed`, body);
     }
 
     return response.json();

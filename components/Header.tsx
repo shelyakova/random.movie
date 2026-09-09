@@ -7,9 +7,10 @@ interface HeaderProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
   onOpenCategoriesModal: () => void;
+  onOpenFilmModal: () => void;
 }
 
-export default function Header({ searchValue, onSearchChange, onOpenCategoriesModal }: HeaderProps) {
+export default function Header({ searchValue, onSearchChange, onOpenCategoriesModal, onOpenFilmModal }: HeaderProps) {
 
   return (
     <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
@@ -34,7 +35,7 @@ export default function Header({ searchValue, onSearchChange, onOpenCategoriesMo
       </div>
 
       <div className="justify-self-end">
-        <IconButton>
+        <IconButton onClick={onOpenFilmModal}>
           <PlusIcon />
         </IconButton>
       </div>

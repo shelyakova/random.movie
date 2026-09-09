@@ -19,7 +19,7 @@ export function useCreateCategory() {
 export function useEditCategory() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, name }: { id: number; name: string }) => editCategory({ name }, id),
+        mutationFn: ({ id, name }: { id: number; name: string }) => editCategory(name, id),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['categories'] }),
     });
 }

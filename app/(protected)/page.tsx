@@ -1,12 +1,13 @@
 'use client';
 
-import { Header, FilmSection, CategoriesModal, LoadingSpinner } from "@/components";
+import { Header, FilmSection, CategoriesModal, LoadingSpinner, FilmModal } from "@/components";
 import { useFilmsSection, useDebounce } from "@/hooks";
 import { useState } from "react";
 
 export default function Home() {
   const [searchInput, setSearchInput] = useState('');
   const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
+  const [isOpenFilmModal, setIsOpenFilmModal] = useState(false);
 
   const debouncedSearch = useDebounce(searchInput, 500);
 
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-100 dark:bg-black px-20">
-      <Header searchValue={searchInput} onSearchChange={setSearchInput} onOpenCategoriesModal={() => setIsOpenCategoryModal(true)} />
+      <Header searchValue={searchInput} onSearchChange={setSearchInput} onOpenCategoriesModal={() => setIsOpenCategoryModal(true)} onOpenFilmModal={() => setIsOpenFilmModal(true)} />
 
       <main className="flex flex-col gap-8 pb-10">
         <FilmSection
@@ -39,6 +40,7 @@ export default function Home() {
       {isLoading && <LoadingSpinner />}
 
       {isOpenCategoryModal && <CategoriesModal onClose={() => setIsOpenCategoryModal(false)} />}
+      {isOpenFilmModal && <FilmModal onClose={() => setIsOpenFilmModal(false)} />}
     </div>
   );
 }
