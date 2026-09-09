@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchFilms } from '@/lib/api-client';
+import { fetchFilms } from '@/lib/api';
 
 export function useFilmsSection(isWatched: boolean, search: string) {
     return useInfiniteQuery({

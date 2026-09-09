@@ -7,7 +7,7 @@ import { registerSchema, RegisterSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/lib/api-client";
+import { registerUser } from "@/lib/api";
 
 export default function RegisterPage() {
   const {

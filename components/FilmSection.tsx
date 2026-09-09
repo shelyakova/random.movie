@@ -1,6 +1,5 @@
 import FilmCard, { Film } from "./FilmCard";
 import EmptyState from "./EmptyState";
-import LoadingSpinner from "./LoadingSpinner";
 import { ChevronRightIcon } from "./icons";
 
 interface FilmSectionProps {
@@ -18,9 +17,7 @@ export default function FilmSection({ title, films, onMore, hasMore, isLoading }
         {title}
       </h2>
 
-      {films.length === 0 && isLoading ? (
-        <LoadingSpinner />
-      ) : films.length === 0 ? (
+      {films.length === 0 ? (
         <EmptyState message="No films found" />
       ) : (
         <div className="relative">

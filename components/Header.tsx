@@ -6,9 +6,10 @@ import { IconButton, Tone } from "./IconButton";
 interface HeaderProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
+  onOpenCategoriesModal: () => void;
 }
 
-export default function Header({ searchValue, onSearchChange }: HeaderProps) {
+export default function Header({ searchValue, onSearchChange, onOpenCategoriesModal }: HeaderProps) {
 
   return (
     <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
@@ -17,7 +18,7 @@ export default function Header({ searchValue, onSearchChange }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-5 justify-center">
-        <IconButton>
+        <IconButton onClick={onOpenCategoriesModal}>
           <SettingsIcon />
         </IconButton>
 

@@ -1,0 +1,118 @@
+import { useState } from "react";
+import Modal from "./Modal";
+import Tag, { TagRadius } from "./Tag";
+import Button from "./Button";
+import FormInput from "./FormInput";
+import LoadingSpinner from "./LoadingSpinner";
+import { IconButton, Tone } from "./IconButton";
+import { PlusIcon, EditIcon } from "./icons";
+import { useCategories, useCreateCategory, useDeleteCategory, useEditCategory } from "@/hooks/useCategories";
+import { Category } from "@/lib/types/category";
+
+interface CategoriesModalProps {
+  onEdit?: () => void;
+  onClose?: () => void;
+}
+
+export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProps) {
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [categoryInputValue, setCategoryInputValue] = useState("");
+
+  const toggleCategory = (category: Category) => {
+    setSelectedCategory((prev) => (prev === category ? null : category));
+    setCategoryInputValue((prev) => (prev === category.name ? "" : category.name));
+  };
+
+  const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
+
+  const createCategory = useCreateCategory();
+  const deleteCategory = useDeleteCategory();
+  const editCategory = useEditCategory();
+
+  const isLoading = isCategoriesLoading || createCategory.isPending || deleteCategory.isPending || editCategory.isPending;
+
+  const handleCreate = () => {
+    createCategory.mutate(
+      { name: categoryInputValue },
+      { onSuccess: () => setCategoryInputValue("") },
+    );
+  };
+
+  const handleEdit = () => {
+    selectedCategory && editCategory.mutate(
+      { id: selectedCategory.id, name: categoryInputValue },
+      {
+        onSuccess: () => {
+          setCategoryInputValue("");
+          setSelectedCategory(null);
+        }
+      },
+    );
+  };
+
+  const handleDelete = () => {
+    selectedCategory && deleteCategory.mutate(selectedCategory.id, {
+      onError: (error) => {
+        if (error.status === 403) {
+          // тут покажете повідомлення про прив'язані фільми
+        }
+      },
+    });
+  };
+
+  return (
+    <Modal
+      title="Edit categories"
+      onEdit={onEdit}
+      onClose={onClose}
+      className="h-[80vh]"
+      footer={
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <FormInput
+              placeholder="Add new category"
+              className="flex-1"
+              value={categoryInputValue}
+              onChange={(e) => setCategoryInputValue(e.target.value)}
+            />
+            <IconButton
+              disabled={categoryInputValue.length < 3 || createCategory.isPending || categoryInputValue === selectedCategory?.name}
+              tone={Tone.Accent}
+              onClick={selectedCategory ? handleEdit : handleCreate}
+            >
+              {selectedCategory ? <EditIcon /> : <PlusIcon />}
+            </IconButton>
+          </div>
+
+          <Button
+            disabled={selectedCategory === null || deleteCategory.isPending}
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        </div>
+      }
+    >
+      <>
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Pick categories:</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <Tag
+              key={category.id}
+              radius={category.name.length > 20 ? TagRadius.Lg : TagRadius.Full}
+              selected={selectedCategory?.id === category.id}
+              onClick={() => toggleCategory(category)}
+            >
+              {category.name}
+            </Tag>
+          ))}
+        </div>
+        {isLoading && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60">
+            <LoadingSpinner />
+          </div>
+        )}
+      </>
+    </Modal>
+  );
+}
