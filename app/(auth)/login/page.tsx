@@ -7,7 +7,7 @@ import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/lib/api-client";
+import { loginUser } from "@/lib/api";
 
 export default function LoginPage() {
   const {
