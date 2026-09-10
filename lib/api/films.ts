@@ -1,6 +1,6 @@
 
 import { authorizedFetch } from "./client";
-import { FilmSchema } from "../schemas/film.schema";
+import { EditFilmSchema, FilmSchema } from "../schemas/film.schema";
 import { Film } from "../types";
 
 export function fetchFilms(params: {
@@ -28,7 +28,7 @@ export function createFilm(data: FilmSchema) {
     return authorizedFetch<Film>("/film/create", { method: "POST", body: JSON.stringify(data) });
 }
 
-export function editFilm(data: FilmSchema, filmId: number) {
+export function editFilm(data: EditFilmSchema, filmId: number) {
     return authorizedFetch<Film>(`/film/${filmId}`, { method: "PATCH", body: JSON.stringify(data) });
 }
 

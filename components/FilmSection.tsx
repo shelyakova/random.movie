@@ -2,6 +2,7 @@ import FilmCard from "./FilmCard";
 import EmptyState from "./EmptyState";
 import { ChevronRightIcon } from "./icons";
 import { Film } from "@/lib/types";
+import Link from "next/link";
 
 interface FilmSectionProps {
   title: string;
@@ -24,7 +25,9 @@ export default function FilmSection({ title, films, onMore, hasMore, isLoading }
         <div className="relative">
           <div className="flex gap-3 overflow-hidden">
             {films.map((film) => (
-              <FilmCard key={film.name} film={film} />
+              <Link key={film.name} href={`/film/${film.id}`}>
+                <FilmCard key={film.name} film={film} />
+              </Link>
             ))}
           </div>
 
