@@ -9,7 +9,7 @@ import { PlusIcon, EditIcon } from "./icons";
 import { useCategories, useCreateCategory, useDeleteCategory, useEditCategory } from "@/hooks/useCategories";
 import { Category } from "@/lib/types/category";
 import { ApiError } from "@/lib/api";
-import ErrorModal from "./ErrorModal";
+import ConfirmModal from "./ConfirmModal";
 
 interface CategoriesModalProps {
   onEdit?: () => void;
@@ -117,10 +117,10 @@ export default function CategoriesModal({ onEdit, onClose }: CategoriesModalProp
           </div>
         )}
         {blockedByFilms && (
-          <ErrorModal
-            title={'You have a film(s) in this category. Please delete this category from the film(s) first.'}
-            description={blockedByFilms.join(', ')}
-            onClose={() => setBlockedByFilms(null)}
+          <ConfirmModal
+            title="You have a film(s) in this category. Please delete this category from the film(s) first."
+            message={blockedByFilms.join(', ')}
+            onConfirm={() => setBlockedByFilms(null)}
           />
         )}
       </>

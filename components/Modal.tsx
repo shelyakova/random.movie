@@ -7,10 +7,11 @@ interface ModalProps {
   onClose?: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  hideFooterBorder?: boolean;
   className?: string;
 }
 
-export default function Modal({ title, onEdit, onClose, children, footer, className }: ModalProps) {
+export default function Modal({ title, onEdit, onClose, children, footer, hideFooterBorder = false, className }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className={`relative flex max-h-[90vh] w-full max-w-sm flex-col rounded-3xl bg-white p-6 dark:bg-zinc-900 ${className ?? ""}`}>
@@ -42,9 +43,13 @@ export default function Modal({ title, onEdit, onClose, children, footer, classN
           </div>
         </div>
 
-        <div className="mt-4 flex-1 overflow-y-auto min-h-0">{children}</div>
+        <div className="mt-4 flex flex-1 flex-col overflow-y-auto min-h-0">{children}</div>
 
-        {footer && <div className="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">{footer}</div>}
+        {footer && (
+          <div className={hideFooterBorder ? "mt-4" : "mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800"}>
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

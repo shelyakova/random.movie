@@ -4,21 +4,27 @@ import Textarea from "./Textarea";
 import Button from "./Button";
 import MultiSelectDropdown from "./MultiSelectDropdown";
 import { filmSchema, FilmSchema } from "@/lib/schemas/film.schema";
-import { FieldErrors, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCategories } from "@/hooks/useCategories";
 import { useCreateFilm } from "@/hooks";
 import LoadingSpinner from "./LoadingSpinner";
+import { Film } from "@/lib/types";
+import { useEditFilm } from "@/hooks/useFilms";
 
 interface FilmModalProps {
+  film?: Film;
   onClose?: () => void;
 }
 
-export default function FilmModal({ onClose }: FilmModalProps) {
+export default function FilmModal({ film, onClose }: FilmModalProps) {
+  const isEditMode = Boolean(film);
+
   const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
   const createFilm = useCreateFilm();
+  const editFilm = useEditFilm(film?.id ?? 0);
 
-  const isLoading = isCategoriesLoading || createFilm.isPending;
+  const isLoading = isCategoriesLoading || createFilm.isPending || editFilm.isPending;
 
   const {
     register,
@@ -28,6 +34,19 @@ export default function FilmModal({ onClose }: FilmModalProps) {
     formState: { errors },
   } = useForm<FilmSchema>({
     resolver: zodResolver(filmSchema),
+    defaultValues: film
+      ? {
+        name: film.name,
+        link: film.link,
+        categoryIds: film.categories.map((c) => c.id),
+        seasons: film.seasons ?? undefined,
+        episodes: film.episodes ?? undefined,
+        duration: film.duration ?? undefined,
+        description: film.description ?? undefined,
+        year: film.year ?? undefined,
+        mark: film.mark ?? undefined,
+      }
+      : undefined,
   });
 
   const [name, categoryIds, link] = watch([
@@ -39,19 +58,21 @@ export default function FilmModal({ onClose }: FilmModalProps) {
   const isFilled = Boolean(name?.trim()) && Boolean(link?.trim());
 
   const onSubmit = (data: FilmSchema) => {
-    createFilm.mutate(data, {
-      onSuccess: () => onClose?.(),
-    });
+    if (isEditMode) {
+      editFilm.mutate(data, { onSuccess: () => onClose?.() });
+    } else {
+      createFilm.mutate(data, { onSuccess: () => onClose?.() });
+    }
   };
 
   return (
     <Modal
-      title="Add new film"
+      title={isEditMode ? 'Edit film' : 'Add new film'}
       onClose={onClose}
       className="max-w-[500px]!"
       footer={
         <Button disabled={!isFilled} type="submit" form="add-film-form">
-          Add
+          {isEditMode ? 'Edit' : 'Add'}
         </Button>
       }
     >

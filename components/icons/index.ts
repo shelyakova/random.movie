@@ -1,5 +1,7 @@
+export { CheckIcon } from "./CheckIcon";
 export { ChevronRightIcon } from "./ChevronRightIcon";
 export { CloseIcon } from "./CloseIcon";
+export { DeleteIcon } from "./DeleteIcon";
 export { EditIcon } from "./EditIcon";
 export { EyeIcon } from "./EyeIcon";
 export { EyeOffIcon } from "./EyeOffIcon";

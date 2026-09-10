@@ -1,8 +1,8 @@
 export { default as FilmModal } from "./FilmModal";
 export { default as Button } from "./Button";
 export { default as CategoriesModal } from "./CategoriesModal";
+export { default as ConfirmModal } from "./ConfirmModal";
 export { default as EmptyState } from "./EmptyState";
-export { default as ErrorModal } from "./ErrorModal";
 export { default as FilmCard } from "./FilmCard";
 export { default as FilmSection } from "./FilmSection";
 export { default as FormInput } from "./FormInput";
@@ -12,6 +12,7 @@ export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as Logo, LogoSize } from "./Logo";
 export { default as Modal } from "./Modal";
 export { default as MultiSelectDropdown } from "./MultiSelectDropdown";
+export { default as Poster } from "./Poster";
 export { default as SearchBar } from "./SearchBar";
 export { default as Tag } from "./Tag";
 export { default as Textarea } from "./Textarea";

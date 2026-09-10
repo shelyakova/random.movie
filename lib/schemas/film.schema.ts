@@ -10,6 +10,10 @@ export const filmSchema = z.object({
     year: z.number().int().optional(),
     mark: z.number().min(1).max(10).optional(),
     link: z.string().trim().min(1, "Link is required"),
+    isWatched: z.boolean().optional(),
 });
 
+export const editFilmSchema = filmSchema.partial();
+
 export type FilmSchema = z.infer<typeof filmSchema>;
+export type EditFilmSchema = z.infer<typeof editFilmSchema>;
