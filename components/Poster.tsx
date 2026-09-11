@@ -33,13 +33,13 @@ export default function Poster({
       )}
 
       {showYear && film?.year !== null && (
-        <Tag tone={TagTone.Info} className="absolute top-3 left-3">
+        <Tag tone={TagTone.Info} className="absolute top-3 left-3" readOnly>
           {film?.year}
         </Tag>
       )}
 
       {showMark && film?.mark !== null && (
-        <Tag tone={TagTone.Rating} className="absolute right-3 bottom-3">
+        <Tag tone={TagTone.Rating} className="absolute right-3 bottom-3" readOnly>
           {film?.mark}
         </Tag>
       )}

@@ -58,7 +58,7 @@ export default function FilmPage() {
                     <div className="flex min-w-0 flex-1 flex-col gap-4">
                         <div className="flex flex-wrap gap-2">
                             {film?.categories.map((category) => (
-                                <Tag key={category.id} tone={TagTone.Outline}>
+                                <Tag key={category.id} tone={TagTone.Outline} readOnly>
                                     {category.name}
                                 </Tag>
                             ))}
@@ -87,7 +87,7 @@ export default function FilmPage() {
                         </IconButton>
 
                         <div className="flex-1">
-                            <Button className="!mt-0">Go to page</Button>
+                            <Button className="!mt-0" href={film?.link}>Go to page</Button>
                         </div>
                     </div>
 

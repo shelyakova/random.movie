@@ -29,10 +29,5 @@ export function useDeleteCategory() {
     return useMutation({
         mutationFn: (id: number) => deleteCategory(id),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['categories'] }),
-        onError: (error: Error & { status?: number }) => {
-            if (error.status === 403) {
-                // категорія має прив'язані фільми — той самий сценарій, який ми тестували в Postman
-            }
-        },
     });
 }

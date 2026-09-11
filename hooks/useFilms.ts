@@ -3,14 +3,21 @@ import { EditFilmSchema } from "@/lib/schemas/film.schema";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 
-export function useFilmsSection(isWatched: boolean, search: string) {
+export function useFilms(params: {
+    isWatched?: boolean;
+    search: string;
+    categoryIds: number[];
+    limit?: number;
+}) {
+    const { isWatched, search, categoryIds, limit = 8 } = params;
+
     return useInfiniteQuery({
-        queryKey: ['films', { isWatched, search }],
+        queryKey: ['films', { isWatched, search, categoryIds, limit }],
         queryFn: ({ pageParam }) =>
-            fetchFilms({ isWatched, search, page: pageParam, limit: 8 }),
+            fetchFilms({ isWatched, search, categoryIds, page: pageParam, limit }),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) =>
-            lastPage.length === 8 ? allPages.length + 1 : undefined,
+            lastPage.length === limit ? allPages.length + 1 : undefined,
     });
 }
 
