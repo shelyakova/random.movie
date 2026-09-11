@@ -6,12 +6,12 @@ import { IconButton, Tone } from "./IconButton";
 interface HeaderProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
+  onOpenLogoutConfirmModal: () => void;
   onOpenCategoriesModal: () => void;
   onOpenFilmModal: () => void;
 }
 
-export default function Header({ searchValue, onSearchChange, onOpenCategoriesModal, onOpenFilmModal }: HeaderProps) {
-
+export default function Header({ searchValue, onSearchChange, onOpenLogoutConfirmModal, onOpenCategoriesModal, onOpenFilmModal }: HeaderProps) {
   return (
     <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
       <div className="justify-self-start">
@@ -29,7 +29,7 @@ export default function Header({ searchValue, onSearchChange, onOpenCategoriesMo
           <SmileyIcon />
         </IconButton>
 
-        <IconButton>
+        <IconButton onClick={onOpenLogoutConfirmModal}>
           <LogoutIcon />
         </IconButton>
       </div>

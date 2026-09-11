@@ -4,6 +4,7 @@ import { CloseIcon, EditIcon } from "./icons";
 interface ModalProps {
   title: string;
   onEdit?: () => void;
+  isEdit?: boolean;
   onClose?: () => void;
   children: ReactNode;
   footer?: ReactNode;
@@ -11,7 +12,9 @@ interface ModalProps {
   className?: string;
 }
 
-export default function Modal({ title, onEdit, onClose, children, footer, hideFooterBorder = false, className }: ModalProps) {
+export default function Modal({ title, onEdit, isEdit, onClose, children, footer, hideFooterBorder = false, className }: ModalProps) {
+  const editIconStyle = isEdit ? 'cursor-pointer text-[#37C6F3]' : 'cursor-pointer text-black dark:text-white';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className={`relative flex max-h-[90vh] w-full max-w-sm flex-col rounded-3xl bg-white p-6 dark:bg-zinc-900 ${className ?? ""}`}>
@@ -24,7 +27,7 @@ export default function Modal({ title, onEdit, onClose, children, footer, hideFo
                 type="button"
                 onClick={onEdit}
                 aria-label="Edit"
-                className="cursor-pointer text-[#37C6F3]"
+                className={editIconStyle}
               >
                 <EditIcon />
               </button>

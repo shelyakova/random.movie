@@ -4,7 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 interface ConfirmModalProps {
   title: string;
-  message: string;
+  message?: string;
   onConfirm: () => void;
   onCancel?: () => void;
   confirmLabel?: string;
@@ -24,7 +24,7 @@ export default function ConfirmModal({
       title=""
       onClose={onCancel ?? onConfirm}
       hideFooterBorder
-      className="min-h-[333px]"
+      className={message ? "min-h-[333px]" : "min-h-[250px]"}
       footer={
         <div className="flex gap-3">
           {onCancel && (

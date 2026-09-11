@@ -7,15 +7,24 @@ export function useSearchNavigation() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const currentSearch = searchParams.get('search') ?? '';
+    const currentSearch = pathname === '/' ? (searchParams.get('search') ?? '') : '';
+    const currentCategoryIds = pathname === '/'
+        ? searchParams.getAll('categoryIds').map(Number)
+        : [];
 
     const handleSearchChange = (value: string) => {
-        if (value) {
-            router.push(`/?search=${encodeURIComponent(value)}`);
-        } else {
-            router.push('/');
-        }
+        const params = new URLSearchParams();
+        if (value) params.set('search', value);
+        currentCategoryIds.forEach((id) => params.append('categoryIds', String(id)));
+        router.push(`/?${params}`);
     };
 
-    return { currentSearch: pathname === '/' ? currentSearch : '', handleSearchChange };
+    const handleFilterChange = (categoryIds: number[]) => {
+        const params = new URLSearchParams();
+        if (currentSearch) params.set('search', currentSearch);
+        categoryIds.forEach((id) => params.append('categoryIds', String(id)));
+        router.push(`/?${params}`);
+    };
+
+    return { currentSearch, currentCategoryIds, handleSearchChange, handleFilterChange };
 }
