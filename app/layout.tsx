@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
-import { QueryProvider } from '@/lib/query-client';
+import { QueryProvider } from "@/lib/query-client";
 import { ErrorModal } from "@/components";
 
 const roboto = Roboto({
@@ -11,11 +11,8 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`h-full antialiased ${roboto.variable}`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`h-full antialiased ${roboto.variable}`}>
+      <body className="flex min-h-full flex-col">
         <QueryProvider>{children}</QueryProvider>
         <ErrorModal />
       </body>

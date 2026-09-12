@@ -64,10 +64,14 @@ export default function MultiSelectDropdown({
           error ? "border-red-500" : "border-zinc-300 dark:border-zinc-700"
         }`}
       >
-        <span className={`truncate ${selectedNames ? "text-black dark:text-white" : "text-zinc-500"}`}>
+        <span
+          className={`truncate ${selectedNames ? "text-black dark:text-white" : "text-zinc-500"}`}
+        >
           {selectedNames || placeholder}
         </span>
-        <span className={`shrink-0 rotate-90 text-zinc-500 transition-transform ${isOpen ? "-rotate-90" : ""}`}>
+        <span
+          className={`shrink-0 rotate-90 text-zinc-500 transition-transform ${isOpen ? "-rotate-90" : ""}`}
+        >
           <ChevronRightIcon />
         </span>
       </button>

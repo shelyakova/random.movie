@@ -12,14 +12,21 @@ interface HeaderProps {
   onClickRandomize: () => void;
 }
 
-export default function Header({ searchValue, onSearchChange, onOpenLogoutConfirmModal, onOpenCategoriesModal, onOpenFilmModal, onClickRandomize }: HeaderProps) {
+export default function Header({
+  searchValue,
+  onSearchChange,
+  onOpenLogoutConfirmModal,
+  onOpenCategoriesModal,
+  onOpenFilmModal,
+  onClickRandomize,
+}: HeaderProps) {
   return (
-    <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
+    <header className="grid w-full grid-cols-[1fr_3fr_1fr] items-center gap-4 py-11">
       <div className="justify-self-start">
         <Logo />
       </div>
 
-      <div className="flex items-center gap-5 justify-center">
+      <div className="flex items-center justify-center gap-5">
         <IconButton onClick={onOpenCategoriesModal}>
           <SettingsIcon />
         </IconButton>

@@ -48,8 +48,12 @@ export default function ConfirmModal({
       }
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <p className="text-center text-base font-semibold text-zinc-500 dark:text-zinc-400">{title}</p>
-        <p className="mt-4 text-center text-[24px] font-bold text-black dark:text-white">{message}</p>
+        <p className="text-center text-base font-semibold text-zinc-500 dark:text-zinc-400">
+          {title}
+        </p>
+        <p className="mt-4 text-center text-[24px] font-bold text-black dark:text-white">
+          {message}
+        </p>
       </div>
 
       {isPending && <LoadingSpinner />}

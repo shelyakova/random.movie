@@ -21,11 +21,7 @@ export default function FilmCard({
     <div className={`relative shrink-0 overflow-hidden rounded-xl ${className ?? ""}`}>
       {film?.posterUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={film?.posterUrl}
-          alt={film?.name}
-          className="h-full w-full object-cover"
-        />
+        <img src={film?.posterUrl} alt={film?.name} className="h-full w-full object-cover" />
       ) : (
         <div className="flex h-full w-full items-center justify-center rounded-xl bg-zinc-200/60 dark:bg-zinc-900">
           <ImagePlaceholderIcon />

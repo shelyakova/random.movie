@@ -21,15 +21,9 @@ export default function RegisterPage() {
     defaultValues: { username: "", password: "", confirmPassword: "" },
   });
 
-  const [username, password, confirmPassword] = watch([
-    "username",
-    "password",
-    "confirmPassword",
-  ]);
+  const [username, password, confirmPassword] = watch(["username", "password", "confirmPassword"]);
   const isFilled =
-    Boolean(username?.trim()) &&
-    Boolean(password?.trim()) &&
-    Boolean(confirmPassword?.trim());
+    Boolean(username?.trim()) && Boolean(password?.trim()) && Boolean(confirmPassword?.trim());
 
   const setToken = useAuthStore((state) => state.setToken);
   const router = useRouter();
@@ -38,7 +32,7 @@ export default function RegisterPage() {
     try {
       const response = await registerUser(data);
       setToken(response.access_token);
-      router.push('/');
+      router.push("/");
     } catch {
       setError("root", { message: "User with the same name is already exist" });
     }
@@ -46,7 +40,7 @@ export default function RegisterPage() {
 
   const onInvalid = (errors: FieldErrors<RegisterSchema>) => {
     const firstError = Object.values(errors)[0];
-    setError('root', { message: firstError?.message ?? 'Invalid form data' });
+    setError("root", { message: firstError?.message ?? "Invalid form data" });
   };
 
   return (
@@ -61,17 +55,9 @@ export default function RegisterPage() {
           handleSubmit(onSubmit, onInvalid)(event);
         }}
       >
-        <FormInput
-          type="text"
-          placeholder="Username"
-          {...register("username")}
-        />
+        <FormInput type="text" placeholder="Username" {...register("username")} />
 
-        <FormInput
-          type="password"
-          placeholder="Password"
-          {...register("password")}
-        />
+        <FormInput type="password" placeholder="Password" {...register("password")} />
 
         <FormInput
           type="password"

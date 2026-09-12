@@ -7,8 +7,8 @@ const readexPro = Readex_Pro({
 });
 
 export enum LogoSize {
-  Small = 'small',
-  Large = 'large',
+  Small = "small",
+  Large = "large",
 }
 
 interface LogoProps {
@@ -16,7 +16,8 @@ interface LogoProps {
 }
 
 export default function Logo({ size = LogoSize.Small }: LogoProps) {
-  const sizeClasses = size === LogoSize.Large ? 'text-[96px] leading-[83px]' : 'text-[36px] leading-[36px]';
+  const sizeClasses =
+    size === LogoSize.Large ? "text-[96px] leading-[83px]" : "text-[36px] leading-[36px]";
 
   return (
     <Link href="/" className="cursor-pointer">
