@@ -1,53 +1,56 @@
 import { useAuthStore } from "../stores";
 
 export class ApiError extends Error {
-    status: number;
-    body?: unknown;
+  status: number;
+  body?: unknown;
 
-    constructor(status: number, message: string, body?: unknown) {
-        super(message);
-        this.name = "ApiError";
-        this.status = status;
-        this.body = body;
-    }
+  constructor(status: number, message: string, body?: unknown) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.body = body;
+  }
 }
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function postJson<TBody, TResponse>(path: string, body: TBody): Promise<TResponse> {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-    });
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 
-    if (!response.ok) {
-        throw new ApiError(response.status, `Request to ${path} failed with status ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new ApiError(response.status, `Request to ${path} failed with status ${response.status}`);
+  }
 
-    return response.json();
+  return response.json();
 }
 
-export async function authorizedFetch<TResponse>(path: string, options: RequestInit = {}): Promise<TResponse> {
-    const token = useAuthStore.getState().token;
+export async function authorizedFetch<TResponse>(
+  path: string,
+  options: RequestInit = {},
+): Promise<TResponse> {
+  const token = useAuthStore.getState().token;
 
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            ...options.headers,
-        },
-    });
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...options.headers,
+    },
+  });
 
-    if (response.status === 401) {
-        useAuthStore.getState().clearToken();
-    }
+  if (response.status === 401) {
+    useAuthStore.getState().clearToken();
+  }
 
-    if (!response.ok) {
-        const body = await response.json().catch(() => null);
-        throw new ApiError(response.status, body?.message ?? `Request to ${path} failed`, body);
-    }
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new ApiError(response.status, body?.message ?? `Request to ${path} failed`, body);
+  }
 
-    return response.json();
+  return response.json();
 }

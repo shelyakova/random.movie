@@ -9,15 +9,13 @@ export default function LoadingSpinner({ overlay = true, className }: LoadingSpi
   );
 
   if (!overlay) {
-    return (
-      <div className={`flex items-center justify-center ${className ?? ""}`}>
-        {spinner}
-      </div>
-    );
+    return <div className={`flex items-center justify-center ${className ?? ""}`}>{spinner}</div>;
   }
 
   return (
-    <div className={`absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60 ${className ?? ""}`}>
+    <div
+      className={`absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60 ${className ?? ""}`}
+    >
       {spinner}
     </div>
   );

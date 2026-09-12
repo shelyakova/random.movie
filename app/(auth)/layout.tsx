@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/lib/stores';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/stores";
 import { Logo, LogoSize } from "@/components";
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
 
   useEffect(() => {
     if (token) {
-      router.push('/');
+      router.push("/");
     } else {
       setIsChecking(false);
     }
@@ -26,7 +26,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
     <div className="flex flex-1 items-center justify-center bg-white px-4 dark:bg-black">
       <div className="w-full max-w-sm">
         <Logo size={LogoSize.Large} />
-        <div className='mt-10'>{children}</div>
+        <div className="mt-10">{children}</div>
       </div>
     </div>
   );

@@ -40,9 +40,9 @@ export default function Tag({
   return (
     <button
       type="button"
-      className={`max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${radius === TagRadius.Lg ? "rounded-2xl" : "rounded-full"
-        } ${selected ? selectedClassName : toneClassNames[tone]} ${className ?? ""}
-      ${readOnly ? 'cursor-default' : 'cursor-pointer'}`}
+      className={`max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${
+        radius === TagRadius.Lg ? "rounded-2xl" : "rounded-full"
+      } ${selected ? selectedClassName : toneClassNames[tone]} ${className ?? ""} ${readOnly ? "cursor-default" : "cursor-pointer"}`}
       onClick={readOnly ? undefined : props.onClick}
       {...props}
     >

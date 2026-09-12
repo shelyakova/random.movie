@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import Modal from "./Modal";
@@ -8,7 +8,12 @@ import FormInput from "./FormInput";
 import LoadingSpinner from "./LoadingSpinner";
 import { IconButton, Tone } from "./IconButton";
 import { PlusIcon, EditIcon } from "./icons";
-import { useCategories, useCreateCategory, useDeleteCategory, useEditCategory } from "@/hooks/useCategories";
+import {
+  useCategories,
+  useCreateCategory,
+  useDeleteCategory,
+  useEditCategory,
+} from "@/hooks/useCategories";
 import { Category } from "@/lib/types/category";
 import { ApiError } from "@/lib/api";
 import ConfirmModal from "./ConfirmModal";
@@ -28,7 +33,8 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
   const { currentCategoryIds, handleFilterChange } = useSearchNavigation();
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [selectedFilterCategoryIds, setSelectedFilterCategoryIds] = useState<number[]>(currentCategoryIds);
+  const [selectedFilterCategoryIds, setSelectedFilterCategoryIds] =
+    useState<number[]>(currentCategoryIds);
   const [categoryInputValue, setCategoryInputValue] = useState("");
   const [blockedByFilms, setBlockedByFilms] = useState<string[] | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,12 +45,18 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
       setCategoryInputValue((prev) => (prev === category.name ? "" : category.name));
     } else {
       setSelectedFilterCategoryIds((prev) =>
-        prev.includes(category.id) ? prev.filter((id) => id !== category.id) : [...prev, category.id]
+        prev.includes(category.id)
+          ? prev.filter((id) => id !== category.id)
+          : [...prev, category.id],
       );
     }
   };
 
-  const isLoading = isCategoriesLoading || createCategory.isPending || deleteCategory.isPending || editCategory.isPending;
+  const isLoading =
+    isCategoriesLoading ||
+    createCategory.isPending ||
+    deleteCategory.isPending ||
+    editCategory.isPending;
   const disabledButton = isEditMode ? selectedCategory === null || deleteCategory.isPending : false;
 
   const handleCreate = () => {
@@ -55,26 +67,28 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
   };
 
   const handleEdit = () => {
-    selectedCategory && editCategory.mutate(
-      { id: selectedCategory.id, name: categoryInputValue },
-      {
-        onSuccess: () => {
-          setCategoryInputValue("");
-          setSelectedCategory(null);
-        }
-      },
-    );
+    selectedCategory &&
+      editCategory.mutate(
+        { id: selectedCategory.id, name: categoryInputValue },
+        {
+          onSuccess: () => {
+            setCategoryInputValue("");
+            setSelectedCategory(null);
+          },
+        },
+      );
   };
 
   const handleDelete = () => {
-    selectedCategory && deleteCategory.mutate(selectedCategory.id, {
-      onError: (error) => {
-        if (error instanceof ApiError && error.status === 403) {
-          const films = (error.body as { films?: string[] })?.films ?? [];
-          setBlockedByFilms(films);
-        }
-      },
-    });
+    selectedCategory &&
+      deleteCategory.mutate(selectedCategory.id, {
+        onError: (error) => {
+          if (error instanceof ApiError && error.status === 403) {
+            const films = (error.body as { films?: string[] })?.films ?? [];
+            setBlockedByFilms(films);
+          }
+        },
+      });
   };
 
   const handleFilter = () => {
@@ -100,7 +114,11 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                 onChange={(e) => setCategoryInputValue(e.target.value)}
               />
               <IconButton
-                disabled={categoryInputValue.length < 3 || createCategory.isPending || categoryInputValue === selectedCategory?.name}
+                disabled={
+                  categoryInputValue.length < 3 ||
+                  createCategory.isPending ||
+                  categoryInputValue === selectedCategory?.name
+                }
                 tone={Tone.Accent}
                 onClick={selectedCategory ? handleEdit : handleCreate}
               >
@@ -108,10 +126,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
               </IconButton>
             </div>
           )}
-          <Button
-            disabled={disabledButton}
-            onClick={isEditMode ? handleDelete : handleFilter}
-          >
+          <Button disabled={disabledButton} onClick={isEditMode ? handleDelete : handleFilter}>
             {isEditMode ? "Delete" : "Filter"}
           </Button>
         </div>
@@ -124,9 +139,11 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
             <Tag
               key={category.id}
               radius={category.name.length > 20 ? TagRadius.Lg : TagRadius.Full}
-              selected={isEditMode
-                ? selectedCategory?.id === category.id
-                : selectedFilterCategoryIds.includes(category.id)}
+              selected={
+                isEditMode
+                  ? selectedCategory?.id === category.id
+                  : selectedFilterCategoryIds.includes(category.id)
+              }
               onClick={() => toggleCategory(category)}
             >
               {category.name}
@@ -141,7 +158,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
         {blockedByFilms && (
           <ConfirmModal
             title="You have a film(s) in this category. Please delete this category from the film(s) first."
-            message={blockedByFilms.join(', ')}
+            message={blockedByFilms.join(", ")}
             onConfirm={() => setBlockedByFilms(null)}
           />
         )}

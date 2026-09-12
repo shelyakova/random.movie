@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import FilmCard from "./FilmCard";
 import EmptyState from "./EmptyState";
@@ -22,7 +22,18 @@ interface FilmSectionProps {
   isLoadingNextPage?: boolean;
 }
 
-export default function FilmSection({ title, films, onMoreClick, hasMoreButton, onMoreData, hasMoreData, isLoading, hasSlider, lazyLoad, isLoadingNextPage }: FilmSectionProps) {
+export default function FilmSection({
+  title,
+  films,
+  onMoreClick,
+  hasMoreButton,
+  onMoreData,
+  hasMoreData,
+  isLoading,
+  hasSlider,
+  lazyLoad,
+  isLoadingNextPage,
+}: FilmSectionProps) {
   const sentinelRef = useInfiniteScroll(onMoreData, Boolean(lazyLoad && hasMoreData));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -42,18 +53,16 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
   }, [films]);
 
   const handleScrollRight = () => {
-    scrollContainerRef.current?.scrollBy({ left: 400, behavior: 'smooth' });
+    scrollContainerRef.current?.scrollBy({ left: 400, behavior: "smooth" });
   };
 
   const handleScrollLeft = () => {
-    scrollContainerRef.current?.scrollBy({ left: -400, behavior: 'smooth' });
+    scrollContainerRef.current?.scrollBy({ left: -400, behavior: "smooth" });
   };
 
   return (
     <section className="w-full">
-      <h2 className='mb-[26px] text-[20px] font-medium text-black dark:text-white'>
-        {title}
-      </h2>
+      <h2 className="mb-[26px] text-[20px] font-medium text-black dark:text-white">{title}</h2>
 
       {films.length === 0 ? (
         <EmptyState message="No films found" />
@@ -62,7 +71,11 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
           <div
             ref={hasSlider ? scrollContainerRef : undefined}
             onScroll={hasSlider ? updateScrollButtons : undefined}
-            className={hasSlider ? "flex gap-3 overflow-x-auto scroll-smooth no-scrollbar" : "grid grid-cols-6 gap-4"}
+            className={
+              hasSlider
+                ? "no-scrollbar flex gap-3 overflow-x-auto scroll-smooth"
+                : "grid grid-cols-6 gap-4"
+            }
           >
             {films.map((film) => (
               <Link key={film.id} href={`/film/${film.id}`}>
@@ -74,7 +87,7 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
           {hasSlider && canScrollLeft && (
             <button
               onClick={handleScrollLeft}
-              className="absolute cursor-pointer top-1/2 -left-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+              className="absolute top-1/2 -left-10 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
             >
               <ChevronLeftIcon />
             </button>
@@ -82,7 +95,7 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
           {hasSlider && canScrollRight && (
             <button
               onClick={handleScrollRight}
-              className="absolute cursor-pointer top-1/2 -right-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+              className="absolute top-1/2 -right-10 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
             >
               <ChevronRightIcon />
             </button>
@@ -90,18 +103,20 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
         </div>
       )}
 
-      {lazyLoad ? (
-        hasMoreData && (
-          <div ref={sentinelRef} className="flex h-10 mt-2 items-center justify-center">
-            {isLoadingNextPage && <LoadingSpinner overlay={false} />}
-          </div>)
-      ) : (
-        hasMoreButton && (
-          <p onClick={() => !isLoading && onMoreClick?.()} className="cursor-pointer mt-2 text-right text-sm text-zinc-500 font-medium dark:text-zinc-400">
-            More
-          </p>
-        )
-      )}
+      {lazyLoad
+        ? hasMoreData && (
+            <div ref={sentinelRef} className="mt-2 flex h-10 items-center justify-center">
+              {isLoadingNextPage && <LoadingSpinner overlay={false} />}
+            </div>
+          )
+        : hasMoreButton && (
+            <p
+              onClick={() => !isLoading && onMoreClick?.()}
+              className="mt-2 cursor-pointer text-right text-sm font-medium text-zinc-500 dark:text-zinc-400"
+            >
+              More
+            </p>
+          )}
     </section>
   );
 }

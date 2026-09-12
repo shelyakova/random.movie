@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/lib/stores';
-import { CategoriesModal, ConfirmModal, FilmModal, Header } from '@/components';
-import { useRandomFilm, useSearchNavigation } from '@/hooks';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/stores";
+import { CategoriesModal, ConfirmModal, FilmModal, Header } from "@/components";
+import { useRandomFilm, useSearchNavigation } from "@/hooks";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
@@ -25,7 +25,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (!token) {
-      router.push('/login');
+      router.push("/login");
     } else {
       setIsChecking(false);
     }
@@ -33,7 +33,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
   const handleLogout = () => {
     clearToken();
-    router.push('/login');
+    router.push("/login");
   };
 
   if (isChecking) {
@@ -41,7 +41,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-zinc-100 dark:bg-black px-20">
+    <div className="flex flex-1 flex-col bg-zinc-100 px-20 dark:bg-black">
       <Header
         searchValue={currentSearch}
         onSearchChange={handleSearchChange}

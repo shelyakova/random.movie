@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Modal from "./Modal";
 import FormInput from "./FormInput";
@@ -38,24 +38,20 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
     resolver: zodResolver(filmSchema),
     defaultValues: film
       ? {
-        name: film.name,
-        link: film.link,
-        categoryIds: film.categories.map((c) => c.id),
-        seasons: film.seasons ?? undefined,
-        episodes: film.episodes ?? undefined,
-        duration: film.duration ?? undefined,
-        description: film.description ?? undefined,
-        year: film.year ?? undefined,
-        mark: film.mark ?? undefined,
-      }
+          name: film.name,
+          link: film.link,
+          categoryIds: film.categories.map((c) => c.id),
+          seasons: film.seasons ?? undefined,
+          episodes: film.episodes ?? undefined,
+          duration: film.duration ?? undefined,
+          description: film.description ?? undefined,
+          year: film.year ?? undefined,
+          mark: film.mark ?? undefined,
+        }
       : undefined,
   });
 
-  const [name, categoryIds, link] = watch([
-    "name",
-    "categoryIds",
-    "link",
-  ]);
+  const [name, categoryIds, link] = watch(["name", "categoryIds", "link"]);
 
   const isFilled = Boolean(name?.trim()) && Boolean(link?.trim());
 
@@ -69,12 +65,12 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
 
   return (
     <Modal
-      title={isEditMode ? 'Edit film' : 'Add new film'}
+      title={isEditMode ? "Edit film" : "Add new film"}
       onClose={onClose}
       className="max-w-[500px]!"
       footer={
         <Button disabled={!isFilled} type="submit" form="add-film-form">
-          {isEditMode ? 'Edit' : 'Add'}
+          {isEditMode ? "Edit" : "Add"}
         </Button>
       }
     >
@@ -100,16 +96,42 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
         />
 
         <div className="flex items-center gap-3">
-          <FormInput type="number" placeholder="Seasons" className="flex-1" {...register("seasons", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
-          <FormInput type="number" placeholder="Episods" className="flex-1" {...register("episodes", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
-          <FormInput type="number" placeholder="Duration(min)" className="flex-1" {...register("duration", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
+          <FormInput
+            type="number"
+            placeholder="Seasons"
+            className="flex-1"
+            {...register("seasons", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+          />
+          <FormInput
+            type="number"
+            placeholder="Episods"
+            className="flex-1"
+            {...register("episodes", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+          />
+          <FormInput
+            type="number"
+            placeholder="Duration(min)"
+            className="flex-1"
+            {...register("duration", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+          />
         </div>
 
         <Textarea placeholder="Description" {...register("description")} />
 
         <div className="flex items-center gap-3">
-          <FormInput type="number" placeholder="Year" className="flex-1" {...register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
-          <FormInput type="number" step="0.1" placeholder="Mark" className="flex-1" {...register("mark", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
+          <FormInput
+            type="number"
+            placeholder="Year"
+            className="flex-1"
+            {...register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+          />
+          <FormInput
+            type="number"
+            step="0.1"
+            placeholder="Mark"
+            className="flex-1"
+            {...register("mark", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+          />
         </div>
 
         <FormInput placeholder="Link" {...register("link")} error={!!errors.link} />

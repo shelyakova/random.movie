@@ -31,7 +31,7 @@ export default function LoginPage() {
     try {
       const response = await loginUser(data);
       setToken(response.access_token);
-      router.push('/');
+      router.push("/");
     } catch {
       setError("root", { message: "Incorrect username or password" });
     }
@@ -39,7 +39,7 @@ export default function LoginPage() {
 
   const onInvalid = (errors: FieldErrors<LoginSchema>) => {
     const firstError = Object.values(errors)[0];
-    setError('root', { message: firstError?.message ?? 'Invalid form data' });
+    setError("root", { message: firstError?.message ?? "Invalid form data" });
   };
 
   return (
@@ -54,17 +54,9 @@ export default function LoginPage() {
           handleSubmit(onSubmit, onInvalid)(event);
         }}
       >
-        <FormInput
-          type="text"
-          placeholder="Username"
-          {...register("username")}
-        />
+        <FormInput type="text" placeholder="Username" {...register("username")} />
 
-        <FormInput
-          type="password"
-          placeholder="Password"
-          {...register("password")}
-        />
+        <FormInput type="password" placeholder="Password" {...register("password")} />
 
         {errors.root ? (
           <p className="text-center text-xs text-red-500">{errors.root.message}</p>
