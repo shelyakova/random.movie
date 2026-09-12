@@ -8,9 +8,7 @@ export function useSearchNavigation() {
     const searchParams = useSearchParams();
 
     const currentSearch = pathname === '/' ? (searchParams.get('search') ?? '') : '';
-    const currentCategoryIds = pathname === '/'
-        ? searchParams.getAll('categoryIds').map(Number)
-        : [];
+    const currentCategoryIds = pathname === '/' ? searchParams.getAll('categoryIds').map(Number) : [];
 
     const handleSearchChange = (value: string) => {
         const params = new URLSearchParams();

@@ -1,3 +1,5 @@
+"use client"
+
 import FilmCard from "./FilmCard";
 import EmptyState from "./EmptyState";
 import { ChevronLeftIcon, ChevronRightIcon } from "./icons";
@@ -5,6 +7,7 @@ import { Film } from "@/lib/types";
 import Link from "next/link";
 import { useInfiniteScroll } from "@/hooks";
 import { useEffect, useRef, useState } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface FilmSectionProps {
   title: string;
@@ -16,9 +19,10 @@ interface FilmSectionProps {
   isLoading: boolean;
   hasSlider?: boolean;
   lazyLoad?: boolean;
+  isLoadingNextPage?: boolean;
 }
 
-export default function FilmSection({ title, films, onMoreClick, hasMoreButton, onMoreData, hasMoreData, isLoading, hasSlider, lazyLoad }: FilmSectionProps) {
+export default function FilmSection({ title, films, onMoreClick, hasMoreButton, onMoreData, hasMoreData, isLoading, hasSlider, lazyLoad, isLoadingNextPage }: FilmSectionProps) {
   const sentinelRef = useInfiniteScroll(onMoreData, Boolean(lazyLoad && hasMoreData));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +66,7 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
           >
             {films.map((film) => (
               <Link key={film.id} href={`/film/${film.id}`}>
-                <FilmCard film={film} />
+                <FilmCard film={film} showName className="h-[263px] w-[177px]" />
               </Link>
             ))}
           </div>
@@ -87,7 +91,10 @@ export default function FilmSection({ title, films, onMoreClick, hasMoreButton, 
       )}
 
       {lazyLoad ? (
-        hasMoreData && <div ref={sentinelRef} className="h-10" />
+        hasMoreData && (
+          <div ref={sentinelRef} className="flex h-10 mt-2 items-center justify-center">
+            {isLoadingNextPage && <LoadingSpinner overlay={false} />}
+          </div>)
       ) : (
         hasMoreButton && (
           <p onClick={() => !isLoading && onMoreClick?.()} className="cursor-pointer mt-2 text-right text-sm text-zinc-500 font-medium dark:text-zinc-400">

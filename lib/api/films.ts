@@ -20,6 +20,13 @@ export function fetchFilms(params: {
     return authorizedFetch<Film[]>(`/film?${query}`);
 }
 
+export function fetchRandomFilm(search: string, categoryIds: number[]) {
+    const query = new URLSearchParams();
+    if (search) query.set('search', search);
+    categoryIds.forEach((id) => query.append('categoryIds', String(id)));
+    return authorizedFetch<{ id: number }>(`/film/random?${query}`);
+}
+
 export function fetchFilmById(filmId: number) {
     return authorizedFetch<Film>(`/film/${filmId}`);
 }

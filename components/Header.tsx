@@ -9,9 +9,10 @@ interface HeaderProps {
   onOpenLogoutConfirmModal: () => void;
   onOpenCategoriesModal: () => void;
   onOpenFilmModal: () => void;
+  onClickRandomize: () => void;
 }
 
-export default function Header({ searchValue, onSearchChange, onOpenLogoutConfirmModal, onOpenCategoriesModal, onOpenFilmModal }: HeaderProps) {
+export default function Header({ searchValue, onSearchChange, onOpenLogoutConfirmModal, onOpenCategoriesModal, onOpenFilmModal, onClickRandomize }: HeaderProps) {
   return (
     <header className="grid grid-cols-[1fr_3fr_1fr] w-full items-center gap-4 py-11">
       <div className="justify-self-start">
@@ -25,7 +26,7 @@ export default function Header({ searchValue, onSearchChange, onOpenLogoutConfir
 
         <SearchBar value={searchValue} onChange={onSearchChange} />
 
-        <IconButton tone={Tone.Accent}>
+        <IconButton tone={Tone.Accent} onClick={onClickRandomize}>
           <SmileyIcon />
         </IconButton>
 
