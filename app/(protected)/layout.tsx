@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores';
 import { CategoriesModal, ConfirmModal, FilmModal, Header } from '@/components';
-import { useSearchNavigation } from '@/hooks';
+import { useRandomFilm, useSearchNavigation } from '@/hooks';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
@@ -16,7 +16,12 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   const [isOpenFilmModal, setIsOpenFilmModal] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
 
-  const { currentSearch, handleSearchChange } = useSearchNavigation();
+  const { currentSearch, currentCategoryIds, handleSearchChange } = useSearchNavigation();
+  const randomFilm = useRandomFilm();
+
+  const handleRandomize = () => {
+    randomFilm.mutate({ search: currentSearch, categoryIds: currentCategoryIds });
+  };
 
   useEffect(() => {
     if (!token) {
@@ -43,6 +48,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         onOpenLogoutConfirmModal={() => setIsLogoutConfirmOpen(true)}
         onOpenCategoriesModal={() => setIsOpenCategoryModal(true)}
         onOpenFilmModal={() => setIsOpenFilmModal(true)}
+        onClickRandomize={handleRandomize}
       />
       {children}
 

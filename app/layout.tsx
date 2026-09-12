@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import { QueryProvider } from '@/lib/query-client';
+import { ErrorModal } from "@/components";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>{children}</QueryProvider>
+        <ErrorModal />
       </body>
     </html>
   );

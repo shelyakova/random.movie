@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton, Button, Poster, LoadingSpinner, EmptyState, FilmModal, ConfirmModal } from "@/components";
+import { IconButton, Button, FilmCard, LoadingSpinner, EmptyState, FilmModal, ConfirmModal } from "@/components";
 import Tag, { TagTone } from "@/components/Tag";
 import { EditIcon, DeleteIcon, CheckIcon } from "@/components/icons";
 import { useGetFilmById } from "@/hooks";
@@ -53,7 +53,7 @@ export default function FilmPage() {
                 </h1>
 
                 <div className="flex gap-8">
-                    <Poster film={film} showYear showMark className="h-[548px] w-[369px]" />
+                    <FilmCard film={film} showYear showMark className="h-[548px] w-[369px]" />
 
                     <div className="flex min-w-0 flex-1 flex-col gap-4">
                         <div className="flex flex-wrap gap-2">

@@ -1,3 +1,5 @@
+"use client"
+
 import Modal from "./Modal";
 import FormInput from "./FormInput";
 import Textarea from "./Textarea";
@@ -107,7 +109,7 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
 
         <div className="flex items-center gap-3">
           <FormInput type="number" placeholder="Year" className="flex-1" {...register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
-          <FormInput type="number" placeholder="Mark" className="flex-1" {...register("mark", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
+          <FormInput type="number" step="0.1" placeholder="Mark" className="flex-1" {...register("mark", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} />
         </div>
 
         <FormInput placeholder="Link" {...register("link")} error={!!errors.link} />

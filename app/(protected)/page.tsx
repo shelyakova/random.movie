@@ -2,7 +2,7 @@
 
 import { FilmSection, LoadingSpinner, Tag } from "@/components";
 import { TagTone } from "@/components/Tag";
-import { useFilms, useDebounce, useCategories } from "@/hooks";
+import { useFilms, useDebounce, useCategories, useSearchNavigation } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from 'next/navigation';
 
@@ -13,21 +13,19 @@ export enum ViewKey {
 
 export default function Home() {
   const router = useRouter();
-
   const searchParams = useSearchParams();
-  const searchQuery = searchParams.get('search') ?? '';
-  const categoryIds = searchParams.getAll('categoryIds').map(Number);
   const expandedSection = searchParams.get('view');
 
-  const debouncedSearch = useDebounce(searchQuery, 500);
-  const isFiltering = Boolean(debouncedSearch) || categoryIds.length > 0;
+  const { currentSearch, currentCategoryIds } = useSearchNavigation();
+  const debouncedSearch = useDebounce(currentSearch, 500);
+  const isFiltering = Boolean(debouncedSearch) || currentCategoryIds.length > 0;
 
-  const suggested = useFilms({ isWatched: false, search: debouncedSearch, categoryIds, limit: expandedSection === ViewKey.Suggested ? 18 : 10 });
-  const previouslyWatched = useFilms({ isWatched: true, search: debouncedSearch, categoryIds, limit: expandedSection === ViewKey.Watched ? 18 : 10 });
-  const searchResults = useFilms({ search: debouncedSearch, categoryIds, limit: 12 });
+  const suggested = useFilms({ isWatched: false, search: debouncedSearch, categoryIds: currentCategoryIds, limit: expandedSection === ViewKey.Suggested ? 18 : 10 });
+  const previouslyWatched = useFilms({ isWatched: true, search: debouncedSearch, categoryIds: currentCategoryIds, limit: expandedSection === ViewKey.Watched ? 18 : 10 });
+  const searchResults = useFilms({ search: debouncedSearch, categoryIds: currentCategoryIds, limit: 12 });
 
   const { data: categories = [] } = useCategories();
-  const selectedCategoryNames = categories.filter((c) => categoryIds.includes(c.id)).map((c) => c.name);
+  const selectedCategoryNames = categories.filter((c) => currentCategoryIds.includes(c.id)).map((c) => c.name);
 
   const isLoading = suggested.isLoading || previouslyWatched.isLoading || searchResults.isLoading;
 
@@ -70,6 +68,7 @@ export default function Home() {
                 hasMoreData={suggested.hasNextPage}
                 lazyLoad={expandedSection === ViewKey.Suggested}
                 isLoading={suggested.isLoading}
+                isLoadingNextPage={suggested.isFetchingNextPage}
               />
             }
             {(!expandedSection || expandedSection === ViewKey.Watched) &&
@@ -83,6 +82,7 @@ export default function Home() {
                 hasMoreData={previouslyWatched.hasNextPage}
                 lazyLoad={expandedSection === ViewKey.Watched}
                 isLoading={previouslyWatched.isLoading}
+                isLoadingNextPage={previouslyWatched.isFetchingNextPage}
               />
             }
 
