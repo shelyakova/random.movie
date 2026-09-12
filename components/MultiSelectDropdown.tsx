@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Tag, { TagRadius } from "./Tag";
+import Tag from "./Tag";
 import { ChevronRightIcon } from "./icons";
+import { TagRadius } from "@/lib/types";
 
 interface MultiSelectOption {
   id: number;

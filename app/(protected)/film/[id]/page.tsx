@@ -9,8 +9,9 @@ import {
   FilmModal,
   ConfirmModal,
 } from "@/components";
-import Tag, { TagTone } from "@/components/Tag";
+import Tag from "@/components/Tag";
 import { EditIcon, DeleteIcon, CheckIcon } from "@/components/icons";
+import { TagTone } from "@/lib/types";
 import { useGetFilmById } from "@/hooks";
 import { useDeleteFilm, useSetIsWatched } from "@/hooks/useFilms";
 import { useParams } from "next/navigation";

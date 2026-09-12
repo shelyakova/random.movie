@@ -11,6 +11,7 @@ import {
 import { EditFilmSchema } from "@/lib/schemas/film.schema";
 import { useErrorStore } from "@/lib/stores/error.store";
 import { Film } from "@/lib/types";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 
@@ -23,7 +24,7 @@ export function useFilms(params: {
   const { isWatched, search, categoryIds, limit = 8 } = params;
 
   return useInfiniteQuery({
-    queryKey: ["films", { isWatched, search, categoryIds, limit }],
+    queryKey: QUERY_KEYS.films.list({ isWatched, search, categoryIds, limit }),
     queryFn: ({ pageParam }) =>
       fetchFilms({ isWatched, search, categoryIds, page: pageParam, limit }),
     initialPageParam: 1,
@@ -51,7 +52,7 @@ export function useGetFilmById() {
   const params = useParams<{ id: string }>();
   const filmId = Number(params.id);
   return useQuery({
-    queryKey: ["films", filmId],
+    queryKey: QUERY_KEYS.films.detail(filmId),
     queryFn: () => fetchFilmById(filmId),
   });
 }
@@ -60,7 +61,7 @@ export function useCreateFilm() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createFilm,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["films"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
       useErrorStore.getState().showError("Failed to create film");
     },
@@ -74,11 +75,11 @@ export function useSetIsWatched(filmId: number) {
     mutationFn: ({ isWatched }: { isWatched: boolean }) => editFilm({ isWatched }, filmId),
 
     onMutate: async ({ isWatched }) => {
-      await queryClient.cancelQueries({ queryKey: ["films", filmId] });
+      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.films.detail(filmId) });
 
-      const previousFilm = queryClient.getQueryData<Film>(["films", filmId]);
+      const previousFilm = queryClient.getQueryData<Film>(QUERY_KEYS.films.detail(filmId));
 
-      queryClient.setQueryData<Film>(["films", filmId], (old) =>
+      queryClient.setQueryData<Film>(QUERY_KEYS.films.detail(filmId), (old) =>
         old ? { ...old, isWatched } : old,
       );
 
@@ -87,13 +88,13 @@ export function useSetIsWatched(filmId: number) {
 
     onError: (_error, _variables, context) => {
       if (context?.previousFilm) {
-        queryClient.setQueryData(["films", filmId], context.previousFilm);
+        queryClient.setQueryData(QUERY_KEYS.films.detail(filmId), context.previousFilm);
       }
       useErrorStore.getState().showError("Failed to set isWatched for a film");
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["films"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all });
     },
   });
 }
@@ -102,7 +103,7 @@ export function useEditFilm(filmId: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (film: EditFilmSchema) => editFilm(film, filmId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["films"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
       useErrorStore.getState().showError("Failed to edit film");
     },
@@ -116,7 +117,7 @@ export function useDeleteFilm(filmId: number) {
   return useMutation({
     mutationFn: () => deleteFilm(filmId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["films"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all });
       router.push("/");
     },
     onError: () => {

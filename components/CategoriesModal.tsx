@@ -1,100 +1,40 @@
 "use client";
 
-import { useState } from "react";
 import Modal from "./Modal";
-import Tag, { TagRadius } from "./Tag";
+import Tag from "./Tag";
 import Button from "./Button";
 import FormInput from "./FormInput";
 import LoadingSpinner from "./LoadingSpinner";
-import { IconButton, Tone } from "./IconButton";
+import { IconButton } from "./IconButton";
 import { PlusIcon, EditIcon } from "./icons";
-import {
-  useCategories,
-  useCreateCategory,
-  useDeleteCategory,
-  useEditCategory,
-} from "@/hooks/useCategories";
-import { Category } from "@/lib/types/category";
-import { ApiError } from "@/lib/api";
+import { TagRadius, Tone } from "@/lib/types";
+import { useCategoryModal } from "@/hooks";
 import ConfirmModal from "./ConfirmModal";
-import { useSearchNavigation } from "@/hooks";
 
 interface CategoriesModalProps {
   onClose?: () => void;
 }
 
 export default function CategoriesModal({ onClose }: CategoriesModalProps) {
-  const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
-
-  const createCategory = useCreateCategory();
-  const deleteCategory = useDeleteCategory();
-  const editCategory = useEditCategory();
-
-  const { currentCategoryIds, handleFilterChange } = useSearchNavigation();
-
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [selectedFilterCategoryIds, setSelectedFilterCategoryIds] =
-    useState<number[]>(currentCategoryIds);
-  const [categoryInputValue, setCategoryInputValue] = useState("");
-  const [blockedByFilms, setBlockedByFilms] = useState<string[] | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  const toggleCategory = (category: Category) => {
-    if (isEditMode) {
-      setSelectedCategory((prev) => (prev === category ? null : category));
-      setCategoryInputValue((prev) => (prev === category.name ? "" : category.name));
-    } else {
-      setSelectedFilterCategoryIds((prev) =>
-        prev.includes(category.id)
-          ? prev.filter((id) => id !== category.id)
-          : [...prev, category.id],
-      );
-    }
-  };
-
-  const isLoading =
-    isCategoriesLoading ||
-    createCategory.isPending ||
-    deleteCategory.isPending ||
-    editCategory.isPending;
-  const disabledButton = isEditMode ? selectedCategory === null || deleteCategory.isPending : false;
-
-  const handleCreate = () => {
-    createCategory.mutate(
-      { name: categoryInputValue },
-      { onSuccess: () => setCategoryInputValue("") },
-    );
-  };
-
-  const handleEdit = () => {
-    selectedCategory &&
-      editCategory.mutate(
-        { id: selectedCategory.id, name: categoryInputValue },
-        {
-          onSuccess: () => {
-            setCategoryInputValue("");
-            setSelectedCategory(null);
-          },
-        },
-      );
-  };
-
-  const handleDelete = () => {
-    selectedCategory &&
-      deleteCategory.mutate(selectedCategory.id, {
-        onError: (error) => {
-          if (error instanceof ApiError && error.status === 403) {
-            const films = (error.body as { films?: string[] })?.films ?? [];
-            setBlockedByFilms(films);
-          }
-        },
-      });
-  };
-
-  const handleFilter = () => {
-    handleFilterChange(selectedFilterCategoryIds);
-    onClose?.();
-  };
+  const {
+    categories,
+    isLoading,
+    isSubmitDisabled,
+    isAddEditDisabled,
+    selectedCategory,
+    selectedFilterCategoryIds,
+    categoryInputValue,
+    setCategoryInputValue,
+    blockedByFilms,
+    setBlockedByFilms,
+    isEditMode,
+    setIsEditMode,
+    toggleCategory,
+    handleCreate,
+    handleEdit,
+    handleDelete,
+    handleFilter,
+  } = useCategoryModal(onClose);
 
   return (
     <Modal
@@ -114,11 +54,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                 onChange={(e) => setCategoryInputValue(e.target.value)}
               />
               <IconButton
-                disabled={
-                  categoryInputValue.length < 3 ||
-                  createCategory.isPending ||
-                  categoryInputValue === selectedCategory?.name
-                }
+                disabled={isAddEditDisabled}
                 tone={Tone.Accent}
                 onClick={selectedCategory ? handleEdit : handleCreate}
               >
@@ -126,7 +62,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
               </IconButton>
             </div>
           )}
-          <Button disabled={disabledButton} onClick={isEditMode ? handleDelete : handleFilter}>
+          <Button disabled={isSubmitDisabled} onClick={isEditMode ? handleDelete : handleFilter}>
             {isEditMode ? "Delete" : "Filter"}
           </Button>
         </div>

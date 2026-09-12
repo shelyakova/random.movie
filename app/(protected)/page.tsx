@@ -1,15 +1,10 @@
 "use client";
 
 import { FilmSection, LoadingSpinner, Tag } from "@/components";
-import { TagTone } from "@/components/Tag";
+import { TagTone, ViewKey } from "@/lib/types";
 import { useFilms, useDebounce, useCategories, useSearchNavigation } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-
-export enum ViewKey {
-  Suggested = "suggested",
-  Watched = "watched",
-}
 
 export default function Home() {
   const router = useRouter();

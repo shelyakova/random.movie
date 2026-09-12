@@ -1,16 +1,5 @@
 import { ComponentProps } from "react";
-
-export enum TagRadius {
-  Full = "full",
-  Lg = "lg",
-}
-
-export enum TagTone {
-  Neutral = "neutral",
-  Outline = "outline",
-  Info = "info",
-  Rating = "rating",
-}
+import { TagRadius, TagTone } from "@/lib/types";
 
 interface TagProps extends ComponentProps<"button"> {
   selected?: boolean;

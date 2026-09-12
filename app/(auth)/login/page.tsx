@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { FieldErrors, useForm } from "react-hook-form";
-import { FormInput, Button } from "@/components";
+import { FormInput, Button, LoadingSpinner } from "@/components";
 import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/api";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -28,12 +31,15 @@ export default function LoginPage() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginSchema) => {
+    setIsSubmitting(true);
     try {
       const response = await loginUser(data);
       setToken(response.access_token);
       router.push("/");
     } catch {
       setError("root", { message: "Incorrect username or password" });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -75,6 +81,8 @@ export default function LoginPage() {
           SignUp
         </Link>
       </p>
+
+      {isSubmitting && <LoadingSpinner />}
     </>
   );
 }

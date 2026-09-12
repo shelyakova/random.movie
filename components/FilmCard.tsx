@@ -1,6 +1,6 @@
-import { Film } from "@/lib/types";
+import { Film, TagTone } from "@/lib/types";
 import { ImagePlaceholderIcon } from "./icons";
-import Tag, { TagTone } from "./Tag";
+import Tag from "./Tag";
 
 interface FilmCardProps {
   film?: Film;

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores";
-import { Logo, LogoSize } from "@/components";
+import { Logo } from "@/components";
+import { LogoSize } from "@/lib/types";
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   const token = useAuthStore((state) => state.token);
