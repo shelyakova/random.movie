@@ -1,9 +1,5 @@
 import { ComponentProps } from "react";
-
-export enum Tone {
-  Default = "default",
-  Accent = "accent",
-}
+import { Tone } from "@/lib/types";
 
 interface IconButtonProps extends ComponentProps<"button"> {
   tone?: Tone;

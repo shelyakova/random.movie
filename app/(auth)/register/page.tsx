@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { FieldErrors, useForm } from "react-hook-form";
-import { FormInput, Button } from "@/components";
+import { FormInput, Button, LoadingSpinner } from "@/components";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/api";
+import { useState } from "react";
 
 export default function RegisterPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -29,12 +32,15 @@ export default function RegisterPage() {
   const router = useRouter();
 
   const onSubmit = async (data: RegisterSchema) => {
+    setIsSubmitting(true);
     try {
       const response = await registerUser(data);
       setToken(response.access_token);
       router.push("/");
     } catch {
       setError("root", { message: "User with the same name is already exist" });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -82,6 +88,8 @@ export default function RegisterPage() {
           Login
         </Link>
       </p>
+
+      {isSubmitting && <LoadingSpinner />}
     </>
   );
 }

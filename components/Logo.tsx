@@ -1,15 +1,11 @@
 import Link from "next/link";
 import { Readex_Pro } from "next/font/google";
+import { LogoSize } from "@/lib/types";
 
 const readexPro = Readex_Pro({
   subsets: ["latin"],
   weight: "600",
 });
-
-export enum LogoSize {
-  Small = "small",
-  Large = "large",
-}
 
 interface LogoProps {
   size?: LogoSize;

@@ -1,7 +1,8 @@
 import SearchBar from "./SearchBar";
 import Logo from "./Logo";
 import { SettingsIcon, SmileyIcon, LogoutIcon, PlusIcon } from "./icons";
-import { IconButton, Tone } from "./IconButton";
+import { IconButton } from "./IconButton";
+import { Tone } from "@/lib/types";
 
 interface HeaderProps {
   searchValue: string;
