@@ -7,6 +7,7 @@ import {
   fetchFilmById,
   fetchFilms,
   fetchRandomFilm,
+  uploadPoster,
 } from "@/lib/api";
 import { EditFilmSchema } from "@/lib/schemas/film.schema";
 import { useErrorStore } from "@/lib/stores/error.store";
@@ -64,6 +65,17 @@ export function useCreateFilm() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
       useErrorStore.getState().showError("Failed to create film");
+    },
+  });
+}
+
+export function useUploadPoster() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ filmId, file }: { filmId: number; file: File }) => uploadPoster(filmId, file),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
+    onError: () => {
+      useErrorStore.getState().showError('Failed to upload poster');
     },
   });
 }

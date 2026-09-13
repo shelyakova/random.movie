@@ -6,6 +6,7 @@ import { useFilmModal } from "@/hooks";
 import LoadingSpinner from "./LoadingSpinner";
 import { Film } from "@/lib/types";
 import FilmFormFields from "./FilmFormFields";
+import PosterUpload from "./PosterUpload";
 
 interface FilmModalProps {
   film?: Film;
@@ -23,6 +24,7 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
     categoryIds,
     setCategoryIds,
     handleFormSubmit,
+    setSelectedFile,
   } = useFilmModal(film, onClose);
 
   return (
@@ -43,6 +45,10 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
           categories={categories ?? []}
           categoryIds={categoryIds}
           onCategoryIdsChange={setCategoryIds}
+        />
+        <PosterUpload
+          currentPosterUrl={film?.posterUrl ?? undefined}
+          onFileSelect={setSelectedFile}
         />
       </form>
       {isLoading && (
