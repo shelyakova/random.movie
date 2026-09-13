@@ -33,11 +33,12 @@ export async function authorizedFetch<TResponse>(
   options: RequestInit = {},
 ): Promise<TResponse> {
   const token = useAuthStore.getState().token;
+  const isFormData = options.body instanceof FormData;
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(!isFormData && { "Content-Type": "application/json" }),
       Authorization: `Bearer ${token}`,
       ...options.headers,
     },

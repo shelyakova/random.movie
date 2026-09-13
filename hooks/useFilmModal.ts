@@ -6,6 +6,9 @@ import { filmSchema, FilmSchema } from "@/lib/schemas/film.schema";
 import { useCategories } from "@/hooks/useCategories";
 import { useCreateFilm, useEditFilm } from "@/hooks";
 import { Film } from "@/lib/types";
+import { useUploadPoster } from "./useFilms";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface UseFilmModalReturn {
   categories: ReturnType<typeof useCategories>["data"];
@@ -16,16 +19,21 @@ interface UseFilmModalReturn {
   categoryIds: number[] | undefined;
   setCategoryIds: (ids: number[]) => void;
   handleFormSubmit: (event: React.FormEvent) => void;
+  setSelectedFile: (file: File | null) => void;
 }
 
 export function useFilmModal(film: Film | undefined, onClose?: () => void): UseFilmModalReturn {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
   const isEditMode = Boolean(film);
 
+  const router = useRouter();
   const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
   const createFilm = useCreateFilm();
   const editFilm = useEditFilm(film?.id ?? 0);
+  const uploadPoster = useUploadPoster();
 
-  const isLoading = isCategoriesLoading || createFilm.isPending || editFilm.isPending;
+  const isLoading = isCategoriesLoading || createFilm.isPending || editFilm.isPending || uploadPoster.isPending;
 
   const {
     register,
@@ -41,12 +49,20 @@ export function useFilmModal(film: Film | undefined, onClose?: () => void): UseF
   const [name, categoryIds, link] = watch(["name", "categoryIds", "link"]);
   const isFilled = Boolean(name?.trim()) && Boolean(link?.trim());
 
-  const onSubmit = (data: FilmSchema) => {
-    if (isEditMode) {
-      editFilm.mutate(data, { onSuccess: () => onClose?.() });
-    } else {
-      createFilm.mutate(data, { onSuccess: () => onClose?.() });
-    }
+  const onSubmit = async (data: FilmSchema) => {
+    try {
+      const newFilm = isEditMode ? await editFilm.mutateAsync(data) : await createFilm.mutateAsync(data);
+  
+      if (selectedFile) {
+        await uploadPoster.mutateAsync({ filmId: newFilm.id, file: selectedFile });
+      }
+  
+      onClose?.();
+
+      if (!isEditMode) {
+        router.push(`/film/${newFilm.id}`);
+      }
+    } catch { }
   };
 
   const handleFormSubmit = (event: React.FormEvent) => {
@@ -66,6 +82,7 @@ export function useFilmModal(film: Film | undefined, onClose?: () => void): UseF
     categoryIds,
     setCategoryIds: (ids: number[]) => setValue("categoryIds", ids, { shouldValidate: true }),
     handleFormSubmit,
+    setSelectedFile,
   };
 }
 

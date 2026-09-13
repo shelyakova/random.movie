@@ -31,6 +31,16 @@ export function fetchFilmById(filmId: number) {
   return authorizedFetch<Film>(`/film/${filmId}`);
 }
 
+export function uploadPoster(filmId: number, file: File) {
+  const formData = new FormData();
+  formData.append('poster', file);
+
+  return authorizedFetch<Film>(`/film/${filmId}/poster`, {
+    method: 'POST',
+    body: formData,
+  });
+}
+
 export function createFilm(data: FilmSchema) {
   return authorizedFetch<Film>("/film/create", { method: "POST", body: JSON.stringify(data) });
 }

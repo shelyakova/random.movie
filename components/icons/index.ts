@@ -1,3 +1,4 @@
+export { AddPosterIcon } from "./AddPosterIcon";
 export { CheckIcon } from "./CheckIcon";
 export { ChevronLeftIcon } from "./ChevronLeftIcon";
 export { ChevronRightIcon } from "./ChevronRightIcon";
