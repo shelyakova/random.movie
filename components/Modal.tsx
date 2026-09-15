@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { CloseIcon, EditIcon } from "./icons";
+import Tooltip from "./Tooltip";
 
 interface ModalProps {
   title: string;
@@ -36,9 +37,11 @@ export default function Modal({
 
           <div className="flex shrink-0 items-center gap-3">
             {onEdit && (
-              <button type="button" onClick={onEdit} aria-label="Edit" className={editIconStyle}>
-                <EditIcon />
-              </button>
+              <Tooltip content="Edit">
+                <button type="button" onClick={onEdit} aria-label="Edit" className={editIconStyle}>
+                  <EditIcon />
+                </button>
+              </Tooltip>
             )}
 
             {onClose && (

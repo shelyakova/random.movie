@@ -7,6 +7,7 @@ import FormInput from "./FormInput";
 import LoadingSpinner from "./LoadingSpinner";
 import { IconButton } from "./IconButton";
 import { PlusIcon, EditIcon } from "./icons";
+import Tooltip from "./Tooltip";
 import { TagRadius, TagTone, Tone } from "@/lib/types";
 import { useCategoryModal } from "@/hooks";
 import ConfirmModal from "./ConfirmModal";
@@ -57,13 +58,15 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                 value={categoryInputValue}
                 onChange={(e) => setCategoryInputValue(e.target.value)}
               />
-              <IconButton
-                disabled={isAddEditDisabled}
-                tone={Tone.Accent}
-                onClick={selectedCategory ? handleEdit : handleCreate}
-              >
-                {selectedCategory ? <EditIcon /> : <PlusIcon />}
-              </IconButton>
+              <Tooltip content={selectedCategory ? "Edit category" : "Add category"}>
+                <IconButton
+                  disabled={isAddEditDisabled}
+                  tone={Tone.Accent}
+                  onClick={selectedCategory ? handleEdit : handleCreate}
+                >
+                  {selectedCategory ? <EditIcon /> : <PlusIcon />}
+                </IconButton>
+              </Tooltip>
             </div>
           ) : (
             <div className="flex items-center gap-3 pt-2">

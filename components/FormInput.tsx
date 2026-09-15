@@ -2,6 +2,7 @@
 
 import { ComponentProps, forwardRef, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "./icons";
+import Tooltip from "./Tooltip";
 
 interface FormInputProps extends ComponentProps<"input"> {
   error?: boolean;
@@ -26,14 +27,19 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       />
 
       {isPassword && (
-        <button
-          type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-zinc-500"
-          aria-label={showPassword ? "Hide password" : "Show password"}
+        <Tooltip
+          content={showPassword ? "Hide password" : "Show password"}
+          className="absolute top-1/2 right-4 -translate-y-1/2"
         >
-          {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-        </button>
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="cursor-pointer text-zinc-500"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+          </button>
+        </Tooltip>
       )}
     </div>
   );
