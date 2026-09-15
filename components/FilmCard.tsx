@@ -1,6 +1,7 @@
-import { Film, TagTone } from "@/lib/types";
+import { Film, TagTone, TooltipAlign, TooltipPlacement } from "@/lib/types";
 import { BellIcon, CalendarIcon, ImagePlaceholderIcon } from "./icons";
 import Tag from "./Tag";
+import Tooltip from "./Tooltip";
 
 interface FilmCardProps {
   film?: Film;
@@ -50,13 +51,29 @@ export default function FilmCard({
       {showDateIcons && (
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {isNewSeasonOut && (
-            <Tag tone={TagTone.Rating} className="!px-1 !py-1 opacity-80" readOnly>
-              <BellIcon />
+            <Tag
+              tone={TagTone.Rating}
+              className="relative z-10 h-8 !bg-yellow-400/80 !px-1 !py-1"
+              readOnly
+            >
+              <Tooltip
+                content="New season out"
+                placement={TooltipPlacement.Bottom}
+                align={TooltipAlign.Start}
+              >
+                <BellIcon />
+              </Tooltip>
             </Tag>
           )}
           {isLatestEpisodeOut && (
-            <Tag tone={TagTone.Success} className="!px-1 !py-1" readOnly>
-              <CalendarIcon />
+            <Tag tone={TagTone.Success} className="h-8 !px-1 !py-1" readOnly>
+              <Tooltip
+                content="Latest episode available"
+                placement={TooltipPlacement.Bottom}
+                align={TooltipAlign.Start}
+              >
+                <CalendarIcon />
+              </Tooltip>
             </Tag>
           )}
         </div>

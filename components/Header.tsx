@@ -2,6 +2,7 @@ import SearchBar from "./SearchBar";
 import Logo from "./Logo";
 import { SettingsIcon, SmileyIcon, LogoutIcon, PlusIcon } from "./icons";
 import { IconButton } from "./IconButton";
+import Tooltip from "./Tooltip";
 import { Tone } from "@/lib/types";
 
 interface HeaderProps {
@@ -28,25 +29,33 @@ export default function Header({
       </div>
 
       <div className="flex items-center justify-center gap-5">
-        <IconButton onClick={onOpenCategoriesModal}>
-          <SettingsIcon />
-        </IconButton>
+        <Tooltip content="Settings">
+          <IconButton onClick={onOpenCategoriesModal}>
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
 
         <SearchBar value={searchValue} onChange={onSearchChange} />
 
-        <IconButton tone={Tone.Accent} onClick={onClickRandomize}>
-          <SmileyIcon />
-        </IconButton>
+        <Tooltip content="Randomize">
+          <IconButton tone={Tone.Accent} onClick={onClickRandomize}>
+            <SmileyIcon />
+          </IconButton>
+        </Tooltip>
 
-        <IconButton onClick={onOpenLogoutConfirmModal}>
-          <LogoutIcon />
-        </IconButton>
+        <Tooltip content="Logout">
+          <IconButton onClick={onOpenLogoutConfirmModal}>
+            <LogoutIcon />
+          </IconButton>
+        </Tooltip>
       </div>
 
       <div className="justify-self-end">
-        <IconButton onClick={onOpenFilmModal}>
-          <PlusIcon />
-        </IconButton>
+        <Tooltip content="Add film">
+          <IconButton onClick={onOpenFilmModal}>
+            <PlusIcon />
+          </IconButton>
+        </Tooltip>
       </div>
     </header>
   );

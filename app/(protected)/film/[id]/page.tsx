@@ -10,6 +10,7 @@ import {
   ConfirmModal,
 } from "@/components";
 import Tag from "@/components/Tag";
+import Tooltip from "@/components/Tooltip";
 import { EditIcon, DeleteIcon, CheckIcon } from "@/components/icons";
 import { TagTone } from "@/lib/types";
 import { useGetFilmById } from "@/hooks";
@@ -116,13 +117,17 @@ export default function FilmPage() {
 
         <div className="mt-auto flex items-center justify-between pt-10">
           <div className="flex w-[369px] items-center gap-2">
-            <IconButton onClick={() => setIsEditModalOpen(true)}>
-              <EditIcon />
-            </IconButton>
+            <Tooltip content="Edit">
+              <IconButton onClick={() => setIsEditModalOpen(true)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
 
-            <IconButton onClick={() => setIsConfirmDeleteOpen(true)}>
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip content="Delete">
+              <IconButton onClick={() => setIsConfirmDeleteOpen(true)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
 
             <div className="flex-1">
               <Button className="!mt-0" href={film?.link}>
@@ -131,12 +136,14 @@ export default function FilmPage() {
             </div>
           </div>
 
-          <IconButton
-            onClick={handleToggleWatched}
-            className={film?.isWatched ? "!bg-[rgba(0,215,139,0.34)] !text-[#00734B]" : undefined}
-          >
-            <CheckIcon />
-          </IconButton>
+          <Tooltip content={film?.isWatched ? "Mark as unwatched" : "Mark as watched"}>
+            <IconButton
+              onClick={handleToggleWatched}
+              className={film?.isWatched ? "!bg-[rgba(0,215,139,0.34)] !text-[#00734B]" : undefined}
+            >
+              <CheckIcon />
+            </IconButton>
+          </Tooltip>
         </div>
       </main>
 

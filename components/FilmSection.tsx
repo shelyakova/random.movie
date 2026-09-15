@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useInfiniteScroll } from "@/hooks";
 import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import Tooltip from "./Tooltip";
 
 interface FilmSectionProps {
   title: string;
@@ -85,20 +86,24 @@ export default function FilmSection({
           </div>
 
           {hasSlider && canScrollLeft && (
-            <button
-              onClick={handleScrollLeft}
-              className="absolute top-1/2 -left-10 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
-            >
-              <ChevronLeftIcon />
-            </button>
+            <Tooltip content="Scroll left" className="absolute top-1/2 -left-10 -translate-y-1/2">
+              <button
+                onClick={handleScrollLeft}
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+              >
+                <ChevronLeftIcon />
+              </button>
+            </Tooltip>
           )}
           {hasSlider && canScrollRight && (
-            <button
-              onClick={handleScrollRight}
-              className="absolute top-1/2 -right-10 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
-            >
-              <ChevronRightIcon />
-            </button>
+            <Tooltip content="Scroll right" className="absolute top-1/2 -right-10 -translate-y-1/2">
+              <button
+                onClick={handleScrollRight}
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+              >
+                <ChevronRightIcon />
+              </button>
+            </Tooltip>
           )}
         </div>
       )}
