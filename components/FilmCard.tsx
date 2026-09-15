@@ -1,5 +1,5 @@
 import { Film, TagTone } from "@/lib/types";
-import { ImagePlaceholderIcon } from "./icons";
+import { BellIcon, CalendarIcon, ImagePlaceholderIcon } from "./icons";
 import Tag from "./Tag";
 
 interface FilmCardProps {
@@ -8,6 +8,7 @@ interface FilmCardProps {
   showYear?: boolean;
   showMark?: boolean;
   showName?: boolean;
+  showDateIcons?: boolean;
 }
 
 export default function FilmCard({
@@ -16,7 +17,13 @@ export default function FilmCard({
   showYear = false,
   showMark = false,
   showName = false,
+  showDateIcons = false,
 }: FilmCardProps) {
+  const isNewSeasonOut = film?.newSeason ? new Date(film.newSeason) <= new Date() : false;
+  const isLatestEpisodeOut = film?.latestEpisode
+    ? new Date(film.latestEpisode) <= new Date()
+    : false;
+
   return (
     <div className={`relative shrink-0 overflow-hidden rounded-xl ${className ?? ""}`}>
       {film?.posterUrl ? (
@@ -38,6 +45,21 @@ export default function FilmCard({
         <Tag tone={TagTone.Rating} className="absolute right-3 bottom-3" readOnly>
           {film?.mark}
         </Tag>
+      )}
+
+      {showDateIcons && (
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {isNewSeasonOut && (
+            <Tag tone={TagTone.Rating} className="!px-1 !py-1 opacity-80" readOnly>
+              <BellIcon />
+            </Tag>
+          )}
+          {isLatestEpisodeOut && (
+            <Tag tone={TagTone.Success} className="!px-1 !py-1" readOnly>
+              <CalendarIcon />
+            </Tag>
+          )}
+        </div>
       )}
 
       {showName && (

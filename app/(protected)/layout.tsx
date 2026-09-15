@@ -16,11 +16,22 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   const [isOpenFilmModal, setIsOpenFilmModal] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
 
-  const { currentSearch, currentCategoryIds, handleSearchChange } = useSearchNavigation();
+  const {
+    currentSearch,
+    currentCategoryIds,
+    handleSearchChange,
+    currentNewSeasonOut,
+    currentHasLatestEpisode,
+  } = useSearchNavigation();
   const randomFilm = useRandomFilm();
 
   const handleRandomize = () => {
-    randomFilm.mutate({ search: currentSearch, categoryIds: currentCategoryIds });
+    randomFilm.mutate({
+      search: currentSearch,
+      categoryIds: currentCategoryIds,
+      newSeasonOut: currentNewSeasonOut,
+      hasLatestEpisode: currentHasLatestEpisode,
+    });
   };
 
   useEffect(() => {

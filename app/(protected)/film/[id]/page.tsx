@@ -16,6 +16,7 @@ import { useGetFilmById } from "@/hooks";
 import { useDeleteFilm, useSetIsWatched } from "@/hooks/useFilms";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { format } from "date-fns";
 
 export default function FilmPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -30,6 +31,11 @@ export default function FilmPage() {
 
   const isLoading = isFilmLoading || setIsWatched.isPending;
   const hasFilm = !!film && Object.keys(film).length > 0;
+
+  const isNewSeasonOut = film?.newSeason ? new Date(film.newSeason) <= new Date() : false;
+  const isLatestEpisodeOut = film?.latestEpisode
+    ? new Date(film.latestEpisode) <= new Date()
+    : false;
 
   const metaParts = [
     film?.seasons != null ? `${film.seasons} season${film.seasons === 1 ? "" : "s"}` : null,
@@ -62,7 +68,7 @@ export default function FilmPage() {
         <div className="flex gap-8">
           <FilmCard film={film} showYear showMark className="h-[548px] w-[369px]" />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-8">
             <div className="flex flex-wrap gap-2">
               {film?.categories.map((category) => (
                 <Tag key={category.id} tone={TagTone.Outline} readOnly>
@@ -75,6 +81,31 @@ export default function FilmPage() {
               <p className="border-b border-zinc-300 pb-4 text-[20px] font-medium text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
                 {metaParts.join(" - ")}
               </p>
+            )}
+
+            {(film?.newSeason || film?.latestEpisode) && (
+              <div className="flex gap-4">
+                {film?.newSeason && (
+                  <div>
+                    <p className="text-s pb-1 font-medium text-zinc-500 dark:text-zinc-400">
+                      New season
+                    </p>
+                    <Tag readOnly tone={isNewSeasonOut ? TagTone.Success : TagTone.Outline}>
+                      {format(new Date(film.newSeason), "dd.MM.yyyy")}
+                    </Tag>
+                  </div>
+                )}
+                {film?.latestEpisode && (
+                  <div>
+                    <p className="text-s pb-1 font-medium text-zinc-500 dark:text-zinc-400">
+                      Latest episode
+                    </p>
+                    <Tag readOnly tone={isLatestEpisodeOut ? TagTone.Success : TagTone.Outline}>
+                      {format(new Date(film.latestEpisode), "dd.MM.yyyy")}
+                    </Tag>
+                  </div>
+                )}
+              </div>
             )}
 
             <p className="text-[18px] leading-relaxed text-zinc-600 dark:text-zinc-300">

@@ -11,6 +11,8 @@ export interface Film {
   seasons: number | null;
   episodes: number | null;
   duration: number | null;
+  newSeason: string | null;
+  latestEpisode: string | null;
   isWatched: boolean;
   mark: number | null;
   userId: number;

@@ -11,6 +11,8 @@ export const filmSchema = z.object({
   mark: z.number().min(1).max(10).optional(),
   link: z.string().trim().min(1, "Link is required"),
   isWatched: z.boolean().optional(),
+  newSeason: z.string().optional(),
+  latestEpisode: z.string().optional(),
 });
 
 export const editFilmSchema = filmSchema.partial();

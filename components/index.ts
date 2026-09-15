@@ -3,6 +3,7 @@ export { default as FilmFormFields } from "./FilmFormFields";
 export { default as Button } from "./Button";
 export { default as CategoriesModal } from "./CategoriesModal";
 export { default as ConfirmModal } from "./ConfirmModal";
+export { default as DatePicker } from "./DatePicker";
 export { default as EmptyState } from "./EmptyState";
 export { default as ErrorModal } from "./ErrorModal";
 export { default as FilmCard } from "./FilmCard";
