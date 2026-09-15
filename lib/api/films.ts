@@ -6,6 +6,8 @@ export function fetchFilms(params: {
   search?: string;
   isWatched?: boolean;
   categoryIds?: number[];
+  newSeasonOut?: boolean;
+  hasLatestEpisode?: boolean;
   page?: number;
   limit?: number;
 }) {
@@ -14,16 +16,25 @@ export function fetchFilms(params: {
   if (params.isWatched !== undefined) query.set("isWatched", String(params.isWatched));
   if (params.categoryIds)
     params.categoryIds.forEach((id) => query.append("categoryIds", String(id)));
+  if (params.newSeasonOut) query.set("newSeasonOut", String(params.newSeasonOut));
+  if (params.hasLatestEpisode) query.set("hasLatestEpisode", String(params.hasLatestEpisode));
   if (params.page) query.set("page", String(params.page));
   if (params.limit) query.set("limit", String(params.limit));
 
   return authorizedFetch<Film[]>(`/film?${query}`);
 }
 
-export function fetchRandomFilm(search: string, categoryIds: number[]) {
+export function fetchRandomFilm(
+  search: string,
+  categoryIds: number[],
+  newSeasonOut?: boolean,
+  hasLatestEpisode?: boolean,
+) {
   const query = new URLSearchParams();
   if (search) query.set("search", search);
   categoryIds.forEach((id) => query.append("categoryIds", String(id)));
+  if (newSeasonOut) query.set("newSeasonOut", "true");
+  if (hasLatestEpisode) query.set("hasLatestEpisode", "true");
   return authorizedFetch<{ id: number }>(`/film/random?${query}`);
 }
 
@@ -33,10 +44,10 @@ export function fetchFilmById(filmId: number) {
 
 export function uploadPoster(filmId: number, file: File) {
   const formData = new FormData();
-  formData.append('poster', file);
+  formData.append("poster", file);
 
   return authorizedFetch<Film>(`/film/${filmId}/poster`, {
-    method: 'POST',
+    method: "POST",
     body: formData,
   });
 }

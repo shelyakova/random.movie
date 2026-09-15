@@ -7,7 +7,7 @@ import FormInput from "./FormInput";
 import LoadingSpinner from "./LoadingSpinner";
 import { IconButton } from "./IconButton";
 import { PlusIcon, EditIcon } from "./icons";
-import { TagRadius, Tone } from "@/lib/types";
+import { TagRadius, TagTone, Tone } from "@/lib/types";
 import { useCategoryModal } from "@/hooks";
 import ConfirmModal from "./ConfirmModal";
 
@@ -34,6 +34,10 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
     handleEdit,
     handleDelete,
     handleFilter,
+    selectedNewSeasonOut,
+    selectedHasLatestEpisode,
+    toggleNewSeasonOut,
+    toggleHasLatestEpisode,
   } = useCategoryModal(onClose);
 
   return (
@@ -45,7 +49,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
       className="h-[80vh]"
       footer={
         <div className="flex flex-col gap-4">
-          {isEditMode && (
+          {isEditMode ? (
             <div className="flex items-center gap-3">
               <FormInput
                 placeholder="Add new category"
@@ -60,6 +64,27 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
               >
                 {selectedCategory ? <EditIcon /> : <PlusIcon />}
               </IconButton>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 pt-2">
+              <Tag
+                key="newSeason"
+                className="flex-1"
+                tone={TagTone.Outline}
+                selected={selectedNewSeasonOut}
+                onClick={toggleNewSeasonOut}
+              >
+                New season
+              </Tag>
+              <Tag
+                key="latestEpisode"
+                className="flex-1"
+                tone={TagTone.Outline}
+                selected={selectedHasLatestEpisode}
+                onClick={toggleHasLatestEpisode}
+              >
+                Latest episode
+              </Tag>
             </div>
           )}
           <Button disabled={isSubmitDisabled} onClick={isEditMode ? handleDelete : handleFilter}>

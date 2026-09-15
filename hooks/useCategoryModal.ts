@@ -29,6 +29,10 @@ interface UseCategoryModalReturn {
   handleEdit: () => void;
   handleDelete: () => void;
   handleFilter: () => void;
+  selectedNewSeasonOut: boolean;
+  selectedHasLatestEpisode: boolean;
+  toggleNewSeasonOut: () => void;
+  toggleHasLatestEpisode: () => void;
 }
 
 export function useCategoryModal(onClose?: () => void): UseCategoryModalReturn {
@@ -37,14 +41,25 @@ export function useCategoryModal(onClose?: () => void): UseCategoryModalReturn {
   const deleteCategory = useDeleteCategory();
   const editCategory = useEditCategory();
 
-  const { currentCategoryIds, handleFilterChange } = useSearchNavigation();
+  const { currentNewSeasonOut, currentHasLatestEpisode, currentCategoryIds, handleFilterChange } =
+    useSearchNavigation();
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedFilterCategoryIds, setSelectedFilterCategoryIds] =
     useState<number[]>(currentCategoryIds);
+  const [selectedNewSeasonOut, setSelectedNewSeasonOut] = useState(currentNewSeasonOut);
+  const [selectedHasLatestEpisode, setSelectedHasLatestEpisode] = useState(currentHasLatestEpisode);
   const [categoryInputValue, setCategoryInputValue] = useState("");
   const [blockedByFilms, setBlockedByFilms] = useState<string[] | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const toggleNewSeasonOut = () => {
+    setSelectedNewSeasonOut((prev) => !prev);
+  };
+
+  const toggleHasLatestEpisode = () => {
+    setSelectedHasLatestEpisode((prev) => !prev);
+  };
 
   const toggleCategory = (category: Category) => {
     if (isEditMode) {
@@ -91,7 +106,7 @@ export function useCategoryModal(onClose?: () => void): UseCategoryModalReturn {
   };
 
   const handleFilter = () => {
-    handleFilterChange(selectedFilterCategoryIds);
+    handleFilterChange(selectedFilterCategoryIds, selectedNewSeasonOut, selectedHasLatestEpisode);
     onClose?.();
   };
 
@@ -126,5 +141,9 @@ export function useCategoryModal(onClose?: () => void): UseCategoryModalReturn {
     handleEdit,
     handleDelete,
     handleFilter,
+    selectedNewSeasonOut,
+    selectedHasLatestEpisode,
+    toggleNewSeasonOut,
+    toggleHasLatestEpisode,
   };
 }

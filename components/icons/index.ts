@@ -1,4 +1,6 @@
 export { AddPosterIcon } from "./AddPosterIcon";
+export { BellIcon } from "./BellIcon";
+export { CalendarIcon } from "./CalendarIcon";
 export { CheckIcon } from "./CheckIcon";
 export { ChevronLeftIcon } from "./ChevronLeftIcon";
 export { ChevronRightIcon } from "./ChevronRightIcon";

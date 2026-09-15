@@ -23,6 +23,10 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
     errors,
     categoryIds,
     setCategoryIds,
+    newSeason,
+    setNewSeason,
+    latestEpisode,
+    setLatestEpisode,
     handleFormSubmit,
     setSelectedFile,
   } = useFilmModal(film, onClose);
@@ -45,6 +49,10 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
           categories={categories ?? []}
           categoryIds={categoryIds}
           onCategoryIdsChange={setCategoryIds}
+          newSeason={newSeason}
+          onNewSeasonChange={setNewSeason}
+          latestEpisode={latestEpisode}
+          onLatestEpisodeChange={setLatestEpisode}
         />
         <PosterUpload
           currentPosterUrl={film?.posterUrl ?? undefined}

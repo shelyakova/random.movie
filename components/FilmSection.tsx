@@ -79,7 +79,7 @@ export default function FilmSection({
           >
             {films.map((film) => (
               <Link key={film.id} href={`/film/${film.id}`}>
-                <FilmCard film={film} showName className="h-[263px] w-[177px]" />
+                <FilmCard film={film} showName showDateIcons className="h-[263px] w-[177px]" />
               </Link>
             ))}
           </div>

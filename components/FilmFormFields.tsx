@@ -2,6 +2,7 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import FormInput from "./FormInput";
 import Textarea from "./Textarea";
 import MultiSelectDropdown from "./MultiSelectDropdown";
+import DatePicker from "./DatePicker";
 import { FilmSchema } from "@/lib/schemas/film.schema";
 import { Category } from "@/lib/types/category";
 
@@ -11,6 +12,10 @@ interface FilmFormFieldsProps {
   categories: Category[];
   categoryIds: number[] | undefined;
   onCategoryIdsChange: (ids: number[]) => void;
+  newSeason: string | undefined;
+  onNewSeasonChange: (date: string | undefined) => void;
+  latestEpisode: string | undefined;
+  onLatestEpisodeChange: (date: string | undefined) => void;
 }
 
 export default function FilmFormFields({
@@ -19,6 +24,10 @@ export default function FilmFormFields({
   categories,
   categoryIds,
   onCategoryIdsChange,
+  newSeason,
+  onNewSeasonChange,
+  latestEpisode,
+  onLatestEpisodeChange,
 }: FilmFormFieldsProps) {
   const toNumberOrUndefined = (v: string) => (v === "" ? undefined : Number(v));
 
@@ -52,6 +61,22 @@ export default function FilmFormFields({
           placeholder="Duration(min)"
           className="flex-1"
           {...register("duration", { setValueAs: toNumberOrUndefined })}
+        />
+      </div>
+
+      <div className="flex items-center gap-3">
+        <DatePicker
+          placeholder="New season"
+          value={newSeason}
+          onChange={onNewSeasonChange}
+          className="flex-1"
+        />
+        <DatePicker
+          placeholder="Latest episode"
+          value={latestEpisode}
+          onChange={onLatestEpisodeChange}
+          className="flex-1"
+          isRightPopupOriented
         />
       </div>
 

@@ -18,13 +18,17 @@ interface UseFilmModalReturn {
   errors: ReturnType<typeof useForm<FilmSchema>>["formState"]["errors"];
   categoryIds: number[] | undefined;
   setCategoryIds: (ids: number[]) => void;
+  newSeason: string | undefined;
+  setNewSeason: (date: string | undefined) => void;
+  latestEpisode: string | undefined;
+  setLatestEpisode: (date: string | undefined) => void;
   handleFormSubmit: (event: React.FormEvent) => void;
   setSelectedFile: (file: File | null) => void;
 }
 
 export function useFilmModal(film: Film | undefined, onClose?: () => void): UseFilmModalReturn {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
+
   const isEditMode = Boolean(film);
 
   const router = useRouter();
@@ -33,7 +37,8 @@ export function useFilmModal(film: Film | undefined, onClose?: () => void): UseF
   const editFilm = useEditFilm(film?.id ?? 0);
   const uploadPoster = useUploadPoster();
 
-  const isLoading = isCategoriesLoading || createFilm.isPending || editFilm.isPending || uploadPoster.isPending;
+  const isLoading =
+    isCategoriesLoading || createFilm.isPending || editFilm.isPending || uploadPoster.isPending;
 
   const {
     register,
@@ -46,23 +51,31 @@ export function useFilmModal(film: Film | undefined, onClose?: () => void): UseF
     defaultValues: getFilmDefaultValues(film),
   });
 
-  const [name, categoryIds, link] = watch(["name", "categoryIds", "link"]);
+  const [name, categoryIds, link, newSeason, latestEpisode] = watch([
+    "name",
+    "categoryIds",
+    "link",
+    "newSeason",
+    "latestEpisode",
+  ]);
   const isFilled = Boolean(name?.trim()) && Boolean(link?.trim());
 
   const onSubmit = async (data: FilmSchema) => {
     try {
-      const newFilm = isEditMode ? await editFilm.mutateAsync(data) : await createFilm.mutateAsync(data);
-  
+      const newFilm = isEditMode
+        ? await editFilm.mutateAsync(data)
+        : await createFilm.mutateAsync(data);
+
       if (selectedFile) {
         await uploadPoster.mutateAsync({ filmId: newFilm.id, file: selectedFile });
       }
-  
+
       onClose?.();
 
       if (!isEditMode) {
         router.push(`/film/${newFilm.id}`);
       }
-    } catch { }
+    } catch {}
   };
 
   const handleFormSubmit = (event: React.FormEvent) => {
@@ -81,6 +94,12 @@ export function useFilmModal(film: Film | undefined, onClose?: () => void): UseF
     errors,
     categoryIds,
     setCategoryIds: (ids: number[]) => setValue("categoryIds", ids, { shouldValidate: true }),
+    newSeason,
+    setNewSeason: (date: string | undefined) =>
+      setValue("newSeason", date, { shouldValidate: true }),
+    latestEpisode,
+    setLatestEpisode: (date: string | undefined) =>
+      setValue("latestEpisode", date, { shouldValidate: true }),
     handleFormSubmit,
     setSelectedFile,
   };
@@ -96,6 +115,8 @@ function getFilmDefaultValues(film?: Film): Partial<FilmSchema> | undefined {
     seasons: film.seasons ?? undefined,
     episodes: film.episodes ?? undefined,
     duration: film.duration ?? undefined,
+    newSeason: film.newSeason ? film.newSeason.split("T")[0] : undefined,
+    latestEpisode: film.latestEpisode ? film.latestEpisode.split("T")[0] : undefined,
     description: film.description ?? undefined,
     year: film.year ?? undefined,
     mark: film.mark ?? undefined,

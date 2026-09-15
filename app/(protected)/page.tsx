@@ -11,26 +11,31 @@ export default function Home() {
   const searchParams = useSearchParams();
   const expandedSection = searchParams.get("view");
 
-  const { currentSearch, currentCategoryIds } = useSearchNavigation();
+  const { currentSearch, currentCategoryIds, currentNewSeasonOut, currentHasLatestEpisode } =
+    useSearchNavigation();
   const debouncedSearch = useDebounce(currentSearch, 500);
-  const isFiltering = Boolean(debouncedSearch) || currentCategoryIds.length > 0;
+  const isFiltering =
+    Boolean(debouncedSearch) ||
+    currentCategoryIds.length > 0 ||
+    currentNewSeasonOut ||
+    currentHasLatestEpisode;
 
   const suggested = useFilms({
     isWatched: false,
     search: debouncedSearch,
-    categoryIds: currentCategoryIds,
     limit: expandedSection === ViewKey.Suggested ? 18 : 10,
   });
   const previouslyWatched = useFilms({
     isWatched: true,
     search: debouncedSearch,
-    categoryIds: currentCategoryIds,
     limit: expandedSection === ViewKey.Watched ? 18 : 10,
   });
   const searchResults = useFilms({
     search: debouncedSearch,
     categoryIds: currentCategoryIds,
     limit: 12,
+    newSeasonOut: currentNewSeasonOut,
+    hasLatestEpisode: currentHasLatestEpisode,
   });
 
   const { data: categories = [] } = useCategories();
@@ -53,6 +58,16 @@ export default function Home() {
                 {debouncedSearch && (
                   <Tag readOnly tone={TagTone.Neutral}>
                     {debouncedSearch}
+                  </Tag>
+                )}
+                {currentNewSeasonOut && (
+                  <Tag readOnly tone={TagTone.Outline}>
+                    New season
+                  </Tag>
+                )}
+                {currentHasLatestEpisode && (
+                  <Tag readOnly tone={TagTone.Outline}>
+                    Latest episode
                   </Tag>
                 )}
                 {selectedCategoryNames.map((name) => (

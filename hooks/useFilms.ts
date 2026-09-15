@@ -18,16 +18,26 @@ import { useParams, useRouter } from "next/navigation";
 
 export function useFilms(params: {
   isWatched?: boolean;
-  search: string;
-  categoryIds: number[];
+  search?: string;
+  categoryIds?: number[];
+  newSeasonOut?: boolean;
+  hasLatestEpisode?: boolean;
   limit?: number;
 }) {
-  const { isWatched, search, categoryIds, limit = 8 } = params;
+  const { isWatched, search, categoryIds, newSeasonOut, hasLatestEpisode, limit = 8 } = params;
 
   return useInfiniteQuery({
-    queryKey: QUERY_KEYS.films.list({ isWatched, search, categoryIds, limit }),
+    queryKey: ["films", { isWatched, search, categoryIds, newSeasonOut, hasLatestEpisode, limit }],
     queryFn: ({ pageParam }) =>
-      fetchFilms({ isWatched, search, categoryIds, page: pageParam, limit }),
+      fetchFilms({
+        isWatched,
+        search,
+        categoryIds,
+        newSeasonOut,
+        hasLatestEpisode,
+        page: pageParam,
+        limit,
+      }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length === limit ? allPages.length + 1 : undefined,
@@ -38,8 +48,17 @@ export function useRandomFilm() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: ({ search, categoryIds }: { search: string; categoryIds: number[] }) =>
-      fetchRandomFilm(search, categoryIds),
+    mutationFn: ({
+      search,
+      categoryIds,
+      newSeasonOut,
+      hasLatestEpisode,
+    }: {
+      search: string;
+      categoryIds: number[];
+      newSeasonOut?: boolean;
+      hasLatestEpisode?: boolean;
+    }) => fetchRandomFilm(search, categoryIds, newSeasonOut, hasLatestEpisode),
     onSuccess: (film) => {
       router.push(`/film/${film.id}`);
     },
@@ -75,7 +94,7 @@ export function useUploadPoster() {
     mutationFn: ({ filmId, file }: { filmId: number; file: File }) => uploadPoster(filmId, file),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError('Failed to upload poster');
+      useErrorStore.getState().showError("Failed to upload poster");
     },
   });
 }

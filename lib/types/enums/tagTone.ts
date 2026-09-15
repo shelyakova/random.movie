@@ -3,4 +3,5 @@ export enum TagTone {
   Outline = "outline",
   Info = "info",
   Rating = "rating",
+  Success = "success",
 }
