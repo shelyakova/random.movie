@@ -7,7 +7,9 @@ import {
   fetchFilmById,
   fetchFilms,
   fetchRandomFilm,
+  removePoster,
   uploadPoster,
+  uploadPosterFromUrl,
 } from "@/lib/api";
 import { EditFilmSchema } from "@/lib/schemas/film.schema";
 import { useErrorStore } from "@/lib/stores/error.store";
@@ -27,7 +29,14 @@ export function useFilms(params: {
   const { isWatched, search, categoryIds, newSeasonOut, hasLatestEpisode, limit = 8 } = params;
 
   return useInfiniteQuery({
-    queryKey: ["films", { isWatched, search, categoryIds, newSeasonOut, hasLatestEpisode, limit }],
+    queryKey: QUERY_KEYS.films.list({
+      isWatched,
+      search,
+      categoryIds,
+      newSeasonOut,
+      hasLatestEpisode,
+      limit,
+    }),
     queryFn: ({ pageParam }) =>
       fetchFilms({
         isWatched,
@@ -95,6 +104,29 @@ export function useUploadPoster() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
       useErrorStore.getState().showError("Failed to upload poster");
+    },
+  });
+}
+
+export function useUploadPosterFromUrl() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ filmId, posterUrl }: { filmId: number; posterUrl: string }) =>
+      uploadPosterFromUrl(filmId, posterUrl),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
+    onError: () => {
+      useErrorStore.getState().showError("Failed to upload poster");
+    },
+  });
+}
+
+export function useRemovePoster() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (filmId: number) => removePoster(filmId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
+    onError: () => {
+      useErrorStore.getState().showError("Failed to remove poster");
     },
   });
 }

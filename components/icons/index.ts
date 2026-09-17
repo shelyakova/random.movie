@@ -13,6 +13,7 @@ export { ImagePlaceholderIcon } from "./ImagePlaceholderIcon";
 export { LogoutIcon } from "./LogoutIcon";
 export { NoData } from "./NoData";
 export { PlusIcon } from "./PlusIcon";
+export { RefreshIcon } from "./RefreshIcon";
 export { SearchIcon } from "./SearchIcon";
 export { SettingsIcon } from "./SettingsIcon";
 export { SmileyIcon } from "./SmileyIcon";

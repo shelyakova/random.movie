@@ -1,44 +1,48 @@
-import { UseFormRegister, FieldErrors } from "react-hook-form";
 import FormInput from "./FormInput";
 import Textarea from "./Textarea";
 import MultiSelectDropdown from "./MultiSelectDropdown";
 import DatePicker from "./DatePicker";
-import { FilmSchema } from "@/lib/schemas/film.schema";
 import { Category } from "@/lib/types/category";
+import { TmdbSearchResult } from "@/lib/types";
+import TmdbSearchDropdown from "./TmdbSearchDropdown";
+import { FilmFormState } from "@/hooks/useFilmModal";
 
 interface FilmFormFieldsProps {
-  register: UseFormRegister<FilmSchema>;
-  errors: FieldErrors<FilmSchema>;
+  form: FilmFormState;
   categories: Category[];
-  categoryIds: number[] | undefined;
-  onCategoryIdsChange: (ids: number[]) => void;
-  newSeason: string | undefined;
-  onNewSeasonChange: (date: string | undefined) => void;
-  latestEpisode: string | undefined;
-  onLatestEpisodeChange: (date: string | undefined) => void;
+  onTmdbSelect: (result: TmdbSearchResult) => void;
 }
 
-export default function FilmFormFields({
-  register,
-  errors,
-  categories,
-  categoryIds,
-  onCategoryIdsChange,
-  newSeason,
-  onNewSeasonChange,
-  latestEpisode,
-  onLatestEpisodeChange,
-}: FilmFormFieldsProps) {
+export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmFormFieldsProps) {
+  const {
+    register,
+    errors,
+    name,
+    onNameChange,
+    categoryIds,
+    setCategoryIds,
+    newSeason,
+    setNewSeason,
+    latestEpisode,
+    setLatestEpisode,
+  } = form;
+
   const toNumberOrUndefined = (v: string) => (v === "" ? undefined : Number(v));
 
   return (
     <>
-      <FormInput placeholder="Name" {...register("name")} error={!!errors.name} />
+      <TmdbSearchDropdown
+        value={name ?? ""}
+        onQueryChange={onNameChange}
+        onSelect={onTmdbSelect}
+        placeholder="Name"
+        error={!!errors.name}
+      />
 
       <MultiSelectDropdown
         options={categories}
         selectedIds={categoryIds ?? []}
-        onChange={onCategoryIdsChange}
+        onChange={setCategoryIds}
         placeholder="Categories"
         error={!!errors.categoryIds}
       />
@@ -68,13 +72,13 @@ export default function FilmFormFields({
         <DatePicker
           placeholder="New season"
           value={newSeason}
-          onChange={onNewSeasonChange}
+          onChange={setNewSeason}
           className="flex-1"
         />
         <DatePicker
           placeholder="Latest episode"
           value={latestEpisode}
-          onChange={onLatestEpisodeChange}
+          onChange={setLatestEpisode}
           className="flex-1"
           isRightPopupOriented
         />
@@ -91,7 +95,7 @@ export default function FilmFormFields({
         />
         <FormInput
           type="number"
-          step="0.1"
+          step="0.01"
           placeholder="Mark"
           className="flex-1"
           {...register("mark", { setValueAs: toNumberOrUndefined })}

@@ -20,8 +20,7 @@ export default function Tooltip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const verticalClasses =
-    placement === TooltipPlacement.Top ? "bottom-full mb-2" : "top-full mt-2";
+  const verticalClasses = placement === TooltipPlacement.Top ? "bottom-full mb-2" : "top-full mt-2";
 
   const horizontalClasses =
     align === TooltipAlign.Center

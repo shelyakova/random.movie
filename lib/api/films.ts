@@ -52,11 +52,26 @@ export function uploadPoster(filmId: number, file: File) {
   });
 }
 
+export function uploadPosterFromUrl(filmId: number, posterUrl: string) {
+  return authorizedFetch<Film>(`/film/${filmId}/poster-from-url`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ posterUrl }),
+  });
+}
+
+export function removePoster(filmId: number) {
+  return authorizedFetch<Film>(`/film/${filmId}/poster`, {
+    method: "DELETE",
+  });
+}
+
 export function createFilm(data: FilmSchema) {
   return authorizedFetch<Film>("/film/create", { method: "POST", body: JSON.stringify(data) });
 }
 
 export function editFilm(data: EditFilmSchema, filmId: number) {
+  console.log("editFilm", data);
   return authorizedFetch<Film>(`/film/${filmId}`, { method: "PATCH", body: JSON.stringify(data) });
 }
 

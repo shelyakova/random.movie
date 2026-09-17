@@ -15,25 +15,15 @@ interface FilmModalProps {
 
 export default function FilmModal({ film, onClose }: FilmModalProps) {
   const isEditMode = Boolean(film);
-  const {
-    categories,
-    isLoading,
-    isFilled,
-    register,
-    errors,
-    categoryIds,
-    setCategoryIds,
-    newSeason,
-    setNewSeason,
-    latestEpisode,
-    setLatestEpisode,
-    handleFormSubmit,
-    setSelectedFile,
-  } = useFilmModal(film, onClose);
+  const { categories, isLoading, isFilled, form, tmdb, poster, handleFormSubmit } = useFilmModal(
+    film,
+    onClose,
+  );
 
   return (
     <Modal
       title={isEditMode ? "Edit film" : "Add new film"}
+      onRefresh={tmdb.hasLink ? tmdb.onUpdate : undefined}
       onClose={onClose}
       className="max-w-[500px]!"
       footer={
@@ -43,20 +33,11 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
       }
     >
       <form id="add-film-form" className="flex flex-col gap-3" onSubmit={handleFormSubmit}>
-        <FilmFormFields
-          register={register}
-          errors={errors}
-          categories={categories ?? []}
-          categoryIds={categoryIds}
-          onCategoryIdsChange={setCategoryIds}
-          newSeason={newSeason}
-          onNewSeasonChange={setNewSeason}
-          latestEpisode={latestEpisode}
-          onLatestEpisodeChange={setLatestEpisode}
-        />
+        <FilmFormFields form={form} categories={categories ?? []} onTmdbSelect={tmdb.onSelect} />
         <PosterUpload
-          currentPosterUrl={film?.posterUrl ?? undefined}
-          onFileSelect={setSelectedFile}
+          currentPosterUrl={poster.previewUrl}
+          onFileSelect={poster.onFileSelect}
+          onRemove={poster.onRemove}
         />
       </form>
       {isLoading && (

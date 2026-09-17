@@ -14,7 +14,7 @@ const toneClassNames: Record<TagTone, string> = {
   [TagTone.Outline]: "border border-zinc-500 text-zinc-800 dark:border-zinc-500 dark:text-zinc-100",
   [TagTone.Info]: "border border-transparent bg-[#9CE7FF] text-[#2988A6]",
   [TagTone.Rating]: "border border-transparent bg-yellow-400 text-yellow-800",
-  [TagTone.Success]: "border border-transparent bg-[rgba(0,215,139,0.34)] !text-[#00734B]",
+  [TagTone.Success]: "border border-transparent bg-[#a1ead0] !text-[#00734B]",
 };
 
 const selectedClassName = "border border-transparent bg-[#9CE7FF] text-[#2988A6]";

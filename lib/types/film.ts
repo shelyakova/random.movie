@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { TmdbMediaType } from "./enums";
 
 export interface Film {
   id: number;
@@ -17,4 +18,6 @@ export interface Film {
   mark: number | null;
   userId: number;
   categories: Category[];
+  tmdbId: number | null;
+  tmdbType: TmdbMediaType | null;
 }

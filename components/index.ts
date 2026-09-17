@@ -18,3 +18,5 @@ export { default as MultiSelectDropdown } from "./MultiSelectDropdown";
 export { default as SearchBar } from "./SearchBar";
 export { default as Tag } from "./Tag";
 export { default as Textarea } from "./Textarea";
+export { default as TmdbSearchDropdown } from "./TmdbSearchDropdown";
+export { default as Tooltip } from "./Tooltip";

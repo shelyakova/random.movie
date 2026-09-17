@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
-import { CloseIcon, EditIcon } from "./icons";
+import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
 
 interface ModalProps {
   title: string;
+  onRefresh?: () => void;
+  refreshTooltip?: string;
   onEdit?: () => void;
   isEdit?: boolean;
   onClose?: () => void;
@@ -15,6 +17,7 @@ interface ModalProps {
 
 export default function Modal({
   title,
+  onRefresh,
   onEdit,
   isEdit,
   onClose,
@@ -36,6 +39,19 @@ export default function Modal({
           <h2 className="text-2xl font-semibold text-black dark:text-white">{title}</h2>
 
           <div className="flex shrink-0 items-center gap-3">
+            {onRefresh && (
+              <Tooltip content="Update from TMDB">
+                <button
+                  type="button"
+                  onClick={onRefresh}
+                  aria-label="Update from TMDB"
+                  className="cursor-pointer text-[#37C6F3]"
+                >
+                  <RefreshIcon />
+                </button>
+              </Tooltip>
+            )}
+
             {onEdit && (
               <Tooltip content="Edit">
                 <button type="button" onClick={onEdit} aria-label="Edit" className={editIconStyle}>

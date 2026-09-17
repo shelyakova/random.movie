@@ -1,11 +1,10 @@
-// components/DatePicker.tsx
 "use client";
 
 import { Datepicker as FlowbiteDatepicker } from "flowbite-react";
 
 interface DatePickerProps {
-  value?: string;
-  onChange: (value: string | undefined) => void;
+  value?: string | null;
+  onChange: (value: string | null) => void;
   placeholder?: string;
   isRightPopupOriented?: boolean;
   className?: string;
@@ -20,9 +19,10 @@ export default function DatePicker({
 }: DatePickerProps) {
   return (
     <FlowbiteDatepicker
+      key={value}
       value={value ? new Date(value) : null}
       onChange={(date: Date | null) => {
-        onChange(date ? date.toISOString().split("T")[0] : undefined);
+        onChange(date ? date.toISOString().split("T")[0] : null);
       }}
       placeholder={placeholder}
       className={className}
