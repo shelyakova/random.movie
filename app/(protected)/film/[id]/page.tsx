@@ -53,10 +53,14 @@ export default function FilmPage() {
     deleteFilm.mutate(undefined);
   };
 
-  if (!isLoading && !hasFilm) {
+  if (!hasFilm) {
     return (
       <main className="flex flex-1 items-center justify-center pb-8">
-        <EmptyState message="Film not found" className="!bg-transparent" />
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <EmptyState message="Film not found" className="!bg-transparent" />
+        )}
       </main>
     );
   }
@@ -118,13 +122,13 @@ export default function FilmPage() {
         <div className="mt-auto flex items-center justify-between pt-10">
           <div className="flex w-[369px] items-center gap-2">
             <Tooltip content="Edit">
-              <IconButton onClick={() => setIsEditModalOpen(true)}>
+              <IconButton onClick={() => setIsEditModalOpen(true)} aria-label="Edit">
                 <EditIcon />
               </IconButton>
             </Tooltip>
 
             <Tooltip content="Delete">
-              <IconButton onClick={() => setIsConfirmDeleteOpen(true)}>
+              <IconButton onClick={() => setIsConfirmDeleteOpen(true)} aria-label="Delete">
                 <DeleteIcon />
               </IconButton>
             </Tooltip>

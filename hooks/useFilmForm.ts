@@ -4,6 +4,7 @@ import { filmSchema, FilmSchema } from "@/lib/schemas/film.schema";
 import { Film, TmdbMediaType } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 
 interface UseFilmFormReturn {
   register: ReturnType<typeof useForm<FilmSchema>>["register"];
@@ -25,11 +26,16 @@ export function useFilmForm(film: Film | undefined): UseFilmFormReturn {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FilmSchema>({
     resolver: zodResolver(filmSchema),
     defaultValues: getFilmDefaultValues(film),
   });
+  
+  useEffect(() => {
+    if (film) reset(getFilmDefaultValues(film));
+  }, [film, reset]);
 
   const [name, categoryIds, link, newSeason, latestEpisode, tmdbId, tmdbType] = watch([
     "name",
@@ -57,7 +63,7 @@ export function useFilmForm(film: Film | undefined): UseFilmFormReturn {
 }
 
 function getFilmDefaultValues(film?: Film): Partial<FilmSchema> | undefined {
-  if (!film) return undefined;
+  if (!film) return { newSeason: null, latestEpisode: null };
 
   return {
     name: film.name,

@@ -30,7 +30,7 @@ export default function Header({
 
       <div className="flex items-center justify-center gap-5">
         <Tooltip content="Settings">
-          <IconButton onClick={onOpenCategoriesModal}>
+          <IconButton onClick={onOpenCategoriesModal} aria-label="Settings">
             <SettingsIcon />
           </IconButton>
         </Tooltip>
@@ -38,13 +38,13 @@ export default function Header({
         <SearchBar value={searchValue} onChange={onSearchChange} />
 
         <Tooltip content="Randomize">
-          <IconButton tone={Tone.Accent} onClick={onClickRandomize}>
+          <IconButton tone={Tone.Accent} onClick={onClickRandomize} aria-label="Randomize">
             <SmileyIcon />
           </IconButton>
         </Tooltip>
 
         <Tooltip content="Logout">
-          <IconButton onClick={onOpenLogoutConfirmModal}>
+          <IconButton onClick={onOpenLogoutConfirmModal} aria-label="Logout">
             <LogoutIcon />
           </IconButton>
         </Tooltip>
@@ -52,7 +52,7 @@ export default function Header({
 
       <div className="justify-self-end">
         <Tooltip content="Add film">
-          <IconButton onClick={onOpenFilmModal}>
+          <IconButton onClick={onOpenFilmModal} aria-label="Add films">
             <PlusIcon />
           </IconButton>
         </Tooltip>
