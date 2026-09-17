@@ -144,6 +144,7 @@ export default function FilmPage() {
             <IconButton
               onClick={handleToggleWatched}
               className={film?.isWatched ? "!bg-[rgba(0,215,139,0.34)] !text-[#00734B]" : undefined}
+              aria-label="Watched"
             >
               <CheckIcon />
             </IconButton>

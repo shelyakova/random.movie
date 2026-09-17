@@ -63,6 +63,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                   disabled={isAddEditDisabled}
                   tone={Tone.Accent}
                   onClick={selectedCategory ? handleEdit : handleCreate}
+                  aria-label="Add category"
                 >
                   {selectedCategory ? <EditIcon /> : <PlusIcon />}
                 </IconButton>

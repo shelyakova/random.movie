@@ -1,51 +1,7 @@
-import { test, expect, Page, Locator, APIRequestContext } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
+import { getAuthToken, createFilmViaApi, deleteFilmViaApi, getSection, scrollUntilVisible } from './helpers';
 
-const E2E_USERNAME = process.env.E2E_USERNAME;
-const E2E_PASSWORD = process.env.E2E_PASSWORD;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
-if (!E2E_USERNAME || !E2E_PASSWORD) {
-  throw new Error(
-    'E2E_USERNAME and E2E_PASSWORD must be set (e.g. in a .env.test.local file) to run login.spec.ts',
-  );
-}
-
-if (!API_BASE_URL) {
-  throw new Error(
-    'NEXT_PUBLIC_API_URL must be set (e.g. in a .env.test.local file) to run login.spec.ts',
-  );
-}
-
-async function getAuthToken(page: Page): Promise<string> {
-  const token = await page.evaluate(() => localStorage.getItem('token'));
-  if (!token) throw new Error('Expected an auth token in localStorage after login');
-  return token;
-}
-
-async function createFilmViaApi(
-  request: APIRequestContext,
-  token: string,
-  name: string,
-  link: string,
-): Promise<{ id: number }> {
-  const response = await request.post(`${API_BASE_URL}/film/create`, {
-    headers: { Authorization: `Bearer ${token}` },
-    data: {
-      name,
-      link,
-      seasons: null,
-      episodes: null,
-      duration: null,
-      description: '',
-      year: null,
-      mark: null,
-      newSeason: null,
-      latestEpisode: null,
-    },
-  });
-  expect(response.ok(), `film/create failed: ${response.status()} ${await response.text()}`).toBeTruthy();
-  return response.json();
-}
 
 async function setFilmWatched(
   request: APIRequestContext,
@@ -58,34 +14,6 @@ async function setFilmWatched(
     data: { isWatched },
   });
   expect(response.ok(), `film PATCH failed: ${response.status()} ${await response.text()}`).toBeTruthy();
-}
-
-async function deleteFilmViaApi(request: APIRequestContext, token: string, filmId: number) {
-  await request.delete(`${API_BASE_URL}/film/${filmId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-}
-
-function getSection(page: Page, title: string) {
-  return page
-    .locator('section')
-    .filter({ has: page.getByRole('heading', { name: title, exact: true }) });
-}
-
-// "Suggested to watch" sorts oldest-first and this shared test backend
-// accumulates films across E2E runs (no cleanup convention exists for most
-// of them), so a freshly created film can be many lazy-loaded pages down.
-// Scroll the page (triggering FilmSection's IntersectionObserver sentinel)
-// until it comes into view, or give up after a bounded number of attempts.
-async function scrollUntilVisible(page: Page, locator: Locator, maxAttempts = 10) {
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const found = await locator
-      .waitFor({ state: 'visible', timeout: 1000 })
-      .then(() => true)
-      .catch(() => false);
-    if (found) return;
-    await page.mouse.wheel(0, 3000);
-  }
 }
 
 test.describe('home page sections', () => {

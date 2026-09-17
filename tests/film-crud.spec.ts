@@ -1,17 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-
-const E2E_USERNAME = process.env.E2E_USERNAME;
-const E2E_PASSWORD = process.env.E2E_PASSWORD;
-
-if (!E2E_USERNAME || !E2E_PASSWORD) {
-  throw new Error(
-    'E2E_USERNAME and E2E_PASSWORD must be set (e.g. in a .env.test.local file) to run login.spec.ts',
-  );
-}
-
-function getAddFilmButton(page: Page) {
-  return page.getByRole('button', { name: 'Add film' });
-}
+import { getAddFilmButton } from './helpers';
 
 function getEditFilmButton(page: Page) {
   return page.getByRole('button', { name: 'Edit' });
