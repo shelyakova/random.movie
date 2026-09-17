@@ -1,18 +1,29 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export function useSearchNavigation() {
+interface UseSearchNavigationReturn {
+  currentSearch: string;
+  currentCategoryIds: number[];
+  currentNewSeasonOut: boolean;
+  currentHasLatestEpisode: boolean;
+  handleSearchChange: (value: string) => void;
+  handleFilterChange: (
+    categoryIds: number[],
+    newSeasonOut: boolean,
+    hasLatestEpisode: boolean,
+  ) => void;
+  buildParams: () => URLSearchParams;
+}
+
+export function useSearchNavigation(): UseSearchNavigationReturn {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const currentSearch = pathname === "/" ? (searchParams.get("search") ?? "") : "";
-  const currentCategoryIds = pathname === "/" ? searchParams.getAll("categoryIds").map(Number) : [];
-  const currentNewSeasonOut =
-    pathname === "/" ? searchParams.get("newSeasonOut") === "true" : false;
-  const currentHasLatestEpisode =
-    pathname === "/" ? searchParams.get("hasLatestEpisode") === "true" : false;
+  const currentSearch = searchParams.get("search") ?? "";
+  const currentCategoryIds = searchParams.getAll("categoryIds").map(Number);
+  const currentNewSeasonOut = searchParams.get("newSeasonOut") === "true";
+  const currentHasLatestEpisode = searchParams.get("hasLatestEpisode") === "true";
 
   const buildParams = () => {
     const params = new URLSearchParams();
@@ -50,5 +61,6 @@ export function useSearchNavigation() {
     currentHasLatestEpisode,
     handleSearchChange,
     handleFilterChange,
+    buildParams,
   };
 }

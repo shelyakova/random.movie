@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores";
-import { CategoriesModal, ConfirmModal, FilmModal, Header } from "@/components";
+import { CategoriesModal, ConfirmModal, FilmModal, Header, LoadingSpinner } from "@/components";
 import { useRandomFilm, useSearchNavigation } from "@/hooks";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
@@ -22,6 +22,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     handleSearchChange,
     currentNewSeasonOut,
     currentHasLatestEpisode,
+    buildParams,
   } = useSearchNavigation();
   const randomFilm = useRandomFilm();
 
@@ -31,6 +32,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
       categoryIds: currentCategoryIds,
       newSeasonOut: currentNewSeasonOut,
       hasLatestEpisode: currentHasLatestEpisode,
+      filterParams: buildParams().toString(),
     });
   };
 
@@ -74,6 +76,8 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           onCancel={() => setIsLogoutConfirmOpen(false)}
         />
       )}
+
+      {randomFilm.isPending && <LoadingSpinner />}
     </div>
   );
 }

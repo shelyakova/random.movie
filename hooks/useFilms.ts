@@ -55,9 +55,10 @@ export function useFilms(params: {
 
 export function useRandomFilm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       search,
       categoryIds,
       newSeasonOut,
@@ -67,9 +68,23 @@ export function useRandomFilm() {
       categoryIds: number[];
       newSeasonOut?: boolean;
       hasLatestEpisode?: boolean;
-    }) => fetchRandomFilm(search, categoryIds, newSeasonOut, hasLatestEpisode),
-    onSuccess: (film) => {
-      router.push(`/film/${film.id}`);
+      filterParams: string;
+    }) => {
+      const [film] = await Promise.all([
+        fetchRandomFilm(search, categoryIds, newSeasonOut, hasLatestEpisode),
+        new Promise((resolve) => setTimeout(resolve, 1000)),
+      ]);
+
+      await queryClient.prefetchQuery({
+        queryKey: QUERY_KEYS.films.detail(film.id),
+        queryFn: () => fetchFilmById(film.id),
+      });
+
+      return film;
+    },
+    onSuccess: (film, variables) => {
+      const query = variables.filterParams ? `?${variables.filterParams}` : "";
+      router.push(`/film/${film.id}${query}`);
     },
     onError: () => {
       useErrorStore.getState().showError("Failed to fetch random film");
