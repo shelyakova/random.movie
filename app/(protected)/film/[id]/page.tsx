@@ -68,7 +68,7 @@ export default function FilmPage() {
   return (
     <>
       <main className="flex flex-1 flex-col pb-8">
-        <h1 className="mb-6 text-[40px] font-semibold text-black dark:text-white">{film?.name}</h1>
+        <h1 className="text-foreground mb-6 text-[40px] font-semibold">{film?.name}</h1>
 
         <div className="flex gap-8">
           <FilmCard film={film} showYear showMark className="h-[548px] w-[369px]" />
@@ -83,7 +83,7 @@ export default function FilmPage() {
             </div>
 
             {metaParts.length > 0 && (
-              <p className="border-b border-zinc-300 pb-4 text-[20px] font-medium text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+              <p className="border-border text-muted-foreground border-b pb-4 text-[20px] font-medium">
                 {metaParts.join(" - ")}
               </p>
             )}
@@ -92,9 +92,7 @@ export default function FilmPage() {
               <div className="flex gap-4">
                 {film?.newSeason && (
                   <div>
-                    <p className="text-s pb-1 font-medium text-zinc-500 dark:text-zinc-400">
-                      New season
-                    </p>
+                    <p className="text-s text-muted-foreground pb-1 font-medium">New season</p>
                     <Tag readOnly tone={isNewSeasonOut ? TagTone.Success : TagTone.Outline}>
                       {format(new Date(film.newSeason), "dd.MM.yyyy")}
                     </Tag>
@@ -102,9 +100,7 @@ export default function FilmPage() {
                 )}
                 {film?.latestEpisode && (
                   <div>
-                    <p className="text-s pb-1 font-medium text-zinc-500 dark:text-zinc-400">
-                      Latest episode
-                    </p>
+                    <p className="text-s text-muted-foreground pb-1 font-medium">Latest episode</p>
                     <Tag readOnly tone={isLatestEpisodeOut ? TagTone.Success : TagTone.Outline}>
                       {format(new Date(film.latestEpisode), "dd.MM.yyyy")}
                     </Tag>
@@ -113,7 +109,7 @@ export default function FilmPage() {
               </div>
             )}
 
-            <p className="text-[18px] leading-relaxed text-zinc-600 dark:text-zinc-300">
+            <p className="text-secondary-foreground text-[18px] leading-relaxed">
               {film?.description}
             </p>
           </div>
@@ -143,7 +139,7 @@ export default function FilmPage() {
           <Tooltip content={film?.isWatched ? "Mark as unwatched" : "Mark as watched"}>
             <IconButton
               onClick={handleToggleWatched}
-              className={film?.isWatched ? "!bg-[rgba(0,215,139,0.34)] !text-[#00734B]" : undefined}
+              className={film?.isWatched ? "!bg-success-bg !text-success-foreground" : undefined}
               aria-label="Watched"
             >
               <CheckIcon />

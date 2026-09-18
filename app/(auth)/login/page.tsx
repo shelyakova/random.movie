@@ -65,7 +65,7 @@ export default function LoginPage() {
         <FormInput type="password" placeholder="Password" {...register("password")} />
 
         {errors.root ? (
-          <p className="text-center text-xs text-red-500">{errors.root.message}</p>
+          <p className="text-danger text-center text-xs">{errors.root.message}</p>
         ) : (
           <p className="h-4"></p>
         )}
@@ -75,7 +75,7 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-xs text-zinc-500">
+      <p className="text-muted-foreground mt-4 text-center text-xs">
         You don&apos;t have an account?{" "}
         <Link href="/register" className="cursor-pointer underline">
           SignUp

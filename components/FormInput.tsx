@@ -20,8 +20,8 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       <input
         ref={ref}
         type={isPassword && showPassword ? "text" : type}
-        className={`w-full rounded-full border px-5 py-3 text-sm text-black placeholder-zinc-500 focus:outline-none dark:text-white ${
-          error ? "border-red-500" : "border-zinc-300 dark:border-zinc-700"
+        className={`text-foreground placeholder-muted-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none ${
+          error ? "border-danger" : "border-border"
         } ${isPassword ? "pr-11" : ""} ${className ?? ""}`}
         {...props}
       />
@@ -34,7 +34,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="cursor-pointer text-zinc-500"
+            className="text-muted-foreground cursor-pointer"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}

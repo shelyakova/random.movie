@@ -95,7 +95,7 @@ export default function PosterUpload({
     return (
       <>
         <div
-          className={`relative flex h-32 items-center gap-3 overflow-hidden rounded-xl border border-zinc-300 px-3 dark:border-zinc-700 ${className ?? ""}`}
+          className={`border-border relative flex h-32 items-center gap-3 overflow-hidden rounded-xl border px-3 ${className ?? ""}`}
         >
           {fileInput}
 
@@ -106,7 +106,7 @@ export default function PosterUpload({
               alt="Poster thumbnail"
               className="h-24 w-24 shrink-0 rounded-lg object-cover"
             />
-            <span className="min-w-0 flex-1 truncate text-left text-sm text-black dark:text-white">
+            <span className="text-foreground min-w-0 flex-1 truncate text-left text-sm">
               {fileName}
             </span>
           </div>
@@ -115,12 +115,12 @@ export default function PosterUpload({
             type="button"
             onClick={handleRemove}
             aria-label="Remove poster"
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-100 hover:text-[#37C6F3] dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className="text-muted-foreground hover:bg-neutral-fill-hover hover:text-accent flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full"
           >
             <DeleteIcon />
           </button>
         </div>
-        {sizeError && <p className="text-center text-xs text-red-500">{sizeError}</p>}
+        {sizeError && <p className="text-danger text-center text-xs">{sizeError}</p>}
       </>
     );
   }
@@ -132,14 +132,14 @@ export default function PosterUpload({
       aria-label="Add poster"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className={`relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-zinc-300 dark:border-zinc-700 ${className ?? ""}`}
+      className={`border-border relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border ${className ?? ""}`}
     >
       {fileInput}
 
-      <div className="flex flex-col items-center gap-2 text-zinc-500 dark:text-zinc-400">
+      <div className="text-muted-foreground flex flex-col items-center gap-2">
         <AddPosterIcon />
         <span className="text-sm">Add poster</span>
-        {sizeError && <p className="text-center text-xs text-red-500">{sizeError}</p>}
+        {sizeError && <p className="text-danger text-center text-xs">{sizeError}</p>}
       </div>
     </div>
   );

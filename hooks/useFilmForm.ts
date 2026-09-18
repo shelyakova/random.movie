@@ -32,7 +32,7 @@ export function useFilmForm(film: Film | undefined): UseFilmFormReturn {
     resolver: zodResolver(filmSchema),
     defaultValues: getFilmDefaultValues(film),
   });
-  
+
   useEffect(() => {
     if (film) reset(getFilmDefaultValues(film));
   }, [film, reset]);

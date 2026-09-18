@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores";
 import { CategoriesModal, ConfirmModal, FilmModal, Header, LoadingSpinner } from "@/components";
 import { useRandomFilm, useSearchNavigation } from "@/hooks";
 
-export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
+function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
   const clearToken = useAuthStore((state) => state.clearToken);
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-zinc-100 px-20 dark:bg-black">
+    <div className="bg-background flex flex-1 flex-col px-20">
       <Header
         searchValue={currentSearch}
         onSearchChange={handleSearchChange}
@@ -79,5 +79,13 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
       {randomFilm.isPending && <LoadingSpinner />}
     </div>
+  );
+}
+
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={null}>
+      <ProtectedLayoutContent>{children}</ProtectedLayoutContent>
+    </Suspense>
   );
 }

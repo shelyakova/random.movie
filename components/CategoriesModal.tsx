@@ -98,7 +98,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
       }
     >
       <>
-        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Pick categories:</p>
+        <p className="text-muted-foreground text-sm font-medium">Pick categories:</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {categories.map((category) => (
             <Tag
@@ -116,7 +116,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
           ))}
         </div>
         {isLoading && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60">
+          <div className="bg-overlay absolute inset-0 z-10 flex items-center justify-center rounded-3xl">
             <LoadingSpinner />
           </div>
         )}

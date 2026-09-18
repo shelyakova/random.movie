@@ -5,7 +5,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({ overlay = true, className }: LoadingSpinnerProps) {
   const spinner = (
-    <div className="h-10 w-10 animate-spin rounded-full border-4 border-zinc-300 border-t-[#37C6F3] dark:border-zinc-700 dark:border-t-[#37C6F3]" />
+    <div className="border-disabled border-t-accent h-10 w-10 animate-spin rounded-full border-4" />
   );
 
   if (!overlay) {
@@ -14,7 +14,7 @@ export default function LoadingSpinner({ overlay = true, className }: LoadingSpi
 
   return (
     <div
-      className={`absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60 ${className ?? ""}`}
+      className={`bg-overlay absolute inset-0 z-10 flex items-center justify-center rounded-3xl ${className ?? ""}`}
     >
       {spinner}
     </div>

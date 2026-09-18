@@ -40,7 +40,7 @@ export default function Tooltip({
 
         {isVisible && (
           <div
-            className={`absolute z-50 ${verticalClasses} ${horizontalClasses} rounded-lg bg-zinc-800 px-3 py-1.5 text-xs whitespace-nowrap text-white shadow-lg`}
+            className={`absolute z-50 ${verticalClasses} ${horizontalClasses} bg-tooltip-bg text-tooltip-foreground rounded-lg px-3 py-1.5 text-xs whitespace-nowrap shadow-lg`}
           >
             {content}
           </div>

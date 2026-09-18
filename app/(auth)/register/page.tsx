@@ -72,7 +72,7 @@ export default function RegisterPage() {
         />
 
         {errors.root ? (
-          <p className="text-center text-xs text-red-500">{errors.root.message}</p>
+          <p className="text-danger text-center text-xs">{errors.root.message}</p>
         ) : (
           <p className="h-4"></p>
         )}
@@ -82,7 +82,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-xs text-zinc-500">
+      <p className="text-muted-foreground mt-4 text-center text-xs">
         Already have an account?{" "}
         <Link href="/login" className="cursor-pointer underline">
           Login

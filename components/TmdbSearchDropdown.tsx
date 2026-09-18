@@ -57,17 +57,17 @@ export default function TmdbSearchDropdown({
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
-        className={`w-full rounded-full border px-5 py-3 text-sm focus:outline-none dark:bg-transparent dark:text-white ${
-          error ? "border-red-500" : "border-zinc-300 dark:border-zinc-700"
+        className={`text-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none dark:bg-transparent ${
+          error ? "border-danger" : "border-border"
         }`}
       />
 
       {isOpen && debouncedQuery.trim().length > 1 && (
-        <div className="absolute top-[calc(100%+8px)] left-0 z-20 max-h-64 w-full overflow-y-auto rounded-3xl border border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-          {isFetching && <p className="px-3 py-2 text-sm text-zinc-500">Searching…</p>}
+        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 max-h-64 w-full overflow-y-auto rounded-3xl border p-2 shadow-lg">
+          {isFetching && <p className="text-muted-foreground px-3 py-2 text-sm">Searching…</p>}
 
           {!isFetching && results.length === 0 && (
-            <p className="px-3 py-2 text-sm text-zinc-500">No results found</p>
+            <p className="text-muted-foreground px-3 py-2 text-sm">No results found</p>
           )}
 
           {!isFetching &&
@@ -76,10 +76,12 @@ export default function TmdbSearchDropdown({
                 key={`${result.type}-${result.tmdbId}`}
                 type="button"
                 onClick={() => handleSelect(result)}
-                className="flex w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                className="hover:bg-neutral-fill-hover flex w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm"
               >
-                <span className="truncate text-black dark:text-white">{result.name}</span>
-                {result.year && <span className="shrink-0 text-zinc-500">{result.year}</span>}
+                <span className="text-foreground truncate">{result.name}</span>
+                {result.year && (
+                  <span className="text-muted-foreground shrink-0">{result.year}</span>
+                )}
               </button>
             ))}
         </div>

@@ -12,10 +12,10 @@ export function IconButton({
   tone = Tone.Default,
   ...props
 }: IconButtonProps) {
-  let toneClassName = "bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300";
+  let toneClassName = "bg-neutral-fill text-zinc-700 dark:text-zinc-300";
 
   if (tone === Tone.Accent && !disabled) {
-    toneClassName = "bg-[#37C6F3] text-white";
+    toneClassName = "bg-accent text-accent-foreground";
   }
 
   toneClassName += disabled ? " cursor-not-allowed" : " cursor-pointer";

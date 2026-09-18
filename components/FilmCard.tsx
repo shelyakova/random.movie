@@ -31,7 +31,7 @@ export default function FilmCard({
         // eslint-disable-next-line @next/next/no-img-element
         <img src={film?.posterUrl} alt={film?.name} className="h-full w-full object-cover" />
       ) : (
-        <div className="flex h-full w-full items-center justify-center rounded-xl bg-zinc-200/60 dark:bg-zinc-900">
+        <div className="bg-placeholder-bg flex h-full w-full items-center justify-center rounded-xl">
           <ImagePlaceholderIcon />
         </div>
       )}
@@ -53,7 +53,7 @@ export default function FilmCard({
           {isNewSeasonOut && (
             <Tag
               tone={TagTone.Rating}
-              className="relative z-10 h-8 !bg-yellow-400/80 !px-1 !py-1"
+              className="!bg-rating-bg/80 relative z-10 h-8 !px-1 !py-1"
               readOnly
             >
               <Tooltip

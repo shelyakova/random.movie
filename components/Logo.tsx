@@ -18,7 +18,7 @@ export default function Logo({ size = LogoSize.Small }: LogoProps) {
   return (
     <Link href="/" className="cursor-pointer">
       <h1
-        className={`${readexPro.className} text-left ${sizeClasses} font-semibold text-black dark:text-white`}
+        className={`${readexPro.className} text-left ${sizeClasses} text-foreground font-semibold`}
       >
         The
         <br />

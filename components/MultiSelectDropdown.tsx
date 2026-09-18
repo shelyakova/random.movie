@@ -62,23 +62,21 @@ export default function MultiSelectDropdown({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className={`flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm focus:outline-none ${
-          error ? "border-red-500" : "border-zinc-300 dark:border-zinc-700"
+          error ? "border-danger" : "border-border"
         }`}
       >
-        <span
-          className={`truncate ${selectedNames ? "text-black dark:text-white" : "text-zinc-500"}`}
-        >
+        <span className={`truncate ${selectedNames ? "text-foreground" : "text-muted-foreground"}`}>
           {selectedNames || placeholder}
         </span>
         <span
-          className={`shrink-0 rotate-90 text-zinc-500 transition-transform ${isOpen ? "-rotate-90" : ""}`}
+          className={`text-muted-foreground shrink-0 rotate-90 transition-transform ${isOpen ? "-rotate-90" : ""}`}
         >
           <ChevronRightIcon />
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-0 z-20 max-h-48 w-full overflow-y-auto rounded-3xl border border-zinc-300 bg-white p-4 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 max-h-48 w-full overflow-y-auto rounded-3xl border p-4 shadow-lg">
           <div className="flex flex-wrap gap-2">
             {options.map((option) => (
               <Tag

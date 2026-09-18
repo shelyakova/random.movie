@@ -63,7 +63,7 @@ export default function FilmSection({
 
   return (
     <section className="w-full">
-      <h2 className="mb-[26px] text-[20px] font-medium text-black dark:text-white">{title}</h2>
+      <h2 className="text-foreground mb-[26px] text-[20px] font-medium">{title}</h2>
 
       {films.length === 0 ? (
         <EmptyState message="No films found" />
@@ -89,7 +89,7 @@ export default function FilmSection({
             <Tooltip content="Scroll left" className="absolute top-1/2 -left-10 -translate-y-1/2">
               <button
                 onClick={handleScrollLeft}
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+                className="bg-surface text-secondary-foreground flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md"
               >
                 <ChevronLeftIcon />
               </button>
@@ -99,7 +99,7 @@ export default function FilmSection({
             <Tooltip content="Scroll right" className="absolute top-1/2 -right-10 -translate-y-1/2">
               <button
                 onClick={handleScrollRight}
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-zinc-600 shadow-md dark:bg-zinc-800 dark:text-zinc-300"
+                className="bg-surface text-secondary-foreground flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md"
               >
                 <ChevronRightIcon />
               </button>
@@ -117,7 +117,7 @@ export default function FilmSection({
         : hasMoreButton && (
             <p
               onClick={() => !isLoading && onMoreClick?.()}
-              className="mt-2 cursor-pointer text-right text-sm font-medium text-zinc-500 dark:text-zinc-400"
+              className="text-muted-foreground mt-2 cursor-pointer text-right text-sm font-medium"
             >
               More
             </p>

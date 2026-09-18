@@ -1,4 +1,4 @@
-import { test, expect, Page, Locator } from '@playwright/test';
+import { test, expect, Page, Locator } from "@playwright/test";
 import {
   getAuthToken,
   createFilmViaApi,
@@ -9,19 +9,19 @@ import {
   scrollUntilVisible,
   getSettingsButton,
   getCategoryTag,
-} from './helpers';
+} from "./helpers";
 
 function getWatchedToggleButton(page: Page): Locator {
-  return page.getByRole('button', { name: 'Watched' });
+  return page.getByRole("button", { name: "Watched" });
 }
 
 function getRandomizeButton(page: Page) {
-  return page.getByRole('button', { name: 'Randomize', exact: true });
+  return page.getByRole("button", { name: "Randomize", exact: true });
 }
 
-test.describe('watched status and randomizer', () => {
+test.describe("watched status and randomizer", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto("/");
   });
 
   test("toggle a film's watched status", async ({ page, request }) => {
@@ -40,38 +40,42 @@ test.describe('watched status and randomizer', () => {
       await page.goto(`/film/${film.id}`);
 
       const toggleButton = getWatchedToggleButton(page);
-      await expect(toggleButton).not.toHaveClass(/rgba\(0,215,139,0\.34\)/);
+      await expect(toggleButton).not.toHaveClass(/bg-success-bg/);
 
       await toggleButton.click();
 
-      await expect(toggleButton).toHaveClass(/rgba\(0,215,139,0\.34\)/);
+      await expect(toggleButton).toHaveClass(/bg-success-bg/);
       await toggleButton.hover();
-      await expect(page.getByText('Mark as unwatched')).toBeVisible();
+      await expect(page.getByText("Mark as unwatched")).toBeVisible();
 
-      await page.goto('/?view=watched');
-      const watchedCard = getSection(page, 'Previously watched').getByText(name, { exact: true });
+      await page.goto("/?view=watched");
+      const watchedCard = getSection(page, "Previously watched").getByText(name, { exact: true });
       await scrollUntilVisible(page, watchedCard);
       await expect(watchedCard).toBeVisible();
-      await expect(getSection(page, 'Suggested to watch').getByText(name, { exact: true })).toHaveCount(0);
+      await expect(
+        getSection(page, "Suggested to watch").getByText(name, { exact: true }),
+      ).toHaveCount(0);
 
       await page.goto(`/film/${film.id}`);
       await toggleButton.click();
 
-      await expect(toggleButton).not.toHaveClass(/rgba\(0,215,139,0\.34\)/);
+      await expect(toggleButton).not.toHaveClass(/bg-success-bg/);
       await toggleButton.hover();
-      await expect(page.getByText('Mark as watched')).toBeVisible();
+      await expect(page.getByText("Mark as watched")).toBeVisible();
 
-      await page.goto('/?view=suggested');
-      const suggestedCard = getSection(page, 'Suggested to watch').getByText(name, { exact: true });
+      await page.goto("/?view=suggested");
+      const suggestedCard = getSection(page, "Suggested to watch").getByText(name, { exact: true });
       await scrollUntilVisible(page, suggestedCard);
       await expect(suggestedCard).toBeVisible();
-      await expect(getSection(page, 'Previously watched').getByText(name, { exact: true })).toHaveCount(0);
+      await expect(
+        getSection(page, "Previously watched").getByText(name, { exact: true }),
+      ).toHaveCount(0);
     } finally {
       await deleteFilmViaApi(request, token, film.id);
     }
   });
 
-  test('randomizer respects active category filter', async ({ page, request }) => {
+  test("randomizer respects active category filter", async ({ page, request }) => {
     const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const categoryName = `E2E Randomizer Category ${uniqueSuffix}`;
@@ -106,14 +110,14 @@ test.describe('watched status and randomizer', () => {
     );
 
     try {
-      await page.goto('/');
+      await page.goto("/");
 
       await getSettingsButton(page).click();
-      await expect(page.getByRole('heading', { name: 'Filter by categories' })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Filter by categories" })).toBeVisible();
       await getCategoryTag(page, categoryName).click();
-      await page.getByRole('button', { name: 'Filter', exact: true }).click();
+      await page.getByRole("button", { name: "Filter", exact: true }).click();
 
-      await expect(page.getByText('Showing search results for:')).toBeVisible();
+      await expect(page.getByText("Showing search results for:")).toBeVisible();
 
       const randomizeButton = getRandomizeButton(page);
       const matchingFilmUrl = new RegExp(`/film/${matchingFilm.id}(\\?|$)`);

@@ -1,16 +1,16 @@
-import { expect, APIRequestContext, Page, Locator } from '@playwright/test';
+import { expect, APIRequestContext, Page, Locator } from "@playwright/test";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 if (!API_BASE_URL) {
   throw new Error(
-    'NEXT_PUBLIC_API_URL must be set (e.g. in a .env.test.local file) to run the E2E suite',
+    "NEXT_PUBLIC_API_URL must be set (e.g. in a .env.test.local file) to run the E2E suite",
   );
 }
 
 export async function getAuthToken(page: Page): Promise<string> {
-  const token = await page.evaluate(() => localStorage.getItem('token'));
-  if (!token) throw new Error('Expected an auth token in localStorage after login');
+  const token = await page.evaluate(() => localStorage.getItem("token"));
+  if (!token) throw new Error("Expected an auth token in localStorage after login");
   return token;
 }
 
@@ -32,14 +32,17 @@ export async function createFilmViaApi(
       seasons: null,
       episodes: null,
       duration: null,
-      description: '',
+      description: "",
       year: null,
       mark: null,
       newSeason: null,
       latestEpisode: null,
     },
   });
-  expect(response.ok(), `film/create failed: ${response.status()} ${await response.text()}`).toBeTruthy();
+  expect(
+    response.ok(),
+    `film/create failed: ${response.status()} ${await response.text()}`,
+  ).toBeTruthy();
   return response.json();
 }
 
@@ -65,7 +68,11 @@ export async function createCategoryViaApi(
   return response.json();
 }
 
-export async function deleteCategoryViaApi(request: APIRequestContext, token: string, categoryId: number) {
+export async function deleteCategoryViaApi(
+  request: APIRequestContext,
+  token: string,
+  categoryId: number,
+) {
   await request.delete(`${API_BASE_URL}/category/${categoryId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -73,8 +80,8 @@ export async function deleteCategoryViaApi(request: APIRequestContext, token: st
 
 export function getSection(page: Page, title: string) {
   return page
-    .locator('section')
-    .filter({ has: page.getByRole('heading', { name: title, exact: true }) });
+    .locator("section")
+    .filter({ has: page.getByRole("heading", { name: title, exact: true }) });
 }
 
 // This shared test backend accumulates films across E2E runs and the home page
@@ -84,7 +91,7 @@ export function getSection(page: Page, title: string) {
 export async function scrollUntilVisible(page: Page, locator: Locator, maxAttempts = 10) {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const found = await locator
-      .waitFor({ state: 'visible', timeout: 1000 })
+      .waitFor({ state: "visible", timeout: 1000 })
       .then(() => true)
       .catch(() => false);
     if (found) return;
@@ -93,13 +100,13 @@ export async function scrollUntilVisible(page: Page, locator: Locator, maxAttemp
 }
 
 export function getSettingsButton(page: Page) {
-  return page.getByRole('button', { name: 'Settings' });
+  return page.getByRole("button", { name: "Settings" });
 }
 
 export function getCategoryTag(page: Page, name: string) {
-  return page.getByRole('button', { name, exact: true });
+  return page.getByRole("button", { name, exact: true });
 }
 
 export function getAddFilmButton(page: Page) {
-  return page.getByRole('button', { name: 'Add film' });
+  return page.getByRole("button", { name: "Add film" });
 }

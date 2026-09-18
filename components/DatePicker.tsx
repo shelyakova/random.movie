@@ -31,9 +31,9 @@ export default function DatePicker({
           input: {
             field: {
               input: {
-                base: "block w-full text-sm text-black placeholder-zinc-500 focus:outline-none dark:text-white",
+                base: "block w-full text-sm text-foreground placeholder-muted-foreground focus:outline-none",
                 colors: {
-                  gray: "border border-zinc-300 bg-transparent focus:border-zinc-300 focus:ring-0 dark:border-zinc-700 dark:bg-transparent dark:focus:border-zinc-700",
+                  gray: "border border-border bg-transparent focus:border-border focus:ring-0 dark:bg-transparent",
                 },
                 sizes: {
                   md: "px-5 py-3 text-sm",
@@ -48,7 +48,7 @@ export default function DatePicker({
         popup: {
           root: {
             base: isRightPopupOriented ? "right-0" : "",
-            inner: "p-2 border border-zinc-300 dark:border-zinc-700",
+            inner: "p-2 border border-border",
           },
         },
       }}

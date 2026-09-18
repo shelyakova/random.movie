@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-white px-4 dark:bg-black">
+    <div className="bg-background flex flex-1 items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <Logo size={LogoSize.Large} />
         <div className="mt-10">{children}</div>

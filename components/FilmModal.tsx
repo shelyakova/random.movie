@@ -41,7 +41,7 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
         />
       </form>
       {isLoading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 dark:bg-black/60">
+        <div className="bg-overlay absolute inset-0 z-10 flex items-center justify-center rounded-3xl">
           <LoadingSpinner />
         </div>
       )}

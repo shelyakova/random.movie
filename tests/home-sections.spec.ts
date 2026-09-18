@@ -1,5 +1,11 @@
-import { test, expect, APIRequestContext } from '@playwright/test';
-import { getAuthToken, createFilmViaApi, deleteFilmViaApi, getSection, scrollUntilVisible } from './helpers';
+import { test, expect, APIRequestContext } from "@playwright/test";
+import {
+  getAuthToken,
+  createFilmViaApi,
+  deleteFilmViaApi,
+  getSection,
+  scrollUntilVisible,
+} from "./helpers";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -13,15 +19,18 @@ async function setFilmWatched(
     headers: { Authorization: `Bearer ${token}` },
     data: { isWatched },
   });
-  expect(response.ok(), `film PATCH failed: ${response.status()} ${await response.text()}`).toBeTruthy();
+  expect(
+    response.ok(),
+    `film PATCH failed: ${response.status()} ${await response.text()}`,
+  ).toBeTruthy();
 }
 
-test.describe('home page sections', () => {
+test.describe("home page sections", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto("/");
   });
 
-  test('home page splits films by watched status', async ({ page, request }) => {
+  test("home page splits films by watched status", async ({ page, request }) => {
     const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 
@@ -43,18 +52,18 @@ test.describe('home page sections', () => {
     await setFilmWatched(request, token, watchedFilm.id, true);
 
     try {
-      await page.goto('/');
+      await page.goto("/");
 
-      const suggestedSection = getSection(page, 'Suggested to watch');
-      const watchedSection = getSection(page, 'Previously watched');
+      const suggestedSection = getSection(page, "Suggested to watch");
+      const watchedSection = getSection(page, "Previously watched");
 
       await expect(watchedSection.getByText(watchedName, { exact: true })).toBeVisible();
 
       await expect(suggestedSection.getByText(watchedName, { exact: true })).toHaveCount(0);
       await expect(watchedSection.getByText(unwatchedName, { exact: true })).toHaveCount(0);
 
-      await page.goto('/?view=suggested');
-      const expandedSuggested = getSection(page, 'Suggested to watch');
+      await page.goto("/?view=suggested");
+      const expandedSuggested = getSection(page, "Suggested to watch");
       const unwatchedCard = expandedSuggested.getByText(unwatchedName, { exact: true });
       await scrollUntilVisible(page, unwatchedCard);
       await expect(unwatchedCard).toBeVisible();

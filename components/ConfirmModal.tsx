@@ -32,7 +32,7 @@ export default function ConfirmModal({
               <Button
                 onClick={onCancel}
                 disabled={isPending}
-                className="!mt-0 !bg-zinc-200 !text-zinc-700 dark:!bg-zinc-800 dark:!text-zinc-300"
+                className="!bg-neutral-fill !mt-0 !text-zinc-700 dark:!text-zinc-300"
               >
                 Cancel
               </Button>
@@ -48,12 +48,8 @@ export default function ConfirmModal({
       }
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <p className="text-center text-base font-semibold text-zinc-500 dark:text-zinc-400">
-          {title}
-        </p>
-        <p className="mt-4 text-center text-[24px] font-bold text-black dark:text-white">
-          {message}
-        </p>
+        <p className="text-muted-foreground text-center text-base font-semibold">{title}</p>
+        <p className="text-foreground mt-4 text-center text-[24px] font-bold">{message}</p>
       </div>
 
       {isPending && <LoadingSpinner />}

@@ -15,7 +15,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const buttonClassName = `mt-2 flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-medium text-white transition-colors ${
-    disabled ? "cursor-not-allowed bg-zinc-300 dark:bg-zinc-700" : "cursor-pointer bg-[#37C6F3]"
+    disabled ? "cursor-not-allowed bg-disabled" : "cursor-pointer bg-accent"
   } ${className ?? ""}`;
 
   if (href && !disabled) {

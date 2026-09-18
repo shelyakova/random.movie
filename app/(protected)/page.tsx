@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { FilmSection, LoadingSpinner, Tag } from "@/components";
 import { TagTone, ViewKey } from "@/lib/types";
 import { useFilms, useDebounce, useCategories, useSearchNavigation } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const expandedSection = searchParams.get("view");
@@ -51,7 +52,7 @@ export default function Home() {
         {isFiltering ? (
           <>
             <div>
-              <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              <p className="text-muted-foreground text-sm font-medium">
                 Showing search results for:
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -123,5 +124,13 @@ export default function Home() {
 
       {isLoading && <LoadingSpinner />}
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<LoadingSpinner overlay={false} className="flex-1" />}>
+      <HomeContent />
+    </Suspense>
   );
 }

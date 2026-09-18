@@ -1,4 +1,4 @@
-import { test, expect, Page, APIRequestContext } from '@playwright/test';
+import { test, expect, Page, APIRequestContext } from "@playwright/test";
 import {
   getAuthToken,
   createCategoryViaApi,
@@ -7,7 +7,7 @@ import {
   deleteFilmViaApi,
   getSettingsButton,
   getCategoryTag,
-} from './helpers';
+} from "./helpers";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,28 +18,31 @@ async function fetchCategoriesViaApi(
   const response = await request.get(`${API_BASE_URL}/category`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  expect(response.ok(), `category fetch failed: ${response.status()} ${await response.text()}`).toBeTruthy();
+  expect(
+    response.ok(),
+    `category fetch failed: ${response.status()} ${await response.text()}`,
+  ).toBeTruthy();
   return response.json();
 }
 
 function getModalEditToggle(page: Page) {
-  return page.getByRole('button', { name: 'Edit', exact: true });
+  return page.getByRole("button", { name: "Edit", exact: true });
 }
 
 function getNewCategoryInput(page: Page) {
-  return page.getByPlaceholder('Add new category');
+  return page.getByPlaceholder("Add new category");
 }
 
 function getAddCategoryButton(page: Page) {
-  return page.getByRole('button', { name: 'Add category' });
+  return page.getByRole("button", { name: "Add category" });
 }
 
-test.describe('categories', () => {
+test.describe("categories", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto("/");
   });
 
-  test('create a new category', async ({ page, request }) => {
+  test("create a new category", async ({ page, request }) => {
     const token = await getAuthToken(page);
     const categoryName = `E2E Category ${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     let categoryId: number | undefined;
@@ -47,7 +50,7 @@ test.describe('categories', () => {
     try {
       await getSettingsButton(page).click();
       await getModalEditToggle(page).click();
-      await expect(page.getByRole('heading', { name: 'Edit categories' })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Edit categories" })).toBeVisible();
 
       await getNewCategoryInput(page).fill(categoryName);
       await getAddCategoryButton(page).click();
@@ -59,14 +62,14 @@ test.describe('categories', () => {
       expect(categoryId, `expected category "${categoryName}" to exist via API`).toBeDefined();
 
       await getModalEditToggle(page).click();
-      await expect(page.getByRole('heading', { name: 'Filter by categories' })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Filter by categories" })).toBeVisible();
       await expect(getCategoryTag(page, categoryName)).toBeVisible();
     } finally {
       if (categoryId) await deleteCategoryViaApi(request, token, categoryId);
     }
   });
 
-  test('filter films by category', async ({ page, request }) => {
+  test("filter films by category", async ({ page, request }) => {
     const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const categoryName = `E2E Filter Category ${uniqueSuffix}`;
@@ -89,15 +92,15 @@ test.describe('categories', () => {
     );
 
     try {
-      await page.goto('/');
+      await page.goto("/");
 
       await getSettingsButton(page).click();
-      await expect(page.getByRole('heading', { name: 'Filter by categories' })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Filter by categories" })).toBeVisible();
 
       await getCategoryTag(page, categoryName).click();
-      await page.getByRole('button', { name: 'Filter', exact: true }).click();
+      await page.getByRole("button", { name: "Filter", exact: true }).click();
 
-      await expect(page.getByText('Showing search results for:')).toBeVisible();
+      await expect(page.getByText("Showing search results for:")).toBeVisible();
       await expect(page.getByText(matchingFilmName, { exact: true })).toBeVisible();
       await expect(page.getByText(otherFilmName, { exact: true })).toHaveCount(0);
     } finally {

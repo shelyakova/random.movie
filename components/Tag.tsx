@@ -9,15 +9,14 @@ interface TagProps extends ComponentProps<"button"> {
 }
 
 const toneClassNames: Record<TagTone, string> = {
-  [TagTone.Neutral]:
-    "border border-transparent bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
+  [TagTone.Neutral]: "border border-transparent bg-neutral-fill text-zinc-700 dark:text-zinc-300",
   [TagTone.Outline]: "border border-zinc-500 text-zinc-800 dark:border-zinc-500 dark:text-zinc-100",
-  [TagTone.Info]: "border border-transparent bg-[#9CE7FF] text-[#2988A6]",
-  [TagTone.Rating]: "border border-transparent bg-yellow-400 text-yellow-800",
-  [TagTone.Success]: "border border-transparent bg-[#a1ead0] !text-[#00734B]",
+  [TagTone.Info]: "border border-transparent bg-info-bg text-info-foreground",
+  [TagTone.Rating]: "border border-transparent bg-rating-bg text-rating-foreground",
+  [TagTone.Success]: "border border-transparent bg-success-bg !text-success-foreground",
 };
 
-const selectedClassName = "border border-transparent bg-[#9CE7FF] text-[#2988A6]";
+const selectedClassName = "border border-transparent bg-info-bg text-info-foreground";
 
 export default function Tag({
   className,
