@@ -63,7 +63,7 @@ export default function FilmSection({
 
   return (
     <section className="w-full">
-      <h2 className="text-foreground mb-[26px] text-[20px] font-medium">{title}</h2>
+      {title && <h2 className="text-foreground mb-[26px] text-[20px] font-medium">{title}</h2>}
 
       {films.length === 0 ? (
         <EmptyState message="No films found" />
@@ -115,12 +115,13 @@ export default function FilmSection({
             </div>
           )
         : hasMoreButton && (
-            <p
+            <button
+              type="button"
               onClick={() => !isLoading && onMoreClick?.()}
-              className="text-muted-foreground mt-2 cursor-pointer text-right text-sm font-medium"
+              className="text-muted-foreground mt-2 block w-full cursor-pointer appearance-none border-0 bg-transparent p-0 text-right text-sm font-medium"
             >
               More
-            </p>
+            </button>
           )}
     </section>
   );

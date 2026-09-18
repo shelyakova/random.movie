@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Tag from "./Tag";
 import { ChevronRightIcon } from "./icons";
 import { TagRadius } from "@/lib/types";
@@ -14,21 +14,28 @@ interface MultiSelectDropdownProps {
   options: MultiSelectOption[];
   selectedIds: number[];
   onChange: (ids: number[]) => void;
+  label: string;
   placeholder?: string;
   className?: string;
   error?: boolean;
+  errorMessage?: string;
 }
 
 export default function MultiSelectDropdown({
   options,
   selectedIds,
   onChange,
+  label,
   placeholder = "Select",
   className,
   error,
+  errorMessage,
 }: MultiSelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const buttonId = useId();
+  const errorId = `${buttonId}-error`;
+  const showError = Boolean(error && errorMessage);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -58,10 +65,16 @@ export default function MultiSelectDropdown({
 
   return (
     <div ref={containerRef} className={`relative w-full ${className ?? ""}`}>
+      <label htmlFor={buttonId} className="sr-only">
+        {label}
+      </label>
       <button
+        id={buttonId}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm focus:outline-none ${
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={showError ? errorId : undefined}
+        className={`flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
           error ? "border-danger" : "border-border"
         }`}
       >
@@ -90,6 +103,12 @@ export default function MultiSelectDropdown({
             ))}
           </div>
         </div>
+      )}
+
+      {showError && (
+        <p id={errorId} className="text-danger mt-1 text-xs">
+          {errorMessage}
+        </p>
       )}
     </div>
   );

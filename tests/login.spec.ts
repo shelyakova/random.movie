@@ -15,19 +15,19 @@ test.describe("login", () => {
   test("successful login", async ({ page }) => {
     await page.goto("/login");
 
-    await page.getByPlaceholder("Username").fill(E2E_USERNAME);
-    await page.getByPlaceholder("Password").fill(E2E_PASSWORD);
+    await page.getByLabel("Username").fill(E2E_USERNAME);
+    await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
     await page.getByRole("button", { name: "Login" }).click();
 
     await expect(page).toHaveURL("/");
-    await expect(page.getByPlaceholder("Search a movie or a series")).toBeVisible();
+    await expect(page.getByLabel("Search a movie or a series")).toBeVisible();
   });
 
   test("invalid login shows an error", async ({ page }) => {
     await page.goto("/login");
 
-    await page.getByPlaceholder("Username").fill(E2E_USERNAME);
-    await page.getByPlaceholder("Password").fill("definitely-the-wrong-password");
+    await page.getByLabel("Username").fill(E2E_USERNAME);
+    await page.getByLabel("Password", { exact: true }).fill("definitely-the-wrong-password");
     await page.getByRole("button", { name: "Login" }).click();
 
     await expect(page).toHaveURL("/login");
@@ -37,8 +37,8 @@ test.describe("login", () => {
   test("successful logout", async ({ page }) => {
     await page.goto("/login");
 
-    await page.getByPlaceholder("Username").fill(E2E_USERNAME);
-    await page.getByPlaceholder("Password").fill(E2E_PASSWORD);
+    await page.getByLabel("Username").fill(E2E_USERNAME);
+    await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
     await page.getByRole("button", { name: "Login" }).click();
 
     await expect(page).toHaveURL("/");

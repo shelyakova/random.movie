@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useTmdbSearch } from "@/hooks/useTmdb";
 import { TmdbSearchResult } from "@/lib/types";
@@ -9,22 +9,29 @@ interface TmdbSearchDropdownProps {
   value: string;
   onQueryChange: (query: string) => void;
   onSelect: (result: TmdbSearchResult) => void;
+  label: string;
   placeholder?: string;
   className?: string;
   error?: boolean;
+  errorMessage?: string;
 }
 
 export default function TmdbSearchDropdown({
   value,
   onQueryChange,
   onSelect,
+  label,
   placeholder = "Search a title…",
   className,
   error,
+  errorMessage,
 }: TmdbSearchDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const debouncedQuery = useDebounce(value, 400);
+  const inputId = useId();
+  const errorId = `${inputId}-error`;
+  const showError = Boolean(error && errorMessage);
 
   const { data: results = [], isFetching } = useTmdbSearch(debouncedQuery);
 
@@ -48,7 +55,11 @@ export default function TmdbSearchDropdown({
 
   return (
     <div ref={containerRef} className={`relative w-full ${className ?? ""}`}>
+      <label htmlFor={inputId} className="sr-only">
+        {label}
+      </label>
       <input
+        id={inputId}
         type="text"
         value={value}
         onChange={(e) => {
@@ -57,7 +68,9 @@ export default function TmdbSearchDropdown({
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
-        className={`text-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none dark:bg-transparent ${
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={showError ? errorId : undefined}
+        className={`text-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background dark:bg-transparent ${
           error ? "border-danger" : "border-border"
         }`}
       />
@@ -85,6 +98,12 @@ export default function TmdbSearchDropdown({
               </button>
             ))}
         </div>
+      )}
+
+      {showError && (
+        <p id={errorId} className="text-danger mt-1 text-xs">
+          {errorMessage}
+        </p>
       )}
     </div>
   );

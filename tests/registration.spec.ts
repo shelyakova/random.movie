@@ -17,13 +17,13 @@ test.describe("registration", () => {
 
     await page.goto("/register");
 
-    await page.getByPlaceholder("Username").fill(username);
-    await page.getByPlaceholder("Password", { exact: true }).fill(password);
-    await page.getByPlaceholder("Confirm password").fill(password);
+    await page.getByLabel("Username").fill(username);
+    await page.getByLabel("Password", { exact: true }).fill(password);
+    await page.getByLabel("Confirm password").fill(password);
     await page.getByRole("button", { name: "SignUp" }).click();
 
     await expect(page).toHaveURL("/");
-    await expect(page.getByPlaceholder("Search a movie or a series")).toBeVisible();
+    await expect(page.getByLabel("Search a movie or a series")).toBeVisible();
   });
 
   test("registration fails with a duplicate username", async ({ page }) => {
@@ -31,9 +31,9 @@ test.describe("registration", () => {
 
     await page.goto("/register");
 
-    await page.getByPlaceholder("Username").fill(E2E_USERNAME!);
-    await page.getByPlaceholder("Password", { exact: true }).fill(password);
-    await page.getByPlaceholder("Confirm password").fill(password);
+    await page.getByLabel("Username").fill(E2E_USERNAME!);
+    await page.getByLabel("Password", { exact: true }).fill(password);
+    await page.getByLabel("Confirm password").fill(password);
     await page.getByRole("button", { name: "SignUp" }).click();
 
     await expect(page).toHaveURL("/register");

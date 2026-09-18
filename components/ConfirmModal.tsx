@@ -22,6 +22,8 @@ export default function ConfirmModal({
   return (
     <Modal
       title=""
+      role="alertdialog"
+      ariaLabel={message ? `${title} ${message}` : title}
       onClose={onCancel ?? onConfirm}
       hideFooterBorder
       className={message ? "min-h-[333px]" : "min-h-[250px]"}

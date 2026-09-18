@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import { SettingsIcon, SmileyIcon, LogoutIcon, PlusIcon, SunIcon, MoonIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import Tooltip from "./Tooltip";
-import { Theme, Tone } from "@/lib/types";
+import { Theme } from "@/lib/types";
 import { useThemeStore } from "@/lib/stores";
 
 interface HeaderProps {
@@ -50,7 +50,11 @@ export default function Header({
         <SearchBar value={searchValue} onChange={onSearchChange} />
 
         <Tooltip content="Randomize">
-          <IconButton tone={Tone.Accent} onClick={onClickRandomize} aria-label="Randomize">
+          <IconButton
+            onClick={onClickRandomize}
+            aria-label="Randomize"
+            className="!bg-info-bg !text-info-foreground"
+          >
             <SmileyIcon />
           </IconButton>
         </Tooltip>

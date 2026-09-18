@@ -50,6 +50,8 @@ export default function LoginPage() {
 
   return (
     <>
+      <h1 className="sr-only">Log in</h1>
+
       <form
         className="flex flex-col gap-4"
         onSubmit={(event) => {
@@ -60,12 +62,19 @@ export default function LoginPage() {
           handleSubmit(onSubmit, onInvalid)(event);
         }}
       >
-        <FormInput type="text" placeholder="Username" {...register("username")} />
+        <FormInput label="Username" type="text" placeholder="Username" {...register("username")} />
 
-        <FormInput type="password" placeholder="Password" {...register("password")} />
+        <FormInput
+          label="Password"
+          type="password"
+          placeholder="Password"
+          {...register("password")}
+        />
 
         {errors.root ? (
-          <p className="text-danger text-center text-xs">{errors.root.message}</p>
+          <p role="alert" className="text-danger text-center text-xs">
+            {errors.root.message}
+          </p>
         ) : (
           <p className="h-4"></p>
         )}

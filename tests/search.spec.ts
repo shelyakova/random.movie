@@ -2,11 +2,11 @@ import { test, expect, Page } from "@playwright/test";
 import { getAuthToken, createFilmViaApi, deleteFilmViaApi, getAddFilmButton } from "./helpers";
 
 function getSearchInput(page: Page) {
-  return page.getByPlaceholder("Search a movie or a series");
+  return page.getByLabel("Search a movie or a series");
 }
 
 function getTmdbNameInput(page: Page) {
-  return page.getByPlaceholder("Name");
+  return page.getByLabel("Name");
 }
 
 function getTmdbResult(page: Page, name: string, year: number) {
@@ -65,8 +65,8 @@ test.describe("search", () => {
     await expect(matrixResult).toBeVisible();
     await matrixResult.click();
 
-    await expect(page.getByPlaceholder("Description")).not.toHaveValue("");
-    await expect(page.getByPlaceholder("Year")).toHaveValue("1999");
+    await expect(page.getByLabel("Description")).not.toHaveValue("");
+    await expect(page.getByLabel("Year")).toHaveValue("1999");
 
     await getCloseModalButton(page).click();
   });

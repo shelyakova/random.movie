@@ -51,6 +51,8 @@ export default function RegisterPage() {
 
   return (
     <>
+      <h1 className="sr-only">Sign up</h1>
+
       <form
         className="flex flex-col gap-4"
         onSubmit={(event) => {
@@ -61,18 +63,26 @@ export default function RegisterPage() {
           handleSubmit(onSubmit, onInvalid)(event);
         }}
       >
-        <FormInput type="text" placeholder="Username" {...register("username")} />
-
-        <FormInput type="password" placeholder="Password" {...register("password")} />
+        <FormInput label="Username" type="text" placeholder="Username" {...register("username")} />
 
         <FormInput
+          label="Password"
+          type="password"
+          placeholder="Password"
+          {...register("password")}
+        />
+
+        <FormInput
+          label="Confirm password"
           type="password"
           placeholder="Confirm password"
           {...register("confirmPassword")}
         />
 
         {errors.root ? (
-          <p className="text-danger text-center text-xs">{errors.root.message}</p>
+          <p role="alert" className="text-danger text-center text-xs">
+            {errors.root.message}
+          </p>
         ) : (
           <p className="h-4"></p>
         )}

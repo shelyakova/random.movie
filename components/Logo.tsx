@@ -17,7 +17,7 @@ export default function Logo({ size = LogoSize.Small }: LogoProps) {
 
   return (
     <Link href="/" className="cursor-pointer">
-      <h1
+      <p
         className={`${readexPro.className} text-left ${sizeClasses} text-foreground font-semibold`}
       >
         The
@@ -25,7 +25,7 @@ export default function Logo({ size = LogoSize.Small }: LogoProps) {
         Movie
         <br />
         List
-      </h1>
+      </p>
     </Link>
   );
 }

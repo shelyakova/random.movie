@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+"use client";
+
+import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
 
@@ -13,7 +15,12 @@ interface ModalProps {
   footer?: ReactNode;
   hideFooterBorder?: boolean;
   className?: string;
+  role?: "dialog" | "alertdialog";
+  ariaLabel?: string;
 }
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export default function Modal({
   title,
@@ -25,16 +32,75 @@ export default function Modal({
   footer,
   hideFooterBorder = false,
   className,
+  role = "dialog",
+  ariaLabel,
 }: ModalProps) {
   const editIconStyle = isEdit ? "cursor-pointer text-accent" : "cursor-pointer text-foreground";
+  const titleId = useId();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    dialogRef.current?.focus();
+
+    return () => {
+      previouslyFocusedRef.current?.focus?.();
+    };
+  }, []);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      if (!onClose) return;
+      event.stopPropagation();
+      onClose();
+      return;
+    }
+
+    if (event.key !== "Tab" || !dialogRef.current) return;
+
+    const focusable = Array.from(
+      dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+    ).filter((el) => el.offsetParent !== null);
+
+    if (focusable.length === 0) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (event.shiftKey) {
+      if (active === first || !dialogRef.current.contains(active)) {
+        event.preventDefault();
+        last.focus();
+      }
+    } else if (active === last || !dialogRef.current.contains(active)) {
+      event.preventDefault();
+      first.focus();
+    }
+
+    event.stopPropagation();
+  };
 
   return (
     <div className="bg-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className={`bg-surface relative flex max-h-[90vh] w-full max-w-sm flex-col rounded-3xl p-6 ${className ?? ""}`}
+        ref={dialogRef}
+        role={role}
+        aria-modal="true"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel ? undefined : titleId}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        className={`bg-surface relative flex max-h-[90vh] w-full max-w-sm flex-col rounded-3xl p-6 outline-none ${className ?? ""}`}
       >
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-foreground text-2xl font-semibold">{title}</h2>
+          <h2 id={titleId} className="text-foreground text-2xl font-semibold">
+            {title}
+          </h2>
 
           <div className="flex shrink-0 items-center gap-3">
             {onRefresh && (

@@ -53,6 +53,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
           {isEditMode ? (
             <div className="flex items-center gap-3">
               <FormInput
+                label="Category name"
                 placeholder="Add new category"
                 className="flex-1"
                 value={categoryInputValue}
@@ -63,7 +64,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                   disabled={isAddEditDisabled}
                   tone={Tone.Accent}
                   onClick={selectedCategory ? handleEdit : handleCreate}
-                  aria-label="Add category"
+                  aria-label={selectedCategory ? "Edit category" : "Add category"}
                 >
                   {selectedCategory ? <EditIcon /> : <PlusIcon />}
                 </IconButton>

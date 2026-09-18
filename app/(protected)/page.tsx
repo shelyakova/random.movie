@@ -49,6 +49,8 @@ function HomeContent() {
   return (
     <>
       <main className="flex flex-col gap-8 pb-10">
+        <h1 className="sr-only">Home</h1>
+
         {isFiltering ? (
           <>
             <div>

@@ -13,8 +13,8 @@ const authFile = "playwright/.auth/user.json";
 
 setup("authenticate", async ({ page }) => {
   await page.goto("/login");
-  await page.getByPlaceholder("Username").fill(E2E_USERNAME);
-  await page.getByPlaceholder("Password").fill(E2E_PASSWORD);
+  await page.getByLabel("Username").fill(E2E_USERNAME);
+  await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
   await page.getByRole("button", { name: "Login" }).click();
 
   await expect(page).toHaveURL("/");

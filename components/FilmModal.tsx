@@ -32,7 +32,7 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
         </Button>
       }
     >
-      <form id="add-film-form" className="flex flex-col gap-3" onSubmit={handleFormSubmit}>
+      <form id="add-film-form" className="flex flex-col gap-3 px-1 py-1" onSubmit={handleFormSubmit}>
         <FilmFormFields form={form} categories={categories ?? []} onTmdbSelect={tmdb.onSelect} />
         <PosterUpload
           currentPosterUrl={poster.previewUrl}

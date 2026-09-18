@@ -11,7 +11,7 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`h-full antialiased ${roboto.variable}`}>
+    <html lang="en" className={`h-full antialiased ${roboto.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

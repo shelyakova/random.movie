@@ -21,18 +21,18 @@ async function addFilmManually(
 ) {
   await getAddFilmButton(page).click();
 
-  await page.getByPlaceholder("Name").fill(name);
+  await page.getByLabel("Name").fill(name);
   await closeTmdbDropdown(page);
-  await page.getByPlaceholder("Link").fill(link);
+  await page.getByLabel("Link").fill(link);
 
   if (extra?.description !== undefined) {
-    await page.getByPlaceholder("Description").fill(extra.description);
+    await page.getByLabel("Description").fill(extra.description);
   }
   if (extra?.year !== undefined) {
-    await page.getByPlaceholder("Year").fill(String(extra.year));
+    await page.getByLabel("Year").fill(String(extra.year));
   }
   if (extra?.mark !== undefined) {
-    await page.getByPlaceholder("Mark").fill(String(extra.mark));
+    await page.getByLabel("Mark").fill(String(extra.mark));
   }
   if (extra?.duration !== undefined) {
     await page.getByPlaceholder("Duration(min)").fill(String(extra.duration));
@@ -57,6 +57,18 @@ test.describe("film CRUD", () => {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   });
 
+  test("Escape closes the add-film modal and restores focus to the trigger", async ({ page }) => {
+    const addFilmButton = getAddFilmButton(page);
+    await addFilmButton.click();
+
+    await expect(page.getByLabel("Name")).toBeVisible();
+
+    await page.keyboard.press("Escape");
+
+    await expect(page.getByLabel("Name")).toHaveCount(0);
+    await expect(addFilmButton).toBeFocused();
+  });
+
   test("edit an existing film", async ({ page }) => {
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const originalName = `E2E Editable Film ${uniqueSuffix}`;
@@ -70,9 +82,9 @@ test.describe("film CRUD", () => {
     const updatedName = `E2E Edited Film ${uniqueSuffix}`;
     const updatedDescription = `E2E updated description ${uniqueSuffix}`;
 
-    await page.getByPlaceholder("Name").fill(updatedName);
+    await page.getByLabel("Name").fill(updatedName);
     await closeTmdbDropdown(page);
-    await page.getByPlaceholder("Description").fill(updatedDescription);
+    await page.getByLabel("Description").fill(updatedDescription);
 
     await page.locator('button[form="add-film-form"]').click();
 
@@ -119,9 +131,9 @@ test.describe("film CRUD", () => {
     await expect(page.getByText(description)).toBeVisible();
     await expect(page.getByText(`${duration} minutes`)).toBeVisible();
 
-    await expect(page.getByRole("button", { name: String(year), exact: true })).toBeVisible();
+    await expect(page.getByText(String(year), { exact: true })).toBeVisible();
     // the mark may come back from the API with trailing decimals (e.g. "8.00"), so match loosely.
-    await expect(page.getByRole("button", { name: new RegExp(`^${mark}(\\.0+)?$`) })).toBeVisible();
+    await expect(page.getByText(new RegExp(`^${mark}(\\.0+)?$`))).toBeVisible();
 
     await expect(getEditFilmButton(page)).toBeVisible();
     await expect(getDeleteFilmButton(page)).toBeVisible();

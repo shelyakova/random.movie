@@ -1,26 +1,38 @@
 "use client";
 
-import { ComponentProps, forwardRef, useState } from "react";
+import { ComponentProps, forwardRef, useId, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "./icons";
 import Tooltip from "./Tooltip";
 
 interface FormInputProps extends ComponentProps<"input"> {
+  label: string;
   error?: boolean;
+  errorMessage?: string;
 }
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
-  { className, type, error, ...props },
+  { className, type, error, errorMessage, label, id, ...props },
   ref,
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+  const errorId = `${inputId}-error`;
+  const showError = Boolean(error && errorMessage);
 
   return (
     <div className="relative w-full">
+      <label htmlFor={inputId} className="sr-only">
+        {label}
+      </label>
       <input
         ref={ref}
+        id={inputId}
         type={isPassword && showPassword ? "text" : type}
-        className={`text-foreground placeholder-muted-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none ${
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={showError ? errorId : undefined}
+        className={`text-foreground placeholder-muted-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
           error ? "border-danger" : "border-border"
         } ${isPassword ? "pr-11" : ""} ${className ?? ""}`}
         {...props}
@@ -40,6 +52,12 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}
           </button>
         </Tooltip>
+      )}
+
+      {showError && (
+        <p id={errorId} className="text-danger mt-1 text-xs">
+          {errorMessage}
+        </p>
       )}
     </div>
   );

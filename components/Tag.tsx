@@ -27,15 +27,18 @@ export default function Tag({
   readOnly = false,
   ...props
 }: TagProps) {
+  const tagClassName = `max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${
+    radius === TagRadius.Lg ? "rounded-2xl" : "rounded-full"
+  } ${selected ? selectedClassName : toneClassNames[tone]} ${className ?? ""} ${
+    readOnly ? "cursor-default" : "cursor-pointer"
+  }`;
+
+  if (readOnly) {
+    return <span className={tagClassName}>{children}</span>;
+  }
+
   return (
-    <button
-      type="button"
-      className={`max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${
-        radius === TagRadius.Lg ? "rounded-2xl" : "rounded-full"
-      } ${selected ? selectedClassName : toneClassNames[tone]} ${className ?? ""} ${readOnly ? "cursor-default" : "cursor-pointer"}`}
-      onClick={readOnly ? undefined : props.onClick}
-      {...props}
-    >
+    <button type="button" className={tagClassName} aria-pressed={selected} {...props}>
       {children}
     </button>
   );
