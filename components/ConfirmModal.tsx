@@ -1,6 +1,7 @@
 import Modal from "./Modal";
 import Button from "./Button";
 import LoadingSpinner from "./LoadingSpinner";
+import { useTranslations } from "next-intl";
 
 interface ConfirmModalProps {
   title: string;
@@ -19,6 +20,8 @@ export default function ConfirmModal({
   confirmLabel,
   isPending = false,
 }: ConfirmModalProps) {
+  const t = useTranslations("common");
+
   return (
     <Modal
       title=""
@@ -36,14 +39,14 @@ export default function ConfirmModal({
                 disabled={isPending}
                 className="!bg-neutral-fill !mt-0 !text-zinc-700 dark:!text-zinc-300"
               >
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
           )}
 
           <div className="relative flex-1 overflow-hidden rounded-full">
             <Button onClick={onConfirm} disabled={isPending} className="!mt-0">
-              {confirmLabel ?? (onCancel ? "Yes" : "Ok")}
+              {confirmLabel ?? (onCancel ? t("yes") : t("ok"))}
             </Button>
           </div>
         </div>

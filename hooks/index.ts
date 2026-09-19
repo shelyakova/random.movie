@@ -21,3 +21,4 @@ export { useIsHydrated } from "./useIsHydrated";
 export { usePosterState } from "./usePosterState";
 export { useSearchNavigation } from "./useSearchNavigation";
 export { useTmdbDetails, useTmdbSearch } from "./useTmdb";
+export { useTranslateError } from "./useTranslateError";

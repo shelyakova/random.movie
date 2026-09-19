@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { ENGLISH_LOCALE_COOKIE } from "./helpers";
 
 const E2E_USERNAME = process.env.E2E_USERNAME;
 
@@ -8,7 +9,7 @@ if (!E2E_USERNAME) {
   );
 }
 
-test.use({ storageState: { cookies: [], origins: [] } });
+test.use({ storageState: { cookies: [ENGLISH_LOCALE_COOKIE], origins: [] } });
 
 test.describe("registration", () => {
   test("successful registration", async ({ page }) => {
@@ -38,6 +39,6 @@ test.describe("registration", () => {
 
     await expect(page).toHaveURL("/register");
 
-    await expect(page.getByText("User with the same name is already exist")).toBeVisible();
+    await expect(page.getByText("A user with this username already exists")).toBeVisible();
   });
 });

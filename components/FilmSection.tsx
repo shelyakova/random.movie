@@ -9,6 +9,7 @@ import { useInfiniteScroll } from "@/hooks";
 import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import Tooltip from "./Tooltip";
+import { useTranslations } from "next-intl";
 import { GRID_CARD_CLASS, GRID_CLASS, SLIDER_CARD_CLASS } from "@/lib/constants/responsive";
 
 interface FilmSectionProps {
@@ -36,6 +37,7 @@ export default function FilmSection({
   lazyLoad,
   isLoadingNextPage,
 }: FilmSectionProps) {
+  const t = useTranslations("filmSection");
   const sentinelRef = useInfiniteScroll(onMoreData, Boolean(lazyLoad && hasMoreData));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +71,7 @@ export default function FilmSection({
       )}
 
       {films.length === 0 ? (
-        <EmptyState message="No films found" />
+        <EmptyState message={t("noFilmsFound")} />
       ) : (
         <div className="relative">
           <div
@@ -99,11 +101,12 @@ export default function FilmSection({
 
           {hasSlider && canScrollLeft && (
             <Tooltip
-              content="Scroll left"
+              content={t("scrollLeft")}
               className="absolute top-1/2 -translate-y-1/2 max-md:hidden! md:-left-9 lg:-left-10"
             >
               <button
                 onClick={handleScrollLeft}
+                aria-label={t("scrollLeft")}
                 className="bg-surface text-secondary-foreground focus-ring relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md before:absolute before:-inset-1.5 before:content-['']"
               >
                 <ChevronLeftIcon />
@@ -112,11 +115,12 @@ export default function FilmSection({
           )}
           {hasSlider && canScrollRight && (
             <Tooltip
-              content="Scroll right"
+              content={t("scrollRight")}
               className="absolute top-1/2 -translate-y-1/2 max-md:hidden! md:-right-9 lg:-right-10"
             >
               <button
                 onClick={handleScrollRight}
+                aria-label={t("scrollRight")}
                 className="bg-surface text-secondary-foreground focus-ring relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md before:absolute before:-inset-1.5 before:content-['']"
               >
                 <ChevronRightIcon />
@@ -138,7 +142,7 @@ export default function FilmSection({
               onClick={() => !isLoading && onMoreClick?.()}
               className="text-muted-foreground focus-ring flex min-h-11 w-full cursor-pointer appearance-none items-center justify-end rounded-lg border-0 bg-transparent p-0 text-sm font-medium"
             >
-              More
+              {t("more")}
             </button>
           )}
     </section>

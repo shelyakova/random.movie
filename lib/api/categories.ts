@@ -1,12 +1,11 @@
 import { authorizedFetch } from "./client";
-import { Category } from "../types/category";
-import { CategorySchema } from "../schemas/category.shema";
+import { Category, CreateCategoryPayload } from "../types/category";
 
 export function fetchCategories() {
   return authorizedFetch<Category[]>("/category");
 }
 
-export function createCategory(data: CategorySchema) {
+export function createCategory(data: CreateCategoryPayload) {
   return authorizedFetch<Category>("/category/create", {
     method: "POST",
     body: JSON.stringify(data),

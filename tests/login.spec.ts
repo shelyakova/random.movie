@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { ENGLISH_LOCALE_COOKIE } from "./helpers";
 
 const E2E_USERNAME = process.env.E2E_USERNAME;
 const E2E_PASSWORD = process.env.E2E_PASSWORD;
@@ -9,7 +10,7 @@ if (!E2E_USERNAME || !E2E_PASSWORD) {
   );
 }
 
-test.use({ storageState: { cookies: [], origins: [] } });
+test.use({ storageState: { cookies: [ENGLISH_LOCALE_COOKIE], origins: [] } });
 
 test.describe("login", () => {
   test("successful login", async ({ page }) => {

@@ -3,6 +3,7 @@
 import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
+import { useTranslations } from "next-intl";
 
 interface ModalProps {
   title: string;
@@ -35,6 +36,8 @@ export default function Modal({
   role = "dialog",
   ariaLabel,
 }: ModalProps) {
+  const t = useTranslations("common");
+  const tFilm = useTranslations("film");
   const editIconStyle = isEdit
     ? "focus-ring cursor-pointer rounded-full p-3 text-accent"
     : "focus-ring cursor-pointer rounded-full p-3 text-foreground";
@@ -106,11 +109,11 @@ export default function Modal({
 
           <div className="-my-1.5 -mr-3 flex shrink-0 items-center">
             {onRefresh && (
-              <Tooltip content="Update from TMDB">
+              <Tooltip content={tFilm("updateFromTmdb")}>
                 <button
                   type="button"
                   onClick={onRefresh}
-                  aria-label="Update from TMDB"
+                  aria-label={tFilm("updateFromTmdb")}
                   className="text-accent focus-ring cursor-pointer rounded-full p-3"
                 >
                   <RefreshIcon />
@@ -119,8 +122,13 @@ export default function Modal({
             )}
 
             {onEdit && (
-              <Tooltip content="Edit">
-                <button type="button" onClick={onEdit} aria-label="Edit" className={editIconStyle}>
+              <Tooltip content={t("edit")}>
+                <button
+                  type="button"
+                  onClick={onEdit}
+                  aria-label={t("edit")}
+                  className={editIconStyle}
+                >
                   <EditIcon />
                 </button>
               </Tooltip>
@@ -130,7 +138,7 @@ export default function Modal({
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close"
+                aria-label={t("close")}
                 className="text-foreground focus-ring cursor-pointer rounded-full p-3"
               >
                 <CloseIcon />

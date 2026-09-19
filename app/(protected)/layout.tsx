@@ -2,11 +2,13 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/lib/stores";
 import { CategoriesModal, ConfirmModal, FilmModal, Header, LoadingSpinner } from "@/components";
 import { useIsHydrated, useRandomFilm, useSearchNavigation } from "@/hooks";
 
 function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("auth");
   const token = useAuthStore((state) => state.token);
   const clearToken = useAuthStore((state) => state.clearToken);
   const router = useRouter();
@@ -68,7 +70,7 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
 
       {isLogoutConfirmOpen && (
         <ConfirmModal
-          title="Are you sure you want to logout?"
+          title={t("logoutConfirm")}
           message=""
           onConfirm={handleLogout}
           onCancel={() => setIsLogoutConfirmOpen(false)}

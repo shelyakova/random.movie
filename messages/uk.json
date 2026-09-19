@@ -1,0 +1,134 @@
+{
+  "common": {
+    "login": "Увійти",
+    "signUp": "Зареєструватися",
+    "logout": "Вийти",
+    "edit": "Редагувати",
+    "add": "Додати",
+    "delete": "Видалити",
+    "filter": "Фільтрувати",
+    "newSeasonFilter": "Новий сезон",
+    "latestEpisodeFilter": "Остання серія",
+    "cancel": "Скасувати",
+    "yes": "Так",
+    "ok": "Гаразд",
+    "select": "Оберіть",
+    "close": "Закрити",
+    "showPassword": "Показати пароль",
+    "hidePassword": "Сховати пароль"
+  },
+  "auth": {
+    "loginTitle": "Вхід",
+    "signUpTitle": "Реєстрація",
+    "username": "Ім’я користувача",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердіть пароль",
+    "incorrectCredentials": "Неправильне ім’я користувача або пароль",
+    "usernameTaken": "Користувач із таким ім’ям уже існує",
+    "invalidFormData": "Некоректні дані форми",
+    "noAccount": "Ще не маєте акаунта?",
+    "haveAccount": "Уже маєте акаунт?",
+    "logoutConfirm": "Ви впевнені, що хочете вийти?"
+  },
+  "header": {
+    "settings": "Налаштування",
+    "toggleTheme": "Перемкнути тему",
+    "switchToLightTheme": "Увімкнути світлу тему",
+    "switchToDarkTheme": "Увімкнути темну тему",
+    "switchToUkrainian": "Перемкнути на українську",
+    "switchToEnglish": "Перемкнути на англійську",
+    "randomize": "Випадковий вибір",
+    "addFilm": "Додати фільм"
+  },
+  "home": {
+    "title": "Головна",
+    "searchResultsFor": "Результати пошуку для:",
+    "suggestedToWatch": "Що подивитися",
+    "previouslyWatched": "Переглянуті раніше"
+  },
+  "filmSection": {
+    "noFilmsFound": "Фільмів не знайдено",
+    "scrollLeft": "Прокрутити вліво",
+    "scrollRight": "Прокрутити вправо",
+    "more": "Більше"
+  },
+  "film": {
+    "editTitle": "Редагувати фільм",
+    "addTitle": "Додати новий фільм",
+    "fields": {
+      "name": "Назва",
+      "categories": "Категорії",
+      "seasons": "Сезони",
+      "episodes": "Серії",
+      "durationLabel": "Час у хвилинах",
+      "durationPlaceholder": "Час (хв)",
+      "newSeasonLabel": "Дата нового сезону",
+      "newSeasonPlaceholder": "Новий сезон",
+      "latestEpisodeLabel": "Дата останньої серії",
+      "latestEpisodePlaceholder": "Остання серія",
+      "description": "Опис",
+      "year": "Рік",
+      "mark": "Оцінка",
+      "link": "Посилання"
+    },
+    "newSeasonOut": "Вийшов новий сезон",
+    "latestEpisodeAvailable": "Доступна остання серія",
+    "notFound": "Фільм не знайдено",
+    "newSeason": "Новий сезон",
+    "latestEpisode": "Остання серія",
+    "goToPage": "Перейти на сторінку",
+    "markAsWatched": "Позначити як переглянуте",
+    "markAsUnwatched": "Позначити як непереглянуте",
+    "deleteConfirmTitle": "Ви впевнені, що хочете видалити цей фільм?",
+    "seasonsCount": "{count, plural, one {# сезон} few {# сезони} many {# сезонів} other {# сезону}}",
+    "episodesCount": "{count, plural, one {# серія} few {# серії} many {# серій} other {# серії}}",
+    "minutesCount": "{count, plural, one {# хвилина} few {# хвилини} many {# хвилин} other {# хвилини}}",
+    "updateFromTmdb": "Оновити з TMDB"
+  },
+  "categories": {
+    "editTitle": "Редагування категорій",
+    "filterTitle": "Фільтр за категоріями",
+    "nameLabel": "Назва категорії",
+    "namePlaceholder": "Додати нову категорію",
+    "editCategory": "Редагувати категорію",
+    "addCategory": "Додати категорію",
+    "pickCategories": "Оберіть категорії:",
+    "blockedByFilms": "{count, plural, one {У цій категорії є # фільм. Спершу видаліть цю категорію з фільмів, наведених нижче.} few {У цій категорії є # фільми. Спершу видаліть цю категорію з фільмів, наведених нижче.} many {У цій категорії є # фільмів. Спершу видаліть цю категорію з фільмів, наведених нижче.} other {У цій категорії є # фільму. Спершу видаліть цю категорію з фільмів, наведених нижче.}}"
+  },
+  "search": {
+    "movieOrSeries": "Знайти фільм або серіал",
+    "titlePlaceholder": "Знайти за назвою…",
+    "searching": "Пошук…",
+    "noResults": "Нічого не знайдено"
+  },
+  "poster": {
+    "tooLarge": "Файл завеликий. Максимальний розмір — {maxSizeMb} МБ.",
+    "thumbnailAlt": "Мініатюра постера",
+    "remove": "Видалити постер",
+    "add": "Додати постер"
+  },
+  "errors": {
+    "somethingWentWrong": "Щось пішло не так",
+    "createCategory": "Не вдалося створити категорію",
+    "editCategory": "Не вдалося змінити категорію",
+    "deleteCategory": "Не вдалося видалити категорію",
+    "fetchRandomFilm": "Не вдалося отримати випадковий фільм",
+    "createFilm": "Не вдалося створити фільм",
+    "uploadPoster": "Не вдалося завантажити постер",
+    "removePoster": "Не вдалося видалити постер",
+    "updateWatchedStatus": "Не вдалося оновити статус перегляду",
+    "editFilm": "Не вдалося змінити фільм",
+    "deleteFilm": "Не вдалося видалити фільм"
+  },
+  "validation": {
+    "usernameMinLength": "Ім’я користувача має містити щонайменше 3 символи",
+    "passwordMinLength": "Пароль має містити щонайменше 6 символів",
+    "passwordsDoNotMatch": "Паролі не збігаються",
+    "nameRequired": "Назва обов’язкова",
+    "linkRequired": "Посилання обов’язкове",
+    "numberInvalid": "Введіть коректне число",
+    "wholeNumberRequired": "Введіть ціле число",
+    "positiveNumberRequired": "Введіть число більше за 0",
+    "markRange": "Оцінка має бути від 1 до 10"
+  }
+}

@@ -23,6 +23,7 @@ export default defineConfig({
   reporter: [["html", { open: "never" }]],
   use: {
     baseURL: "http://localhost:3000",
+    locale: "en-US",
     trace: "on-first-retry",
   },
   projects: [

@@ -87,7 +87,7 @@ export function useRandomFilm() {
       router.push(`/film/${film.id}${query}`);
     },
     onError: () => {
-      useErrorStore.getState().showError("Failed to fetch random film");
+      useErrorStore.getState().showError("errors.fetchRandomFilm");
     },
   });
 }
@@ -107,7 +107,7 @@ export function useCreateFilm() {
     mutationFn: createFilm,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to create film");
+      useErrorStore.getState().showError("errors.createFilm");
     },
   });
 }
@@ -118,7 +118,7 @@ export function useUploadPoster() {
     mutationFn: ({ filmId, file }: { filmId: number; file: File }) => uploadPoster(filmId, file),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to upload poster");
+      useErrorStore.getState().showError("errors.uploadPoster");
     },
   });
 }
@@ -130,7 +130,7 @@ export function useUploadPosterFromUrl() {
       uploadPosterFromUrl(filmId, posterUrl),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to upload poster");
+      useErrorStore.getState().showError("errors.uploadPoster");
     },
   });
 }
@@ -141,7 +141,7 @@ export function useRemovePoster() {
     mutationFn: (filmId: number) => removePoster(filmId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to remove poster");
+      useErrorStore.getState().showError("errors.removePoster");
     },
   });
 }
@@ -168,7 +168,7 @@ export function useSetIsWatched(filmId: number) {
       if (context?.previousFilm) {
         queryClient.setQueryData(QUERY_KEYS.films.detail(filmId), context.previousFilm);
       }
-      useErrorStore.getState().showError("Failed to set isWatched for a film");
+      useErrorStore.getState().showError("errors.updateWatchedStatus");
     },
 
     onSettled: () => {
@@ -183,7 +183,7 @@ export function useEditFilm(filmId: number) {
     mutationFn: (film: EditFilmSchema) => editFilm(film, filmId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.films.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to edit film");
+      useErrorStore.getState().showError("errors.editFilm");
     },
   });
 }
@@ -199,7 +199,7 @@ export function useDeleteFilm(filmId: number) {
       router.push("/");
     },
     onError: () => {
-      useErrorStore.getState().showError("Failed to delete film");
+      useErrorStore.getState().showError("errors.deleteFilm");
     },
   });
 }

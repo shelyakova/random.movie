@@ -1,4 +1,5 @@
 import { expect, APIRequestContext, Page, Locator } from "@playwright/test";
+import { LOCALE_COOKIE_NAME } from "../i18n/config";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -7,6 +8,17 @@ if (!API_BASE_URL) {
     "NEXT_PUBLIC_API_URL must be set (e.g. in a .env.test.local file) to run the E2E suite",
   );
 }
+
+export const ENGLISH_LOCALE_COOKIE = {
+  name: LOCALE_COOKIE_NAME,
+  value: "en",
+  domain: "localhost",
+  path: "/",
+  expires: -1,
+  httpOnly: false,
+  secure: false,
+  sameSite: "Lax" as const,
+};
 
 export async function getAuthToken(page: Page): Promise<string> {
   const token = await page.evaluate(() => localStorage.getItem("token"));

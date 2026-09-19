@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import Tag from "./Tag";
 import { ChevronRightIcon } from "./icons";
 import { TagRadius } from "@/lib/types";
+import { useTranslateError } from "@/hooks/useTranslateError";
+import { useTranslations } from "next-intl";
 
 interface MultiSelectOption {
   id: number;
@@ -26,15 +28,17 @@ export default function MultiSelectDropdown({
   selectedIds,
   onChange,
   label,
-  placeholder = "Select",
+  placeholder,
   className,
   error,
   errorMessage,
 }: MultiSelectDropdownProps) {
+  const t = useTranslations("common");
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonId = useId();
   const errorId = `${buttonId}-error`;
+  const translateError = useTranslateError();
   const showError = Boolean(error && errorMessage);
 
   useEffect(() => {
@@ -78,7 +82,7 @@ export default function MultiSelectDropdown({
         }`}
       >
         <span className={`truncate ${selectedNames ? "text-foreground" : "text-muted-foreground"}`}>
-          {selectedNames || placeholder}
+          {selectedNames || (placeholder ?? t("select"))}
         </span>
         <span
           className={`text-muted-foreground shrink-0 rotate-90 transition-transform ${isOpen ? "-rotate-90" : ""}`}
@@ -106,7 +110,7 @@ export default function MultiSelectDropdown({
 
       {showError && (
         <p id={errorId} className="text-danger mt-1 text-xs">
-          {errorMessage}
+          {translateError(errorMessage)}
         </p>
       )}
     </div>

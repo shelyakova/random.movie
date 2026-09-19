@@ -1,5 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
-import { getAddFilmButton } from "./helpers";
+import { deleteFilmViaApi, getAddFilmButton, getAuthToken } from "./helpers";
 
 function getEditFilmButton(page: Page) {
   return page.getByRole("button", { name: "Edit" });
@@ -7,6 +7,12 @@ function getEditFilmButton(page: Page) {
 
 function getDeleteFilmButton(page: Page) {
   return page.getByRole("button", { name: "Delete" });
+}
+
+function getFilmIdFromUrl(url: string) {
+  const match = url.match(/\/film\/(\d+)$/);
+  if (!match) throw new Error(`Expected a film detail URL, got ${url}`);
+  return Number(match[1]);
 }
 
 async function closeTmdbDropdown(page: Page) {
@@ -46,15 +52,22 @@ test.describe("film CRUD", () => {
     await page.goto("/");
   });
 
-  test("add a film manually", async ({ page }) => {
+  test("add a film manually", async ({ page, request }) => {
+    const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const name = `E2E Manual Film ${uniqueSuffix}`;
     const link = `https://example.com/e2e-film-${uniqueSuffix}`;
+    let filmId: number | undefined;
 
-    await addFilmManually(page, name, link);
+    try {
+      await addFilmManually(page, name, link);
 
-    await expect(page).toHaveURL(/\/film\/\d+$/);
-    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+      await expect(page).toHaveURL(/\/film\/\d+$/);
+      filmId = getFilmIdFromUrl(page.url());
+      await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+    } finally {
+      if (filmId !== undefined) await deleteFilmViaApi(request, token, filmId);
+    }
   });
 
   test("Escape closes the add-film modal and restores focus to the trigger", async ({ page }) => {
@@ -69,50 +82,66 @@ test.describe("film CRUD", () => {
     await expect(addFilmButton).toBeFocused();
   });
 
-  test("edit an existing film", async ({ page }) => {
+  test("edit an existing film", async ({ page, request }) => {
+    const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const originalName = `E2E Editable Film ${uniqueSuffix}`;
     const link = `https://example.com/e2e-film-${uniqueSuffix}`;
+    let filmId: number | undefined;
 
-    await addFilmManually(page, originalName, link);
-    await expect(page).toHaveURL(/\/film\/\d+$/);
+    try {
+      await addFilmManually(page, originalName, link);
+      await expect(page).toHaveURL(/\/film\/\d+$/);
+      filmId = getFilmIdFromUrl(page.url());
 
-    await getEditFilmButton(page).click();
+      await getEditFilmButton(page).click();
 
-    const updatedName = `E2E Edited Film ${uniqueSuffix}`;
-    const updatedDescription = `E2E updated description ${uniqueSuffix}`;
+      const updatedName = `E2E Edited Film ${uniqueSuffix}`;
+      const updatedDescription = `E2E updated description ${uniqueSuffix}`;
 
-    await page.getByLabel("Name").fill(updatedName);
-    await closeTmdbDropdown(page);
-    await page.getByLabel("Description").fill(updatedDescription);
+      await page.getByLabel("Name").fill(updatedName);
+      await closeTmdbDropdown(page);
+      await page.getByLabel("Description").fill(updatedDescription);
 
-    await page.locator('button[form="add-film-form"]').click();
+      await page.locator('button[form="add-film-form"]').click();
 
-    await expect(page.getByRole("heading", { name: updatedName, exact: true })).toBeVisible();
-    await expect(page.getByText(updatedDescription)).toBeVisible();
+      await expect(page.getByRole("heading", { name: updatedName, exact: true })).toBeVisible();
+      await expect(page.getByText(updatedDescription)).toBeVisible();
+    } finally {
+      if (filmId !== undefined) await deleteFilmViaApi(request, token, filmId);
+    }
   });
 
-  test("delete a film", async ({ page }) => {
+  test("delete a film", async ({ page, request }) => {
+    const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const name = `E2E Deletable Film ${uniqueSuffix}`;
     const link = `https://example.com/e2e-film-${uniqueSuffix}`;
+    let filmId: number | undefined;
 
-    await addFilmManually(page, name, link);
-    await expect(page).toHaveURL(/\/film\/\d+$/);
-    const filmUrl = page.url();
+    try {
+      await addFilmManually(page, name, link);
+      await expect(page).toHaveURL(/\/film\/\d+$/);
+      const filmUrl = page.url();
+      filmId = getFilmIdFromUrl(filmUrl);
 
-    await getDeleteFilmButton(page).click();
+      await getDeleteFilmButton(page).click();
 
-    await expect(page.getByText("Are you sure you want to delete this film?")).toBeVisible();
-    await page.getByRole("button", { name: "Yes" }).click();
+      await expect(page.getByText("Are you sure you want to delete this film?")).toBeVisible();
+      await page.getByRole("button", { name: "Yes" }).click();
 
-    await expect(page).toHaveURL("/");
+      await expect(page).toHaveURL("/");
 
-    await page.goto(filmUrl);
-    await expect(page.getByText("Film not found")).toBeVisible();
+      await page.goto(filmUrl);
+      await expect(page.getByText("Film not found")).toBeVisible();
+    } finally {
+      // The test deletes the film through the UI; this only cleans up if it failed before that.
+      if (filmId !== undefined) await deleteFilmViaApi(request, token, filmId);
+    }
   });
 
-  test("view a film's detail page", async ({ page }) => {
+  test("view a film's detail page", async ({ page, request }) => {
+    const token = await getAuthToken(page);
     const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     const name = `E2E Viewable Film ${uniqueSuffix}`;
     const link = `https://example.com/e2e-film-${uniqueSuffix}`;
@@ -120,23 +149,29 @@ test.describe("film CRUD", () => {
     const year = 2020;
     const mark = 8;
     const duration = 120;
+    let filmId: number | undefined;
 
-    await addFilmManually(page, name, link, { description, year, mark, duration });
-    await expect(page).toHaveURL(/\/film\/\d+$/);
-    const filmUrl = page.url();
+    try {
+      await addFilmManually(page, name, link, { description, year, mark, duration });
+      await expect(page).toHaveURL(/\/film\/\d+$/);
+      const filmUrl = page.url();
+      filmId = getFilmIdFromUrl(filmUrl);
 
-    await page.goto(filmUrl);
+      await page.goto(filmUrl);
 
-    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
-    await expect(page.getByText(description)).toBeVisible();
-    await expect(page.getByText(`${duration} minutes`)).toBeVisible();
+      await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+      await expect(page.getByText(description)).toBeVisible();
+      await expect(page.getByText(`${duration} minutes`)).toBeVisible();
 
-    await expect(page.getByText(String(year), { exact: true })).toBeVisible();
-    // the mark may come back from the API with trailing decimals (e.g. "8.00"), so match loosely.
-    await expect(page.getByText(new RegExp(`^${mark}(\\.0+)?$`))).toBeVisible();
+      await expect(page.getByText(String(year), { exact: true })).toBeVisible();
+      // the mark may come back from the API with trailing decimals (e.g. "8.00"), so match loosely.
+      await expect(page.getByText(new RegExp(`^${mark}(\\.0+)?$`))).toBeVisible();
 
-    await expect(getEditFilmButton(page)).toBeVisible();
-    await expect(getDeleteFilmButton(page)).toBeVisible();
-    await expect(page.getByRole("link", { name: "Go to page" })).toHaveAttribute("href", link);
+      await expect(getEditFilmButton(page)).toBeVisible();
+      await expect(getDeleteFilmButton(page)).toBeVisible();
+      await expect(page.getByRole("link", { name: "Go to page" })).toHaveAttribute("href", link);
+    } finally {
+      if (filmId !== undefined) await deleteFilmViaApi(request, token, filmId);
+    }
   });
 });
