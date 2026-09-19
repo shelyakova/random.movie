@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FieldErrors, useForm } from "react-hook-form";
+import { FieldErrors, useForm, useWatch } from "react-hook-form";
 import { FormInput, Button, LoadingSpinner } from "@/components";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,14 +17,17 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     setError,
-    watch,
+    control,
     formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: { username: "", password: "", confirmPassword: "" },
   });
 
-  const [username, password, confirmPassword] = watch(["username", "password", "confirmPassword"]);
+  const [username, password, confirmPassword] = useWatch({
+    control,
+    name: ["username", "password", "confirmPassword"],
+  });
   const isFilled =
     Boolean(username?.trim()) && Boolean(password?.trim()) && Boolean(confirmPassword?.trim());
 

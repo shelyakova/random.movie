@@ -72,7 +72,6 @@ export default function MultiSelectDropdown({
         id={buttonId}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
         className={`focus-ring flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm ${
           error ? "border-danger" : "border-border"

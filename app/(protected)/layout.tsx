@@ -4,14 +4,14 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores";
 import { CategoriesModal, ConfirmModal, FilmModal, Header, LoadingSpinner } from "@/components";
-import { useRandomFilm, useSearchNavigation } from "@/hooks";
+import { useIsHydrated, useRandomFilm, useSearchNavigation } from "@/hooks";
 
 function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
   const clearToken = useAuthStore((state) => state.clearToken);
   const router = useRouter();
 
-  const [isChecking, setIsChecking] = useState(true);
+  const isHydrated = useIsHydrated();
   const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [isOpenFilmModal, setIsOpenFilmModal] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
@@ -39,8 +39,6 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!token) {
       router.push("/login");
-    } else {
-      setIsChecking(false);
     }
   }, [token, router]);
 
@@ -49,7 +47,7 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
     router.push("/login");
   };
 
-  if (isChecking) {
+  if (!isHydrated || !token) {
     return null;
   }
 

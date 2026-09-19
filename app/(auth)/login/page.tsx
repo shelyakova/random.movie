@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FieldErrors, useForm } from "react-hook-form";
+import { FieldErrors, useForm, useWatch } from "react-hook-form";
 import { FormInput, Button, LoadingSpinner } from "@/components";
 import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,14 +17,14 @@ export default function LoginPage() {
     register,
     handleSubmit,
     setError,
-    watch,
+    control,
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: { username: "", password: "" },
   });
 
-  const [username, password] = watch(["username", "password"]);
+  const [username, password] = useWatch({ control, name: ["username", "password"] });
   const isFilled = Boolean(username?.trim()) && Boolean(password?.trim());
 
   const setToken = useAuthStore((state) => state.setToken);

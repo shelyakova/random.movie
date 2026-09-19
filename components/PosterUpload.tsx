@@ -32,17 +32,20 @@ export default function PosterUpload({
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const [sizeError, setSizeError] = useState<string | null>(null);
 
+  const objectUrlRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (!selectedFile) {
-      setPreviewUrl(undefined);
-      return;
-    }
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
 
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreviewUrl(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+  const updateSelection = (file: File | null) => {
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    objectUrlRef.current = file ? URL.createObjectURL(file) : null;
+    setSelectedFile(file);
+    setPreviewUrl(objectUrlRef.current ?? undefined);
+  };
 
   const displayUrl = previewUrl ?? currentPosterUrl;
   const fileName =
@@ -70,13 +73,13 @@ export default function PosterUpload({
     }
 
     setSizeError(null);
-    setSelectedFile(file);
+    updateSelection(file);
     onFileSelect(file);
   };
 
   const handleRemove = () => {
     setSizeError(null);
-    setSelectedFile(null);
+    updateSelection(null);
     if (inputRef.current) inputRef.current.value = "";
     onRemove?.();
   };

@@ -5,7 +5,6 @@ import { TmdbMediaType, TmdbSearchResult } from "@/lib/types";
 import { UseFormSetValue } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { fetchTmdbDetails } from "@/lib/api";
-import { useState } from "react";
 
 interface UseTmdbAutofillReturn {
   hasTmdbLink: boolean;
