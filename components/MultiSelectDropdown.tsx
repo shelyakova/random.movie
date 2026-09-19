@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import Tag from "./Tag";
 import { ChevronRightIcon } from "./icons";
 import { TagRadius } from "@/lib/types";
+import { useTranslateError } from "@/hooks/useTranslateError";
+import { useTranslations } from "next-intl";
 
 interface MultiSelectOption {
   id: number;
@@ -26,15 +28,17 @@ export default function MultiSelectDropdown({
   selectedIds,
   onChange,
   label,
-  placeholder = "Select",
+  placeholder,
   className,
   error,
   errorMessage,
 }: MultiSelectDropdownProps) {
+  const t = useTranslations("common");
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonId = useId();
   const errorId = `${buttonId}-error`;
+  const translateError = useTranslateError();
   const showError = Boolean(error && errorMessage);
 
   useEffect(() => {
@@ -72,14 +76,13 @@ export default function MultiSelectDropdown({
         id={buttonId}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`focus-ring flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm ${
           error ? "border-danger" : "border-border"
         }`}
       >
         <span className={`truncate ${selectedNames ? "text-foreground" : "text-muted-foreground"}`}>
-          {selectedNames || placeholder}
+          {selectedNames || (placeholder ?? t("select"))}
         </span>
         <span
           className={`text-muted-foreground shrink-0 rotate-90 transition-transform ${isOpen ? "-rotate-90" : ""}`}
@@ -107,7 +110,7 @@ export default function MultiSelectDropdown({
 
       {showError && (
         <p id={errorId} className="text-danger mt-1 text-xs">
-          {errorMessage}
+          {translateError(errorMessage)}
         </p>
       )}
     </div>

@@ -1,17 +1,25 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { QueryProvider } from "@/lib/query-client";
 import { ErrorModal } from "@/components";
 
 const roboto = Roboto({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "700"],
   variable: "--font-roboto",
 });
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en" className={`h-full antialiased ${roboto.variable}`} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`h-full antialiased ${roboto.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -32,8 +40,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="flex min-h-full flex-col">
-        <QueryProvider>{children}</QueryProvider>
-        <ErrorModal />
+        <NextIntlClientProvider>
+          <QueryProvider>{children}</QueryProvider>
+          <ErrorModal />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

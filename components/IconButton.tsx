@@ -24,7 +24,7 @@ export function IconButton({
     <button
       type="button"
       disabled={disabled}
-      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${toneClassName} ${className ?? ""}`}
+      className={`focus-ring flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${toneClassName} ${className ?? ""}`}
       {...props}
     >
       {children}

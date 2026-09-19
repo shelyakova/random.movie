@@ -2,7 +2,7 @@
 
 import { filmSchema, FilmSchema } from "@/lib/schemas/film.schema";
 import { Film, TmdbMediaType } from "@/lib/types";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
@@ -24,7 +24,7 @@ export function useFilmForm(film: Film | undefined): UseFilmFormReturn {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     reset,
     formState: { errors },
@@ -37,15 +37,10 @@ export function useFilmForm(film: Film | undefined): UseFilmFormReturn {
     if (film) reset(getFilmDefaultValues(film));
   }, [film, reset]);
 
-  const [name, categoryIds, link, newSeason, latestEpisode, tmdbId, tmdbType] = watch([
-    "name",
-    "categoryIds",
-    "link",
-    "newSeason",
-    "latestEpisode",
-    "tmdbId",
-    "tmdbType",
-  ]);
+  const [name, categoryIds, link, newSeason, latestEpisode, tmdbId, tmdbType] = useWatch({
+    control,
+    name: ["name", "categoryIds", "link", "newSeason", "latestEpisode", "tmdbId", "tmdbType"],
+  });
 
   return {
     register,

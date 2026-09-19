@@ -2,16 +2,18 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/lib/stores";
 import { CategoriesModal, ConfirmModal, FilmModal, Header, LoadingSpinner } from "@/components";
-import { useRandomFilm, useSearchNavigation } from "@/hooks";
+import { useIsHydrated, useRandomFilm, useSearchNavigation } from "@/hooks";
 
 function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("auth");
   const token = useAuthStore((state) => state.token);
   const clearToken = useAuthStore((state) => state.clearToken);
   const router = useRouter();
 
-  const [isChecking, setIsChecking] = useState(true);
+  const isHydrated = useIsHydrated();
   const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [isOpenFilmModal, setIsOpenFilmModal] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
@@ -39,8 +41,6 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!token) {
       router.push("/login");
-    } else {
-      setIsChecking(false);
     }
   }, [token, router]);
 
@@ -49,12 +49,12 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
     router.push("/login");
   };
 
-  if (isChecking) {
+  if (!isHydrated || !token) {
     return null;
   }
 
   return (
-    <div className="bg-background flex flex-1 flex-col px-20">
+    <div className="bg-background mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20">
       <Header
         searchValue={currentSearch}
         onSearchChange={handleSearchChange}
@@ -70,7 +70,7 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
 
       {isLogoutConfirmOpen && (
         <ConfirmModal
-          title="Are you sure you want to logout?"
+          title={t("logoutConfirm")}
           message=""
           onConfirm={handleLogout}
           onCancel={() => setIsLogoutConfirmOpen(false)}

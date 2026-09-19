@@ -1,25 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores";
+import { useIsHydrated } from "@/hooks";
 import { Logo } from "@/components";
 import { LogoSize } from "@/lib/types";
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   const token = useAuthStore((state) => state.token);
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true);
+  const isHydrated = useIsHydrated();
 
   useEffect(() => {
     if (token) {
       router.push("/");
-    } else {
-      setIsChecking(false);
     }
   }, [token, router]);
 
-  if (isChecking) {
+  if (!isHydrated || token) {
     return null;
   }
 

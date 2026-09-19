@@ -1,6 +1,7 @@
 "use client";
 
 import { ComponentProps, forwardRef, useId } from "react";
+import { useTranslateError } from "@/hooks/useTranslateError";
 
 interface TextareaProps extends ComponentProps<"textarea"> {
   label: string;
@@ -12,6 +13,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textare
   { className, rows = 4, label, error, errorMessage, id, ...props },
   ref,
 ) {
+  const translateError = useTranslateError();
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const errorId = `${inputId}-error`;
@@ -28,14 +30,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textare
         rows={rows}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground placeholder-muted-foreground w-full resize-none rounded-3xl border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`text-foreground placeholder-muted-foreground focus-ring w-full resize-none rounded-3xl border px-5 py-3 text-sm ${
           error ? "border-danger" : "border-border"
         } ${className ?? ""}`}
         {...props}
       />
       {showError && (
         <p id={errorId} className="text-danger mt-1 text-xs">
-          {errorMessage}
+          {translateError(errorMessage)}
         </p>
       )}
     </div>

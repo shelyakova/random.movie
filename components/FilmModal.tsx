@@ -7,6 +7,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { Film } from "@/lib/types";
 import FilmFormFields from "./FilmFormFields";
 import PosterUpload from "./PosterUpload";
+import { useTranslations } from "next-intl";
 
 interface FilmModalProps {
   film?: Film;
@@ -14,6 +15,8 @@ interface FilmModalProps {
 }
 
 export default function FilmModal({ film, onClose }: FilmModalProps) {
+  const t = useTranslations("film");
+  const tCommon = useTranslations("common");
   const isEditMode = Boolean(film);
   const { categories, isLoading, isFilled, form, tmdb, poster, handleFormSubmit } = useFilmModal(
     film,
@@ -22,13 +25,13 @@ export default function FilmModal({ film, onClose }: FilmModalProps) {
 
   return (
     <Modal
-      title={isEditMode ? "Edit film" : "Add new film"}
+      title={isEditMode ? t("editTitle") : t("addTitle")}
       onRefresh={tmdb.hasLink ? tmdb.onUpdate : undefined}
       onClose={onClose}
       className="max-w-[500px]!"
       footer={
         <Button disabled={!isFilled} type="submit" form="add-film-form">
-          {isEditMode ? "Edit" : "Add"}
+          {isEditMode ? tCommon("edit") : tCommon("add")}
         </Button>
       }
     >

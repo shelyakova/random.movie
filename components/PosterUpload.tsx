@@ -2,8 +2,10 @@
 
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { AddPosterIcon, DeleteIcon } from "./icons";
+import { useTranslations } from "next-intl";
 
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 interface PosterUploadProps {
   onFileSelect: (file: File) => void;
@@ -27,23 +29,28 @@ export default function PosterUpload({
   currentPosterUrl,
   className,
 }: PosterUploadProps) {
+  const t = useTranslations("poster");
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
-  const [sizeError, setSizeError] = useState<string | null>(null);
+  const [hasSizeError, setHasSizeError] = useState(false);
+
+  const objectUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!selectedFile) {
-      setPreviewUrl(undefined);
-      return;
-    }
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
 
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreviewUrl(objectUrl);
+  const updateSelection = (file: File | null) => {
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    objectUrlRef.current = file ? URL.createObjectURL(file) : null;
+    setSelectedFile(file);
+    setPreviewUrl(objectUrlRef.current ?? undefined);
+  };
 
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
+  const sizeErrorMessage = t("tooLarge", { maxSizeMb: MAX_FILE_SIZE_MB });
   const displayUrl = previewUrl ?? currentPosterUrl;
   const fileName =
     selectedFile?.name ?? (currentPosterUrl ? getFileNameFromUrl(currentPosterUrl) : undefined);
@@ -64,19 +71,19 @@ export default function PosterUpload({
     if (!file) return;
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
-      setSizeError("File is too large. Maximum size is 5MB.");
+      setHasSizeError(true);
       event.target.value = "";
       return;
     }
 
-    setSizeError(null);
-    setSelectedFile(file);
+    setHasSizeError(false);
+    updateSelection(file);
     onFileSelect(file);
   };
 
   const handleRemove = () => {
-    setSizeError(null);
-    setSelectedFile(null);
+    setHasSizeError(false);
+    updateSelection(null);
     if (inputRef.current) inputRef.current.value = "";
     onRemove?.();
   };
@@ -103,7 +110,7 @@ export default function PosterUpload({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={displayUrl}
-              alt="Poster thumbnail"
+              alt={t("thumbnailAlt")}
               className="h-24 w-24 shrink-0 rounded-lg object-cover"
             />
             <span className="text-foreground min-w-0 flex-1 truncate text-left text-sm">
@@ -114,13 +121,13 @@ export default function PosterUpload({
           <button
             type="button"
             onClick={handleRemove}
-            aria-label="Remove poster"
-            className="text-muted-foreground hover:bg-neutral-fill-hover hover:text-accent flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full"
+            aria-label={t("remove")}
+            className="text-muted-foreground hover:bg-neutral-fill-hover hover:text-accent focus-ring relative flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full before:absolute before:-inset-1.5 before:content-['']"
           >
             <DeleteIcon />
           </button>
         </div>
-        {sizeError && <p className="text-danger text-center text-xs">{sizeError}</p>}
+        {hasSizeError && <p className="text-danger text-center text-xs">{sizeErrorMessage}</p>}
       </>
     );
   }
@@ -129,17 +136,17 @@ export default function PosterUpload({
     <div
       role="button"
       tabIndex={0}
-      aria-label="Add poster"
+      aria-label={t("add")}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className={`border-border relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border ${className ?? ""}`}
+      className={`border-border focus-ring relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border ${className ?? ""}`}
     >
       {fileInput}
 
       <div className="text-muted-foreground flex flex-col items-center gap-2">
         <AddPosterIcon />
-        <span className="text-sm">Add poster</span>
-        {sizeError && <p className="text-danger text-center text-xs">{sizeError}</p>}
+        <span className="text-sm">{t("add")}</span>
+        {hasSizeError && <p className="text-danger text-center text-xs">{sizeErrorMessage}</p>}
       </div>
     </div>
   );

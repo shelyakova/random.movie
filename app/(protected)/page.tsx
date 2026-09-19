@@ -5,9 +5,13 @@ import { FilmSection, LoadingSpinner, Tag } from "@/components";
 import { TagTone, ViewKey } from "@/lib/types";
 import { useFilms, useDebounce, useCategories, useSearchNavigation } from "@/hooks";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { SLIDER_LIMIT, EXPANDED_LIMIT, SEARCH_LIMIT } from "@/lib/constants/responsive";
 
 function HomeContent() {
+  const t = useTranslations("home");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const searchParams = useSearchParams();
   const expandedSection = searchParams.get("view");
@@ -24,17 +28,17 @@ function HomeContent() {
   const suggested = useFilms({
     isWatched: false,
     search: debouncedSearch,
-    limit: expandedSection === ViewKey.Suggested ? 18 : 10,
+    limit: expandedSection === ViewKey.Suggested ? EXPANDED_LIMIT : SLIDER_LIMIT,
   });
   const previouslyWatched = useFilms({
     isWatched: true,
     search: debouncedSearch,
-    limit: expandedSection === ViewKey.Watched ? 18 : 10,
+    limit: expandedSection === ViewKey.Watched ? EXPANDED_LIMIT : SLIDER_LIMIT,
   });
   const searchResults = useFilms({
     search: debouncedSearch,
     categoryIds: currentCategoryIds,
-    limit: 12,
+    limit: SEARCH_LIMIT,
     newSeasonOut: currentNewSeasonOut,
     hasLatestEpisode: currentHasLatestEpisode,
   });
@@ -48,15 +52,13 @@ function HomeContent() {
 
   return (
     <>
-      <main className="flex flex-col gap-8 pb-10">
-        <h1 className="sr-only">Home</h1>
+      <main className="tv:gap-5 flex flex-col gap-8 pb-10">
+        <h1 className="sr-only">{t("title")}</h1>
 
         {isFiltering ? (
           <>
             <div>
-              <p className="text-muted-foreground text-sm font-medium">
-                Showing search results for:
-              </p>
+              <p className="text-muted-foreground text-sm font-medium">{t("searchResultsFor")}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {debouncedSearch && (
                   <Tag readOnly tone={TagTone.Neutral}>
@@ -65,12 +67,12 @@ function HomeContent() {
                 )}
                 {currentNewSeasonOut && (
                   <Tag readOnly tone={TagTone.Outline}>
-                    New season
+                    {tCommon("newSeasonFilter")}
                   </Tag>
                 )}
                 {currentHasLatestEpisode && (
                   <Tag readOnly tone={TagTone.Outline}>
-                    Latest episode
+                    {tCommon("latestEpisodeFilter")}
                   </Tag>
                 )}
                 {selectedCategoryNames.map((name) => (
@@ -94,7 +96,7 @@ function HomeContent() {
           <>
             {(!expandedSection || expandedSection === ViewKey.Suggested) && (
               <FilmSection
-                title="Suggested to watch"
+                title={t("suggestedToWatch")}
                 hasSlider={!expandedSection}
                 films={suggested.data?.pages.flat() ?? []}
                 onMoreClick={() => router.push(`/?view=${ViewKey.Suggested}`)}
@@ -108,7 +110,7 @@ function HomeContent() {
             )}
             {(!expandedSection || expandedSection === ViewKey.Watched) && (
               <FilmSection
-                title="Previously watched"
+                title={t("previouslyWatched")}
                 hasSlider={!expandedSection}
                 films={previouslyWatched.data?.pages.flat() ?? []}
                 onMoreClick={() => router.push(`/?view=${ViewKey.Watched}`)}

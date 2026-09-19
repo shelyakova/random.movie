@@ -3,6 +3,8 @@
 import { ComponentProps, forwardRef, useId, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "./icons";
 import Tooltip from "./Tooltip";
+import { useTranslateError } from "@/hooks/useTranslateError";
+import { useTranslations } from "next-intl";
 
 interface FormInputProps extends ComponentProps<"input"> {
   label: string;
@@ -14,6 +16,8 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
   { className, type, error, errorMessage, label, id, ...props },
   ref,
 ) {
+  const t = useTranslations("common");
+  const translateError = useTranslateError();
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
   const generatedId = useId();
@@ -32,7 +36,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
         type={isPassword && showPassword ? "text" : type}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground placeholder-muted-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`text-foreground placeholder-muted-foreground focus-ring w-full rounded-full border px-5 py-3 text-sm ${
           error ? "border-danger" : "border-border"
         } ${isPassword ? "pr-11" : ""} ${className ?? ""}`}
         {...props}
@@ -40,14 +44,14 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
 
       {isPassword && (
         <Tooltip
-          content={showPassword ? "Hide password" : "Show password"}
+          content={showPassword ? t("hidePassword") : t("showPassword")}
           className="absolute top-1/2 right-4 -translate-y-1/2"
         >
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="text-muted-foreground cursor-pointer"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            className="text-muted-foreground focus-ring -m-3.5 cursor-pointer rounded-full p-3.5"
+            aria-label={showPassword ? t("hidePassword") : t("showPassword")}
           >
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}
           </button>
@@ -56,7 +60,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
 
       {showError && (
         <p id={errorId} className="text-danger mt-1 text-xs">
-          {errorMessage}
+          {translateError(errorMessage)}
         </p>
       )}
     </div>

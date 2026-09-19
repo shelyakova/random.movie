@@ -22,7 +22,7 @@ export function useCreateCategory() {
     mutationFn: createCategory,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to create category");
+      useErrorStore.getState().showError("errors.createCategory");
     },
   });
 }
@@ -33,7 +33,7 @@ export function useEditCategory() {
     mutationFn: ({ id, name }: { id: number; name: string }) => editCategory(name, id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories.all }),
     onError: () => {
-      useErrorStore.getState().showError("Failed to edit category");
+      useErrorStore.getState().showError("errors.editCategory");
     },
   });
 }
@@ -47,7 +47,7 @@ export function useDeleteCategory() {
       if (error instanceof ApiError && error.status === 403) {
         return;
       }
-      useErrorStore.getState().showError("Failed to delete category");
+      useErrorStore.getState().showError("errors.deleteCategory");
     },
   });
 }

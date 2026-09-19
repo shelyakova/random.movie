@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { useState, FocusEvent, ReactNode } from "react";
 import { TooltipAlign, TooltipPlacement } from "@/lib/types/enums";
 
 interface TooltipProps {
@@ -18,7 +18,17 @@ export default function Tooltip({
   placement = TooltipPlacement.Top,
   align = TooltipAlign.Center,
 }: TooltipProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const isVisible = isHovered || isFocused;
+
+  const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
+    try {
+      setIsFocused(event.target.matches(":focus-visible"));
+    } catch {
+      setIsFocused(true);
+    }
+  };
 
   const verticalClasses = placement === TooltipPlacement.Top ? "bottom-full mb-2" : "top-full mt-2";
 
@@ -33,8 +43,10 @@ export default function Tooltip({
     <div className={`inline-flex ${className}`}>
       <div
         className="relative inline-flex"
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onFocus={handleFocus}
+        onBlur={() => setIsFocused(false)}
       >
         {children}
 

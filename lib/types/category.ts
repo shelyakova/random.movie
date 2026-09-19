@@ -3,3 +3,7 @@ export interface Category {
   name: string;
   userId: number;
 }
+
+export interface CreateCategoryPayload {
+  name: string;
+}

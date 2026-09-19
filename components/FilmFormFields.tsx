@@ -6,6 +6,7 @@ import { Category } from "@/lib/types/category";
 import { TmdbSearchResult } from "@/lib/types";
 import TmdbSearchDropdown from "./TmdbSearchDropdown";
 import { FilmFormState } from "@/hooks/useFilmModal";
+import { useTranslations } from "next-intl";
 
 interface FilmFormFieldsProps {
   form: FilmFormState;
@@ -14,6 +15,7 @@ interface FilmFormFieldsProps {
 }
 
 export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmFormFieldsProps) {
+  const t = useTranslations("film.fields");
   const {
     register,
     errors,
@@ -35,8 +37,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
         value={name ?? ""}
         onQueryChange={onNameChange}
         onSelect={onTmdbSelect}
-        label="Name"
-        placeholder="Name"
+        label={t("name")}
+        placeholder={t("name")}
         error={!!errors.name}
         errorMessage={errors.name?.message}
       />
@@ -45,8 +47,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
         options={categories}
         selectedIds={categoryIds ?? []}
         onChange={setCategoryIds}
-        label="Categories"
-        placeholder="Categories"
+        label={t("categories")}
+        placeholder={t("categories")}
         error={!!errors.categoryIds}
         errorMessage={errors.categoryIds?.message}
       />
@@ -54,8 +56,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
       <div className="flex items-center gap-3">
         <FormInput
           type="number"
-          label="Seasons"
-          placeholder="Seasons"
+          label={t("seasons")}
+          placeholder={t("seasons")}
           className="flex-1"
           error={!!errors.seasons}
           errorMessage={errors.seasons?.message}
@@ -63,8 +65,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
         />
         <FormInput
           type="number"
-          label="Episodes"
-          placeholder="Episods"
+          label={t("episodes")}
+          placeholder={t("episodes")}
           className="flex-1"
           error={!!errors.episodes}
           errorMessage={errors.episodes?.message}
@@ -72,8 +74,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
         />
         <FormInput
           type="number"
-          label="Duration in minutes"
-          placeholder="Duration(min)"
+          label={t("durationLabel")}
+          placeholder={t("durationPlaceholder")}
           className="flex-1"
           error={!!errors.duration}
           errorMessage={errors.duration?.message}
@@ -83,15 +85,15 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
 
       <div className="flex items-center gap-3">
         <DatePicker
-          label="New season date"
-          placeholder="New season"
+          label={t("newSeasonLabel")}
+          placeholder={t("newSeasonPlaceholder")}
           value={newSeason}
           onChange={setNewSeason}
           className="flex-1"
         />
         <DatePicker
-          label="Latest episode date"
-          placeholder="Latest episode"
+          label={t("latestEpisodeLabel")}
+          placeholder={t("latestEpisodePlaceholder")}
           value={latestEpisode}
           onChange={setLatestEpisode}
           className="flex-1"
@@ -100,8 +102,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
       </div>
 
       <Textarea
-        label="Description"
-        placeholder="Description"
+        label={t("description")}
+        placeholder={t("description")}
         error={!!errors.description}
         errorMessage={errors.description?.message}
         {...register("description")}
@@ -110,8 +112,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
       <div className="flex items-center gap-3">
         <FormInput
           type="number"
-          label="Year"
-          placeholder="Year"
+          label={t("year")}
+          placeholder={t("year")}
           className="flex-1"
           error={!!errors.year}
           errorMessage={errors.year?.message}
@@ -120,8 +122,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
         <FormInput
           type="number"
           step="0.01"
-          label="Mark"
-          placeholder="Mark"
+          label={t("mark")}
+          placeholder={t("mark")}
           className="flex-1"
           error={!!errors.mark}
           errorMessage={errors.mark?.message}
@@ -130,8 +132,8 @@ export default function FilmFormFields({ form, categories, onTmdbSelect }: FilmF
       </div>
 
       <FormInput
-        label="Link"
-        placeholder="Link"
+        label={t("link")}
+        placeholder={t("link")}
         {...register("link")}
         error={!!errors.link}
         errorMessage={errors.link?.message}

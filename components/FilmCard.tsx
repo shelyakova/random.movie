@@ -2,6 +2,7 @@ import { Film, TagTone, TooltipAlign, TooltipPlacement } from "@/lib/types";
 import { BellIcon, CalendarIcon, ImagePlaceholderIcon } from "./icons";
 import Tag from "./Tag";
 import Tooltip from "./Tooltip";
+import { useTranslations } from "next-intl";
 
 interface FilmCardProps {
   film?: Film;
@@ -20,6 +21,7 @@ export default function FilmCard({
   showName = false,
   showDateIcons = false,
 }: FilmCardProps) {
+  const t = useTranslations("film");
   const isNewSeasonOut = film?.newSeason ? new Date(film.newSeason) <= new Date() : false;
   const isLatestEpisodeOut = film?.latestEpisode
     ? new Date(film.latestEpisode) <= new Date()
@@ -57,7 +59,7 @@ export default function FilmCard({
               readOnly
             >
               <Tooltip
-                content="New season out"
+                content={t("newSeasonOut")}
                 placement={TooltipPlacement.Bottom}
                 align={TooltipAlign.Start}
               >
@@ -68,7 +70,7 @@ export default function FilmCard({
           {isLatestEpisodeOut && (
             <Tag tone={TagTone.Success} className="h-8 !px-1 !py-1" readOnly>
               <Tooltip
-                content="Latest episode available"
+                content={t("latestEpisodeAvailable")}
                 placement={TooltipPlacement.Bottom}
                 align={TooltipAlign.Start}
               >

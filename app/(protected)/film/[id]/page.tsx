@@ -17,9 +17,28 @@ import { useGetFilmById } from "@/hooks";
 import { useDeleteFilm, useSetIsWatched } from "@/hooks/useFilms";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { format } from "date-fns";
+import { useFormatter, useTranslations } from "next-intl";
+import {
+  ACTION_GROUP,
+  ACTION_ROW,
+  CONTENT_ROW,
+  DATES_ROW,
+  DESCRIPTION_SIZE,
+  DETAILS_COLUMN,
+  META_SIZE,
+  PAGE_PADDING,
+  POSTER_COLUMN_WIDTH,
+  POSTER_SIZE,
+  TITLE_SIZE,
+  TV_POSTER_VARS,
+} from "@/lib/constants/responsive";
+
+const DATE_FORMAT = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 
 export default function FilmPage() {
+  const t = useTranslations("film");
+  const tCommon = useTranslations("common");
+  const formatter = useFormatter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
@@ -39,9 +58,9 @@ export default function FilmPage() {
     : false;
 
   const metaParts = [
-    film?.seasons != null ? `${film.seasons} season${film.seasons === 1 ? "" : "s"}` : null,
-    film?.episodes != null ? `${film.episodes} episodes` : null,
-    film?.duration != null ? `${film.duration} minutes` : null,
+    film?.seasons != null ? t("seasonsCount", { count: film.seasons }) : null,
+    film?.episodes != null ? t("episodesCount", { count: film.episodes }) : null,
+    film?.duration != null ? t("minutesCount", { count: film.duration }) : null,
   ].filter((part): part is string => part !== null);
 
   const handleToggleWatched = () => {
@@ -59,7 +78,7 @@ export default function FilmPage() {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <EmptyState message="Film not found" className="!bg-transparent" />
+          <EmptyState message={t("notFound")} className="!bg-transparent" />
         )}
       </main>
     );
@@ -67,13 +86,20 @@ export default function FilmPage() {
 
   return (
     <>
-      <main className="flex flex-1 flex-col pb-8">
-        <h1 className="text-foreground mb-6 text-[40px] font-semibold">{film?.name}</h1>
+      <main className={`${PAGE_PADDING} flex flex-1 flex-col ${TV_POSTER_VARS}`}>
+        <h1 className={`text-foreground ${TITLE_SIZE} font-semibold wrap-break-word`}>
+          {film?.name}
+        </h1>
 
-        <div className="flex gap-8">
-          <FilmCard film={film} showYear showMark className="h-[548px] w-[369px]" />
+        <div className={CONTENT_ROW}>
+          <FilmCard
+            film={film}
+            showYear
+            showMark
+            className={`${POSTER_SIZE} ${POSTER_COLUMN_WIDTH}`}
+          />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-8">
+          <div className={DETAILS_COLUMN}>
             <div className="flex flex-wrap gap-2">
               {film?.categories.map((category) => (
                 <Tag key={category.id} tone={TagTone.Outline} readOnly>
@@ -83,64 +109,75 @@ export default function FilmPage() {
             </div>
 
             {metaParts.length > 0 && (
-              <p className="border-border text-muted-foreground border-b pb-4 text-[20px] font-medium">
+              <p
+                className={`border-border text-muted-foreground border-b ${META_SIZE} font-medium`}
+              >
                 {metaParts.join(" - ")}
               </p>
             )}
 
             {(film?.newSeason || film?.latestEpisode) && (
-              <div className="flex gap-4">
+              <div className={DATES_ROW}>
                 {film?.newSeason && (
                   <div>
-                    <p className="text-s text-muted-foreground pb-1 font-medium">New season</p>
+                    <p className="text-muted-foreground pb-1 text-sm font-medium">
+                      {t("newSeason")}
+                    </p>
                     <Tag readOnly tone={isNewSeasonOut ? TagTone.Success : TagTone.Outline}>
-                      {format(new Date(film.newSeason), "dd.MM.yyyy")}
+                      {formatter.dateTime(new Date(film.newSeason), DATE_FORMAT)}
                     </Tag>
                   </div>
                 )}
                 {film?.latestEpisode && (
                   <div>
-                    <p className="text-s text-muted-foreground pb-1 font-medium">Latest episode</p>
+                    <p className="text-muted-foreground pb-1 text-sm font-medium">
+                      {t("latestEpisode")}
+                    </p>
                     <Tag readOnly tone={isLatestEpisodeOut ? TagTone.Success : TagTone.Outline}>
-                      {format(new Date(film.latestEpisode), "dd.MM.yyyy")}
+                      {formatter.dateTime(new Date(film.latestEpisode), DATE_FORMAT)}
                     </Tag>
                   </div>
                 )}
               </div>
             )}
 
-            <p className="text-secondary-foreground text-[18px] leading-relaxed">
+            <p
+              className={`text-secondary-foreground max-w-3xl ${DESCRIPTION_SIZE} leading-relaxed`}
+            >
               {film?.description}
             </p>
           </div>
         </div>
 
-        <div className="mt-auto flex items-center justify-between pt-10">
-          <div className="flex w-[369px] items-center gap-2">
-            <Tooltip content="Edit">
-              <IconButton onClick={() => setIsEditModalOpen(true)} aria-label="Edit">
+        <div className={ACTION_ROW}>
+          <div className={ACTION_GROUP}>
+            <Tooltip content={tCommon("edit")}>
+              <IconButton onClick={() => setIsEditModalOpen(true)} aria-label={tCommon("edit")}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
 
-            <Tooltip content="Delete">
-              <IconButton onClick={() => setIsConfirmDeleteOpen(true)} aria-label="Delete">
+            <Tooltip content={tCommon("delete")}>
+              <IconButton
+                onClick={() => setIsConfirmDeleteOpen(true)}
+                aria-label={tCommon("delete")}
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
 
-            <div className="flex-1">
+            <div className="min-w-0 flex-1">
               <Button className="!mt-0" href={film?.link}>
-                Go to page
+                {t("goToPage")}
               </Button>
             </div>
           </div>
 
-          <Tooltip content={film?.isWatched ? "Mark as unwatched" : "Mark as watched"}>
+          <Tooltip content={film?.isWatched ? t("markAsUnwatched") : t("markAsWatched")}>
             <IconButton
               onClick={handleToggleWatched}
               className={film?.isWatched ? "!bg-success-bg !text-success-foreground" : undefined}
-              aria-label="Watched"
+              aria-label={film?.isWatched ? t("markAsUnwatched") : t("markAsWatched")}
             >
               <CheckIcon />
             </IconButton>
@@ -154,7 +191,7 @@ export default function FilmPage() {
 
       {isConfirmDeleteOpen && (
         <ConfirmModal
-          title="Are you sure you want to delete this film?"
+          title={t("deleteConfirmTitle")}
           message={`${film?.name}`}
           onConfirm={handleDelete}
           onCancel={() => setIsConfirmDeleteOpen(false)}

@@ -11,12 +11,15 @@ import Tooltip from "./Tooltip";
 import { TagRadius, TagTone, Tone } from "@/lib/types";
 import { useCategoryModal } from "@/hooks";
 import ConfirmModal from "./ConfirmModal";
+import { useTranslations } from "next-intl";
 
 interface CategoriesModalProps {
   onClose?: () => void;
 }
 
 export default function CategoriesModal({ onClose }: CategoriesModalProps) {
+  const t = useTranslations("categories");
+  const tCommon = useTranslations("common");
   const {
     categories,
     isLoading,
@@ -43,28 +46,28 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
 
   return (
     <Modal
-      title={isEditMode ? "Edit categories" : "Filter by categories"}
+      title={isEditMode ? t("editTitle") : t("filterTitle")}
       onEdit={() => setIsEditMode((prev) => !prev)}
       isEdit={isEditMode}
       onClose={onClose}
-      className="h-[80vh]"
+      className="h-[80dvh]"
       footer={
         <div className="flex flex-col gap-4">
           {isEditMode ? (
             <div className="flex items-center gap-3">
               <FormInput
-                label="Category name"
-                placeholder="Add new category"
+                label={t("nameLabel")}
+                placeholder={t("namePlaceholder")}
                 className="flex-1"
                 value={categoryInputValue}
                 onChange={(e) => setCategoryInputValue(e.target.value)}
               />
-              <Tooltip content={selectedCategory ? "Edit category" : "Add category"}>
+              <Tooltip content={selectedCategory ? t("editCategory") : t("addCategory")}>
                 <IconButton
                   disabled={isAddEditDisabled}
                   tone={Tone.Accent}
                   onClick={selectedCategory ? handleEdit : handleCreate}
-                  aria-label={selectedCategory ? "Edit category" : "Add category"}
+                  aria-label={selectedCategory ? t("editCategory") : t("addCategory")}
                 >
                   {selectedCategory ? <EditIcon /> : <PlusIcon />}
                 </IconButton>
@@ -79,7 +82,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                 selected={selectedNewSeasonOut}
                 onClick={toggleNewSeasonOut}
               >
-                New season
+                {tCommon("newSeasonFilter")}
               </Tag>
               <Tag
                 key="latestEpisode"
@@ -88,18 +91,18 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
                 selected={selectedHasLatestEpisode}
                 onClick={toggleHasLatestEpisode}
               >
-                Latest episode
+                {tCommon("latestEpisodeFilter")}
               </Tag>
             </div>
           )}
           <Button disabled={isSubmitDisabled} onClick={isEditMode ? handleDelete : handleFilter}>
-            {isEditMode ? "Delete" : "Filter"}
+            {isEditMode ? tCommon("delete") : tCommon("filter")}
           </Button>
         </div>
       }
     >
       <>
-        <p className="text-muted-foreground text-sm font-medium">Pick categories:</p>
+        <p className="text-muted-foreground text-sm font-medium">{t("pickCategories")}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {categories.map((category) => (
             <Tag
@@ -123,7 +126,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
         )}
         {blockedByFilms && (
           <ConfirmModal
-            title="You have a film(s) in this category. Please delete this category from the film(s) first."
+            title={t("blockedByFilms", { count: blockedByFilms.length })}
             message={blockedByFilms.join(", ")}
             onConfirm={() => setBlockedByFilms(null)}
           />

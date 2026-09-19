@@ -27,7 +27,10 @@ export default function Tag({
   readOnly = false,
   ...props
 }: TagProps) {
-  const tagClassName = `max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${
+  const interactiveClassName = readOnly
+    ? ""
+    : "focus-ring relative before:absolute before:-inset-y-[3px] before:inset-x-0 before:content-['']";
+  const tagClassName = `${interactiveClassName} max-w-full shrink-0 px-4 py-2 text-sm font-medium whitespace-normal transition-colors ${
     radius === TagRadius.Lg ? "rounded-2xl" : "rounded-full"
   } ${selected ? selectedClassName : toneClassNames[tone]} ${className ?? ""} ${
     readOnly ? "cursor-default" : "cursor-pointer"

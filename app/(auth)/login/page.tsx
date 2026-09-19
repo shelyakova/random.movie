@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FieldErrors, useForm } from "react-hook-form";
+import { FieldErrors, useForm, useWatch } from "react-hook-form";
 import { FormInput, Button, LoadingSpinner } from "@/components";
 import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,22 +9,27 @@ import { useAuthStore } from "@/lib/stores";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/api";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useTranslateError } from "@/hooks/useTranslateError";
 
 export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
+  const translateError = useTranslateError();
 
   const {
     register,
     handleSubmit,
     setError,
-    watch,
+    control,
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: { username: "", password: "" },
   });
 
-  const [username, password] = watch(["username", "password"]);
+  const [username, password] = useWatch({ control, name: ["username", "password"] });
   const isFilled = Boolean(username?.trim()) && Boolean(password?.trim());
 
   const setToken = useAuthStore((state) => state.setToken);
@@ -37,7 +42,7 @@ export default function LoginPage() {
       setToken(response.access_token);
       router.push("/");
     } catch {
-      setError("root", { message: "Incorrect username or password" });
+      setError("root", { message: "auth.incorrectCredentials" });
     } finally {
       setIsSubmitting(false);
     }
@@ -45,12 +50,12 @@ export default function LoginPage() {
 
   const onInvalid = (errors: FieldErrors<LoginSchema>) => {
     const firstError = Object.values(errors)[0];
-    setError("root", { message: firstError?.message ?? "Invalid form data" });
+    setError("root", { message: firstError?.message ?? "auth.invalidFormData" });
   };
 
   return (
     <>
-      <h1 className="sr-only">Log in</h1>
+      <h1 className="sr-only">{t("loginTitle")}</h1>
 
       <form
         className="flex flex-col gap-4"
@@ -62,32 +67,37 @@ export default function LoginPage() {
           handleSubmit(onSubmit, onInvalid)(event);
         }}
       >
-        <FormInput label="Username" type="text" placeholder="Username" {...register("username")} />
+        <FormInput
+          label={t("username")}
+          type="text"
+          placeholder={t("username")}
+          {...register("username")}
+        />
 
         <FormInput
-          label="Password"
+          label={t("password")}
           type="password"
-          placeholder="Password"
+          placeholder={t("password")}
           {...register("password")}
         />
 
         {errors.root ? (
           <p role="alert" className="text-danger text-center text-xs">
-            {errors.root.message}
+            {translateError(errors.root.message)}
           </p>
         ) : (
           <p className="h-4"></p>
         )}
 
         <Button type="submit" disabled={!isFilled}>
-          Login
+          {tCommon("login")}
         </Button>
       </form>
 
       <p className="text-muted-foreground mt-4 text-center text-xs">
-        You don&apos;t have an account?{" "}
-        <Link href="/register" className="cursor-pointer underline">
-          SignUp
+        {t("noAccount")}{" "}
+        <Link href="/register" className="focus-ring cursor-pointer rounded-sm underline">
+          {tCommon("signUp")}
         </Link>
       </p>
 

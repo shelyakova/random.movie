@@ -3,6 +3,7 @@
 import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
+import { useTranslations } from "next-intl";
 
 interface ModalProps {
   title: string;
@@ -35,7 +36,11 @@ export default function Modal({
   role = "dialog",
   ariaLabel,
 }: ModalProps) {
-  const editIconStyle = isEdit ? "cursor-pointer text-accent" : "cursor-pointer text-foreground";
+  const t = useTranslations("common");
+  const tFilm = useTranslations("film");
+  const editIconStyle = isEdit
+    ? "focus-ring cursor-pointer rounded-full p-3 text-accent"
+    : "focus-ring cursor-pointer rounded-full p-3 text-foreground";
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
@@ -95,21 +100,21 @@ export default function Modal({
         aria-labelledby={ariaLabel ? undefined : titleId}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        className={`bg-surface relative flex max-h-[90vh] w-full max-w-sm flex-col rounded-3xl p-6 outline-none ${className ?? ""}`}
+        className={`bg-surface relative flex max-h-[90dvh] w-full max-w-sm flex-col rounded-3xl p-6 outline-none ${className ?? ""}`}
       >
         <div className="flex items-center justify-between gap-4">
           <h2 id={titleId} className="text-foreground text-2xl font-semibold">
             {title}
           </h2>
 
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="-my-1.5 -mr-3 flex shrink-0 items-center">
             {onRefresh && (
-              <Tooltip content="Update from TMDB">
+              <Tooltip content={tFilm("updateFromTmdb")}>
                 <button
                   type="button"
                   onClick={onRefresh}
-                  aria-label="Update from TMDB"
-                  className="text-accent cursor-pointer"
+                  aria-label={tFilm("updateFromTmdb")}
+                  className="text-accent focus-ring cursor-pointer rounded-full p-3"
                 >
                   <RefreshIcon />
                 </button>
@@ -117,8 +122,13 @@ export default function Modal({
             )}
 
             {onEdit && (
-              <Tooltip content="Edit">
-                <button type="button" onClick={onEdit} aria-label="Edit" className={editIconStyle}>
+              <Tooltip content={t("edit")}>
+                <button
+                  type="button"
+                  onClick={onEdit}
+                  aria-label={t("edit")}
+                  className={editIconStyle}
+                >
                   <EditIcon />
                 </button>
               </Tooltip>
@@ -128,8 +138,8 @@ export default function Modal({
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close"
-                className="text-foreground cursor-pointer"
+                aria-label={t("close")}
+                className="text-foreground focus-ring cursor-pointer rounded-full p-3"
               >
                 <CloseIcon />
               </button>
@@ -137,7 +147,9 @@ export default function Modal({
           </div>
         </div>
 
-        <div className="mt-4 flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</div>
+        <div className="-mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1">
+          {children}
+        </div>
 
         {footer && (
           <div className={hideFooterBorder ? "mt-4" : "border-border-subtle mt-4 border-t pt-4"}>
