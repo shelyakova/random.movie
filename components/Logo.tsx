@@ -13,17 +13,17 @@ interface LogoProps {
 
 export default function Logo({ size = LogoSize.Small }: LogoProps) {
   const sizeClasses =
-    size === LogoSize.Large ? "text-[96px] leading-[83px]" : "text-[36px] leading-[36px]";
+    size === LogoSize.Large
+      ? "text-[96px] leading-[83px] tv:text-[40px] tv:leading-[40px]"
+      : "text-[36px] leading-[36px] tv:text-[24px] tv:leading-[24px]";
 
   return (
-    <Link href="/" className="cursor-pointer">
+    <Link href="/" className="focus-ring cursor-pointer rounded-lg">
       <p
         className={`${readexPro.className} text-left ${sizeClasses} text-foreground font-semibold`}
       >
-        The
-        <br />
-        Movie
-        <br />
+        The <br className="tv:hidden" />
+        Movie <br className="tv:hidden" />
         List
       </p>
     </Link>

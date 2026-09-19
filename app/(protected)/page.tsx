@@ -6,6 +6,7 @@ import { TagTone, ViewKey } from "@/lib/types";
 import { useFilms, useDebounce, useCategories, useSearchNavigation } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { SLIDER_LIMIT, EXPANDED_LIMIT, SEARCH_LIMIT } from "@/lib/constants/responsive";
 
 function HomeContent() {
   const router = useRouter();
@@ -24,17 +25,17 @@ function HomeContent() {
   const suggested = useFilms({
     isWatched: false,
     search: debouncedSearch,
-    limit: expandedSection === ViewKey.Suggested ? 18 : 10,
+    limit: expandedSection === ViewKey.Suggested ? EXPANDED_LIMIT : SLIDER_LIMIT,
   });
   const previouslyWatched = useFilms({
     isWatched: true,
     search: debouncedSearch,
-    limit: expandedSection === ViewKey.Watched ? 18 : 10,
+    limit: expandedSection === ViewKey.Watched ? EXPANDED_LIMIT : SLIDER_LIMIT,
   });
   const searchResults = useFilms({
     search: debouncedSearch,
     categoryIds: currentCategoryIds,
-    limit: 12,
+    limit: SEARCH_LIMIT,
     newSeasonOut: currentNewSeasonOut,
     hasLatestEpisode: currentHasLatestEpisode,
   });
@@ -48,7 +49,7 @@ function HomeContent() {
 
   return (
     <>
-      <main className="flex flex-col gap-8 pb-10">
+      <main className="tv:gap-5 flex flex-col gap-8 pb-10">
         <h1 className="sr-only">Home</h1>
 
         {isFiltering ? (

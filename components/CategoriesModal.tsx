@@ -47,7 +47,7 @@ export default function CategoriesModal({ onClose }: CategoriesModalProps) {
       onEdit={() => setIsEditMode((prev) => !prev)}
       isEdit={isEditMode}
       onClose={onClose}
-      className="h-[80vh]"
+      className="h-[80dvh]"
       footer={
         <div className="flex flex-col gap-4">
           {isEditMode ? (

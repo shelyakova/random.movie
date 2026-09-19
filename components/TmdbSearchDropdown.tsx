@@ -70,7 +70,7 @@ export default function TmdbSearchDropdown({
         placeholder={placeholder}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background dark:bg-transparent ${
+        className={`text-foreground focus-ring w-full rounded-full border px-5 py-3 text-sm dark:bg-transparent ${
           error ? "border-danger" : "border-border"
         }`}
       />
@@ -89,7 +89,7 @@ export default function TmdbSearchDropdown({
                 key={`${result.type}-${result.tmdbId}`}
                 type="button"
                 onClick={() => handleSelect(result)}
-                className="hover:bg-neutral-fill-hover flex w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm"
+                className="hover:bg-neutral-fill-hover focus-ring flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm"
               >
                 <span className="text-foreground truncate">{result.name}</span>
                 {result.year && (

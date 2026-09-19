@@ -17,7 +17,7 @@ export default function SearchBar({
   const inputId = useId();
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-xl min-w-0">
       <label htmlFor={inputId} className="sr-only">
         {label}
       </label>
@@ -30,7 +30,7 @@ export default function SearchBar({
         onChange={(e) => onChange(e.target.value)}
         type="text"
         placeholder="Search a movie or a series"
-        className="border-border-subtle bg-surface text-foreground placeholder-muted-foreground w-full rounded-full border py-2.5 pr-4 pl-11 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background"
+        className="border-border-subtle bg-surface text-foreground placeholder-muted-foreground focus-ring min-h-11 w-full rounded-full border py-2.5 pr-4 pl-11 text-sm"
       />
     </div>
   );

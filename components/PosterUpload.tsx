@@ -115,7 +115,7 @@ export default function PosterUpload({
             type="button"
             onClick={handleRemove}
             aria-label="Remove poster"
-            className="text-muted-foreground hover:bg-neutral-fill-hover hover:text-accent flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full"
+            className="text-muted-foreground hover:bg-neutral-fill-hover hover:text-accent focus-ring relative flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full before:absolute before:-inset-1.5 before:content-['']"
           >
             <DeleteIcon />
           </button>
@@ -132,7 +132,7 @@ export default function PosterUpload({
       aria-label="Add poster"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className={`border-border relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border ${className ?? ""}`}
+      className={`border-border focus-ring relative flex h-32 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border ${className ?? ""}`}
     >
       {fileInput}
 

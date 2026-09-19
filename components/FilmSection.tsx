@@ -9,6 +9,7 @@ import { useInfiniteScroll } from "@/hooks";
 import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import Tooltip from "./Tooltip";
+import { GRID_CARD_CLASS, GRID_CLASS, SLIDER_CARD_CLASS } from "@/lib/constants/responsive";
 
 interface FilmSectionProps {
   title: string;
@@ -63,7 +64,9 @@ export default function FilmSection({
 
   return (
     <section className="w-full">
-      {title && <h2 className="text-foreground mb-[26px] text-[20px] font-medium">{title}</h2>}
+      {title && (
+        <h2 className="text-foreground tv:mb-4 mb-[26px] text-[20px] font-medium">{title}</h2>
+      )}
 
       {films.length === 0 ? (
         <EmptyState message="No films found" />
@@ -74,32 +77,47 @@ export default function FilmSection({
             onScroll={hasSlider ? updateScrollButtons : undefined}
             className={
               hasSlider
-                ? "no-scrollbar flex gap-3 overflow-x-auto scroll-smooth"
-                : "grid grid-cols-6 gap-4"
+                ? "no-scrollbar -mx-1 -my-1 flex gap-3 overflow-x-auto scroll-smooth px-1 py-1"
+                : GRID_CLASS
             }
           >
             {films.map((film) => (
-              <Link key={film.id} href={`/film/${film.id}`}>
-                <FilmCard film={film} showName showDateIcons className="h-[263px] w-[177px]" />
+              <Link
+                key={film.id}
+                href={`/film/${film.id}`}
+                className={`focus-ring rounded-xl ${hasSlider ? "shrink-0" : "block min-w-0"}`}
+              >
+                <FilmCard
+                  film={film}
+                  showName
+                  showDateIcons
+                  className={hasSlider ? SLIDER_CARD_CLASS : GRID_CARD_CLASS}
+                />
               </Link>
             ))}
           </div>
 
           {hasSlider && canScrollLeft && (
-            <Tooltip content="Scroll left" className="absolute top-1/2 -left-10 -translate-y-1/2">
+            <Tooltip
+              content="Scroll left"
+              className="absolute top-1/2 -translate-y-1/2 max-md:hidden! md:-left-9 lg:-left-10"
+            >
               <button
                 onClick={handleScrollLeft}
-                className="bg-surface text-secondary-foreground flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md"
+                className="bg-surface text-secondary-foreground focus-ring relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md before:absolute before:-inset-1.5 before:content-['']"
               >
                 <ChevronLeftIcon />
               </button>
             </Tooltip>
           )}
           {hasSlider && canScrollRight && (
-            <Tooltip content="Scroll right" className="absolute top-1/2 -right-10 -translate-y-1/2">
+            <Tooltip
+              content="Scroll right"
+              className="absolute top-1/2 -translate-y-1/2 max-md:hidden! md:-right-9 lg:-right-10"
+            >
               <button
                 onClick={handleScrollRight}
-                className="bg-surface text-secondary-foreground flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md"
+                className="bg-surface text-secondary-foreground focus-ring relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full shadow-md before:absolute before:-inset-1.5 before:content-['']"
               >
                 <ChevronRightIcon />
               </button>
@@ -118,7 +136,7 @@ export default function FilmSection({
             <button
               type="button"
               onClick={() => !isLoading && onMoreClick?.()}
-              className="text-muted-foreground mt-2 block w-full cursor-pointer appearance-none border-0 bg-transparent p-0 text-right text-sm font-medium"
+              className="text-muted-foreground focus-ring flex min-h-11 w-full cursor-pointer appearance-none items-center justify-end rounded-lg border-0 bg-transparent p-0 text-sm font-medium"
             >
               More
             </button>

@@ -28,7 +28,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textare
         rows={rows}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground placeholder-muted-foreground w-full resize-none rounded-3xl border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`text-foreground placeholder-muted-foreground focus-ring w-full resize-none rounded-3xl border px-5 py-3 text-sm ${
           error ? "border-danger" : "border-border"
         } ${className ?? ""}`}
         {...props}

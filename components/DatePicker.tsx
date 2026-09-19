@@ -40,7 +40,7 @@ export default function DatePicker({
             input: {
               field: {
                 input: {
-                  base: "block w-full text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background",
+                  base: "block w-full text-sm text-foreground placeholder-muted-foreground focus-ring",
                   colors: {
                     gray: "border border-border bg-transparent focus:border-border dark:bg-transparent",
                   },

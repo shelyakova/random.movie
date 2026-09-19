@@ -32,7 +32,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
         type={isPassword && showPassword ? "text" : type}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground placeholder-muted-foreground w-full rounded-full border px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`text-foreground placeholder-muted-foreground focus-ring w-full rounded-full border px-5 py-3 text-sm ${
           error ? "border-danger" : "border-border"
         } ${isPassword ? "pr-11" : ""} ${className ?? ""}`}
         {...props}
@@ -46,7 +46,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="text-muted-foreground cursor-pointer"
+            className="text-muted-foreground focus-ring -m-3.5 cursor-pointer rounded-full p-3.5"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}

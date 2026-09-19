@@ -94,7 +94,7 @@ export default function RegisterPage() {
 
       <p className="text-muted-foreground mt-4 text-center text-xs">
         Already have an account?{" "}
-        <Link href="/login" className="cursor-pointer underline">
+        <Link href="/login" className="focus-ring cursor-pointer rounded-sm underline">
           Login
         </Link>
       </p>

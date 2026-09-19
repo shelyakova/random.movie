@@ -29,12 +29,12 @@ export default function Header({
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   return (
-    <header className="grid w-full grid-cols-[1fr_3fr_1fr] items-center gap-4 py-11">
-      <div className="justify-self-start">
+    <header className="nav:grid-cols-[1fr_3fr_1fr] nav:py-11 tv:grid-cols-[auto_1fr_auto] tv:pt-10 tv:pb-2 grid w-full grid-cols-[1fr_auto] items-center gap-4 py-4 sm:py-6">
+      <div className="col-start-1 row-start-1 justify-self-start">
         <Logo />
       </div>
 
-      <div className="flex items-center justify-center gap-5">
+      <div className="nav:col-span-1 nav:col-start-2 nav:row-start-1 nav:gap-5 col-span-2 col-start-1 row-start-2 flex items-center justify-center gap-2 sm:gap-3">
         <Tooltip content="Settings">
           <IconButton onClick={onOpenCategoriesModal} aria-label="Settings">
             <SettingsIcon />
@@ -66,7 +66,7 @@ export default function Header({
         </Tooltip>
       </div>
 
-      <div className="justify-self-end">
+      <div className="nav:col-start-3 col-start-2 row-start-1 justify-self-end">
         <Tooltip content="Add film">
           <IconButton onClick={onOpenFilmModal} aria-label="Add films">
             <PlusIcon />

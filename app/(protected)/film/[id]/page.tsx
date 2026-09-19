@@ -18,6 +18,7 @@ import { useDeleteFilm, useSetIsWatched } from "@/hooks/useFilms";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { format } from "date-fns";
+import { ACTION_GROUP, ACTION_ROW, CONTENT_ROW, DATES_ROW, DESCRIPTION_SIZE, DETAILS_COLUMN, META_SIZE, PAGE_PADDING, POSTER_COLUMN_WIDTH, POSTER_SIZE, TITLE_SIZE, TV_POSTER_VARS } from "@/lib/constants/responsive";
 
 export default function FilmPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -67,13 +68,20 @@ export default function FilmPage() {
 
   return (
     <>
-      <main className="flex flex-1 flex-col pb-8">
-        <h1 className="text-foreground mb-6 text-[40px] font-semibold">{film?.name}</h1>
+      <main className={`${PAGE_PADDING} flex flex-1 flex-col ${TV_POSTER_VARS}`}>
+        <h1 className={`text-foreground ${TITLE_SIZE} font-semibold wrap-break-word`}>
+          {film?.name}
+        </h1>
 
-        <div className="flex gap-8">
-          <FilmCard film={film} showYear showMark className="h-[548px] w-[369px]" />
+        <div className={CONTENT_ROW}>
+          <FilmCard
+            film={film}
+            showYear
+            showMark
+            className={`${POSTER_SIZE} ${POSTER_COLUMN_WIDTH}`}
+          />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-8">
+          <div className={DETAILS_COLUMN}>
             <div className="flex flex-wrap gap-2">
               {film?.categories.map((category) => (
                 <Tag key={category.id} tone={TagTone.Outline} readOnly>
@@ -83,16 +91,18 @@ export default function FilmPage() {
             </div>
 
             {metaParts.length > 0 && (
-              <p className="border-border text-muted-foreground border-b pb-4 text-[20px] font-medium">
+              <p
+                className={`border-border text-muted-foreground border-b ${META_SIZE} font-medium`}
+              >
                 {metaParts.join(" - ")}
               </p>
             )}
 
             {(film?.newSeason || film?.latestEpisode) && (
-              <div className="flex gap-4">
+              <div className={DATES_ROW}>
                 {film?.newSeason && (
                   <div>
-                    <p className="text-s text-muted-foreground pb-1 font-medium">New season</p>
+                    <p className="text-muted-foreground pb-1 text-sm font-medium">New season</p>
                     <Tag readOnly tone={isNewSeasonOut ? TagTone.Success : TagTone.Outline}>
                       {format(new Date(film.newSeason), "dd.MM.yyyy")}
                     </Tag>
@@ -100,7 +110,7 @@ export default function FilmPage() {
                 )}
                 {film?.latestEpisode && (
                   <div>
-                    <p className="text-s text-muted-foreground pb-1 font-medium">Latest episode</p>
+                    <p className="text-muted-foreground pb-1 text-sm font-medium">Latest episode</p>
                     <Tag readOnly tone={isLatestEpisodeOut ? TagTone.Success : TagTone.Outline}>
                       {format(new Date(film.latestEpisode), "dd.MM.yyyy")}
                     </Tag>
@@ -109,14 +119,16 @@ export default function FilmPage() {
               </div>
             )}
 
-            <p className="text-secondary-foreground text-[18px] leading-relaxed">
+            <p
+              className={`text-secondary-foreground max-w-3xl ${DESCRIPTION_SIZE} leading-relaxed`}
+            >
               {film?.description}
             </p>
           </div>
         </div>
 
-        <div className="mt-auto flex items-center justify-between pt-10">
-          <div className="flex w-[369px] items-center gap-2">
+        <div className={ACTION_ROW}>
+          <div className={ACTION_GROUP}>
             <Tooltip content="Edit">
               <IconButton onClick={() => setIsEditModalOpen(true)} aria-label="Edit">
                 <EditIcon />
@@ -129,7 +141,7 @@ export default function FilmPage() {
               </IconButton>
             </Tooltip>
 
-            <div className="flex-1">
+            <div className="min-w-0 flex-1">
               <Button className="!mt-0" href={film?.link}>
                 Go to page
               </Button>

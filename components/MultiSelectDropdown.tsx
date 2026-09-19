@@ -74,7 +74,7 @@ export default function MultiSelectDropdown({
         onClick={() => setIsOpen((prev) => !prev)}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={showError ? errorId : undefined}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-background ${
+        className={`focus-ring flex w-full items-center justify-between gap-3 rounded-full border px-5 py-3 text-left text-sm ${
           error ? "border-danger" : "border-border"
         }`}
       >

@@ -54,7 +54,7 @@ function ProtectedLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="bg-background flex flex-1 flex-col px-20">
+    <div className="bg-background mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20">
       <Header
         searchValue={currentSearch}
         onSearchChange={handleSearchChange}

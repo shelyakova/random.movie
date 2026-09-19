@@ -26,7 +26,7 @@ export default function ConfirmModal({
       ariaLabel={message ? `${title} ${message}` : title}
       onClose={onCancel ?? onConfirm}
       hideFooterBorder
-      className={message ? "min-h-[333px]" : "min-h-[250px]"}
+      className={message ? "min-h-[min(333px,90dvh)]" : "min-h-[min(250px,90dvh)]"}
       footer={
         <div className="flex gap-3">
           {onCancel && (
