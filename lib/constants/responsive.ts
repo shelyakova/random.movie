@@ -11,7 +11,7 @@ export const POSTER_SIZE = "tv:h-(--poster-h) aspect-[369/548] w-full md:self-st
 export const PAGE_PADDING = "tv:pb-4 pb-8";
 export const CONTENT_ROW = "tv:gap-5 flex flex-col gap-6 md:flex-row md:gap-8";
 export const DETAILS_COLUMN =
-  "tv:max-h-(--poster-h) tv:gap-3 tv:overflow-y-auto flex min-w-0 flex-1 flex-col gap-6 md:gap-8";
+  "tv:max-h-(--poster-h) tv:gap-3 tv:overflow-y-auto themed-scrollbar flex min-w-0 flex-1 flex-col gap-6 md:gap-8";
   export const DATES_ROW = "flex flex-col gap-4 md:flex-row md:flex-wrap";
   export const ACTION_ROW = "tv:pt-4 mt-auto flex items-center gap-2 pt-8 md:justify-between md:pt-10";
   export const ACTION_GROUP = `contents md:flex md:items-center md:gap-2 ${POSTER_COLUMN_WIDTH}`;

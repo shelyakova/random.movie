@@ -80,29 +80,31 @@ export default function TmdbSearchDropdown({
       />
 
       {isOpen && debouncedQuery.trim().length > 1 && (
-        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 max-h-64 w-full overflow-y-auto rounded-3xl border p-2 shadow-lg">
-          {isFetching && (
-            <p className="text-muted-foreground px-3 py-2 text-sm">{t("searching")}</p>
-          )}
+        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 flex max-h-64 w-full flex-col rounded-3xl border p-2 shadow-lg">
+          <div className="themed-scrollbar min-h-0 overflow-y-auto">
+            {isFetching && (
+              <p className="text-muted-foreground px-3 py-2 text-sm">{t("searching")}</p>
+            )}
 
-          {!isFetching && results.length === 0 && (
-            <p className="text-muted-foreground px-3 py-2 text-sm">{t("noResults")}</p>
-          )}
+            {!isFetching && results.length === 0 && (
+              <p className="text-muted-foreground px-3 py-2 text-sm">{t("noResults")}</p>
+            )}
 
-          {!isFetching &&
-            results.map((result) => (
-              <button
-                key={`${result.type}-${result.tmdbId}`}
-                type="button"
-                onClick={() => handleSelect(result)}
-                className="hover:bg-neutral-fill-hover focus-ring flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm"
-              >
-                <span className="text-foreground truncate">{result.name}</span>
-                {result.year && (
-                  <span className="text-muted-foreground shrink-0">{result.year}</span>
-                )}
-              </button>
-            ))}
+            {!isFetching &&
+              results.map((result) => (
+                <button
+                  key={`${result.type}-${result.tmdbId}`}
+                  type="button"
+                  onClick={() => handleSelect(result)}
+                  className="hover:bg-neutral-fill-hover focus-ring flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm"
+                >
+                  <span className="text-foreground truncate">{result.name}</span>
+                  {result.year && (
+                    <span className="text-muted-foreground shrink-0">{result.year}</span>
+                  )}
+                </button>
+              ))}
+          </div>
         </div>
       )}
 

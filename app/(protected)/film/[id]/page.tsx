@@ -13,6 +13,7 @@ import Tag from "@/components/Tag";
 import Tooltip from "@/components/Tooltip";
 import { EditIcon, DeleteIcon, CheckIcon } from "@/components/icons";
 import { TagTone } from "@/lib/types";
+import { parseDateOnly } from "@/lib/utils/date";
 import { useGetFilmById } from "@/hooks";
 import { useDeleteFilm, useSetIsWatched } from "@/hooks/useFilms";
 import { useParams } from "next/navigation";
@@ -52,9 +53,9 @@ export default function FilmPage() {
   const isLoading = isFilmLoading || setIsWatched.isPending;
   const hasFilm = !!film && Object.keys(film).length > 0;
 
-  const isNewSeasonOut = film?.newSeason ? new Date(film.newSeason) <= new Date() : false;
+  const isNewSeasonOut = film?.newSeason ? parseDateOnly(film.newSeason) <= new Date() : false;
   const isLatestEpisodeOut = film?.latestEpisode
-    ? new Date(film.latestEpisode) <= new Date()
+    ? parseDateOnly(film.latestEpisode) <= new Date()
     : false;
 
   const metaParts = [
@@ -124,7 +125,7 @@ export default function FilmPage() {
                       {t("newSeason")}
                     </p>
                     <Tag readOnly tone={isNewSeasonOut ? TagTone.Success : TagTone.Outline}>
-                      {formatter.dateTime(new Date(film.newSeason), DATE_FORMAT)}
+                      {formatter.dateTime(parseDateOnly(film.newSeason), DATE_FORMAT)}
                     </Tag>
                   </div>
                 )}
@@ -134,7 +135,7 @@ export default function FilmPage() {
                       {t("latestEpisode")}
                     </p>
                     <Tag readOnly tone={isLatestEpisodeOut ? TagTone.Success : TagTone.Outline}>
-                      {formatter.dateTime(new Date(film.latestEpisode), DATE_FORMAT)}
+                      {formatter.dateTime(parseDateOnly(film.latestEpisode), DATE_FORMAT)}
                     </Tag>
                   </div>
                 )}

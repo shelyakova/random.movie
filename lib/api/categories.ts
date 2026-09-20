@@ -15,7 +15,7 @@ export function createCategory(data: CreateCategoryPayload) {
 export function editCategory(name: string, categoryId: number) {
   return authorizedFetch<Category>(`/category/${categoryId}`, {
     method: "PATCH",
-    body: JSON.stringify(name),
+    body: JSON.stringify({ name }),
   });
 }
 

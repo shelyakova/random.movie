@@ -1,7 +1,9 @@
 "use client";
 
 import { useId } from "react";
-import { Datepicker as FlowbiteDatepicker } from "flowbite-react";
+import { Datepicker as FlowbiteDatepicker, WeekStart } from "flowbite-react";
+import { useLocale, useTranslations } from "next-intl";
+import { formatDateOnly, parseDateOnly } from "@/lib/utils/date";
 
 interface DatePickerProps {
   value?: string | null;
@@ -20,6 +22,8 @@ export default function DatePicker({
   className,
   isRightPopupOriented,
 }: DatePickerProps) {
+  const t = useTranslations("common");
+  const locale = useLocale();
   const inputId = useId();
 
   return (
@@ -30,11 +34,15 @@ export default function DatePicker({
       <FlowbiteDatepicker
         key={value}
         id={inputId}
-        value={value ? new Date(value) : null}
+        value={value ? parseDateOnly(value) : null}
         onChange={(date: Date | null) => {
-          onChange(date ? date.toISOString().split("T")[0] : null);
+          onChange(date ? formatDateOnly(date) : null);
         }}
         placeholder={placeholder}
+        language={locale}
+        weekStart={locale === "uk" ? WeekStart.Monday : WeekStart.Sunday}
+        labelTodayButton={t("today")}
+        labelClearButton={t("clear")}
         theme={{
           root: {
             input: {
