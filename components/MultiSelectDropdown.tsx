@@ -92,18 +92,20 @@ export default function MultiSelectDropdown({
       </button>
 
       {isOpen && (
-        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 max-h-48 w-full overflow-y-auto rounded-3xl border p-4 shadow-lg">
-          <div className="flex flex-wrap gap-2">
-            {options.map((option) => (
-              <Tag
-                key={option.id}
-                radius={option.name.length > 20 ? TagRadius.Lg : TagRadius.Full}
-                selected={selectedIds.includes(option.id)}
-                onClick={() => toggleOption(option.id)}
-              >
-                {option.name}
-              </Tag>
-            ))}
+        <div className="border-border bg-surface absolute top-[calc(100%+8px)] left-0 z-20 flex max-h-48 w-full flex-col rounded-3xl border p-3 shadow-lg">
+          <div className="themed-scrollbar min-h-0 overflow-y-auto p-1">
+            <div className="flex flex-wrap gap-2">
+              {options.map((option) => (
+                <Tag
+                  key={option.id}
+                  radius={option.name.length > 20 ? TagRadius.Lg : TagRadius.Full}
+                  selected={selectedIds.includes(option.id)}
+                  onClick={() => toggleOption(option.id)}
+                >
+                  {option.name}
+                </Tag>
+              ))}
+            </div>
           </div>
         </div>
       )}

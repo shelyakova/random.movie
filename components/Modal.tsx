@@ -147,7 +147,7 @@ export default function Modal({
           </div>
         </div>
 
-        <div className="-mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1">
+        <div className="themed-scrollbar -mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1">
           {children}
         </div>
 

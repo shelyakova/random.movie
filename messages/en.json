@@ -15,7 +15,9 @@
     "select": "Select",
     "close": "Close",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "today": "Today",
+    "clear": "Clear"
   },
   "auth": {
     "loginTitle": "Log in",

@@ -15,7 +15,9 @@
     "select": "Оберіть",
     "close": "Закрити",
     "showPassword": "Показати пароль",
-    "hidePassword": "Сховати пароль"
+    "hidePassword": "Сховати пароль",
+    "today": "Сьогодні",
+    "clear": "Очистити"
   },
   "auth": {
     "loginTitle": "Вхід",

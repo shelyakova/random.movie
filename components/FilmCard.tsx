@@ -3,6 +3,7 @@ import { BellIcon, CalendarIcon, ImagePlaceholderIcon } from "./icons";
 import Tag from "./Tag";
 import Tooltip from "./Tooltip";
 import { useTranslations } from "next-intl";
+import { parseDateOnly } from "@/lib/utils/date";
 
 interface FilmCardProps {
   film?: Film;
@@ -22,9 +23,9 @@ export default function FilmCard({
   showDateIcons = false,
 }: FilmCardProps) {
   const t = useTranslations("film");
-  const isNewSeasonOut = film?.newSeason ? new Date(film.newSeason) <= new Date() : false;
+  const isNewSeasonOut = film?.newSeason ? parseDateOnly(film.newSeason) <= new Date() : false;
   const isLatestEpisodeOut = film?.latestEpisode
-    ? new Date(film.latestEpisode) <= new Date()
+    ? parseDateOnly(film.latestEpisode) <= new Date()
     : false;
 
   return (

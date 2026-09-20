@@ -24,17 +24,21 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textare
       <label htmlFor={inputId} className="sr-only">
         {label}
       </label>
-      <textarea
-        ref={ref}
-        id={inputId}
-        rows={rows}
-        aria-invalid={error ? "true" : undefined}
-        aria-describedby={showError ? errorId : undefined}
-        className={`text-foreground placeholder-muted-foreground focus-ring w-full resize-none rounded-3xl border px-5 py-3 text-sm ${
+      <div
+        className={`has-focus-visible:ring-accent has-focus-visible:ring-offset-background rounded-3xl border py-3 pr-3 pl-5 has-focus-visible:ring-2 has-focus-visible:ring-offset-1 ${
           error ? "border-danger" : "border-border"
         } ${className ?? ""}`}
-        {...props}
-      />
+      >
+        <textarea
+          ref={ref}
+          id={inputId}
+          rows={rows}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={showError ? errorId : undefined}
+          className="themed-scrollbar text-foreground placeholder-muted-foreground block w-full resize-none bg-transparent pr-2 text-sm outline-none"
+          {...props}
+        />
+      </div>
       {showError && (
         <p id={errorId} className="text-danger mt-1 text-xs">
           {translateError(errorMessage)}

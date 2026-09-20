@@ -14,7 +14,7 @@ export default function Button({
   target,
   ...props
 }: ButtonProps) {
-  const buttonClassName = `focus-ring mt-2 flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-medium text-accent-foreground transition-colors ${
+  const buttonClassName = `focus-ring mt-2 flex w-full items-center justify-center rounded-full px-5 py-3 text-center text-sm font-medium text-accent-foreground transition-colors ${
     disabled ? "cursor-not-allowed bg-disabled" : "cursor-pointer bg-accent"
   } ${className ?? ""}`;
 
