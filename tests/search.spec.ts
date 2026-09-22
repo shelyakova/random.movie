@@ -56,6 +56,15 @@ test.describe("search", () => {
     }
   });
 
+  test("rapid typing does not drop characters from the search input", async ({ page }) => {
+    const rapidText = "The Quick Brown Fox Jumps 12345";
+    const searchInput = getSearchInput(page);
+
+    await searchInput.pressSequentially(rapidText, { delay: 1 });
+
+    await expect(searchInput).toHaveValue(rapidText);
+  });
+
   test("TMDB search dropdown autofills the add-film form", async ({ page }) => {
     await getAddFilmButton(page).click();
 
