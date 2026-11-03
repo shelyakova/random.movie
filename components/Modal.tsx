@@ -4,6 +4,7 @@ import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
 import { useTranslations } from "next-intl";
+import { ArrowKey, findSpatialNeighbor, isArrowKey } from "@/lib/utils/spatial-navigation";
 
 interface ModalProps {
   title: string;
@@ -22,6 +23,10 @@ interface ModalProps {
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+// Controls whose own arrow-key behaviour (caret movement, option picking) must win over navigation.
+const NATIVE_ARROW_SELECTOR = 'textarea, select, [contenteditable="true"]';
+const ARROW_SCROLL_STEP = 80;
 
 export default function Modal({
   title,
@@ -44,6 +49,7 @@ export default function Modal({
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
@@ -54,6 +60,55 @@ export default function Modal({
     };
   }, []);
 
+  const getFocusable = () =>
+    Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
+      (el) => el.offsetParent !== null,
+    );
+
+  // TV remotes only send arrow keys (no Tab), so move focus spatially between controls; focusing an
+  // element scrolls it into view, which is what makes the scrollable modal body reachable.
+  const handleArrowKey = (event: KeyboardEvent<HTMLDivElement>, key: ArrowKey) => {
+    const dialog = dialogRef.current;
+    const target = event.target as HTMLElement;
+    if (!dialog || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+    // A nested modal (e.g. ConfirmModal inside CategoriesModal) handles its own keys.
+    if (target.closest('[role="dialog"], [role="alertdialog"]') !== dialog) return;
+    if (target.closest(NATIVE_ARROW_SELECTOR)) return;
+    if (target instanceof HTMLInputElement && (key === "ArrowLeft" || key === "ArrowRight")) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const focusable = getFocusable();
+    const fromIndex = focusable.indexOf(target);
+
+    if (fromIndex === -1) {
+      // First press right after opening: start at the content rather than the header icons.
+      (focusable.find((el) => bodyRef.current?.contains(el)) ?? focusable[0])?.focus();
+      return;
+    }
+
+    const nextIndex = findSpatialNeighbor(
+      target.getBoundingClientRect(),
+      fromIndex,
+      focusable.map((el) => el.getBoundingClientRect()),
+      key,
+    );
+
+    if (nextIndex !== -1) {
+      focusable[nextIndex].focus();
+      focusable[nextIndex].scrollIntoView({ block: "nearest", inline: "nearest" });
+      return;
+    }
+
+    // Nothing focusable that way — still let the remote scroll through non-interactive content.
+    if (key === "ArrowUp" || key === "ArrowDown") {
+      bodyRef.current?.scrollBy({
+        top: key === "ArrowDown" ? ARROW_SCROLL_STEP : -ARROW_SCROLL_STEP,
+      });
+    }
+  };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
       if (!onClose) return;
@@ -62,11 +117,14 @@ export default function Modal({
       return;
     }
 
+    if (isArrowKey(event.key)) {
+      handleArrowKey(event, event.key);
+      return;
+    }
+
     if (event.key !== "Tab" || !dialogRef.current) return;
 
-    const focusable = Array.from(
-      dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-    ).filter((el) => el.offsetParent !== null);
+    const focusable = getFocusable();
 
     if (focusable.length === 0) {
       event.preventDefault();
@@ -147,7 +205,10 @@ export default function Modal({
           </div>
         </div>
 
-        <div className="themed-scrollbar -mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1">
+        <div
+          ref={bodyRef}
+          className="themed-scrollbar -mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1"
+        >
           {children}
         </div>
 
