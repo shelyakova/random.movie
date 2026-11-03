@@ -14,6 +14,8 @@
     "ok": "Ok",
     "select": "Select",
     "close": "Close",
+    "scrollUp": "Scroll up",
+    "scrollDown": "Scroll down",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "today": "Today",
