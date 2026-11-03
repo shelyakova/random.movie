@@ -1,7 +1,16 @@
 "use client";
 
-import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
-import { CloseIcon, EditIcon, RefreshIcon } from "./icons";
+import {
+  KeyboardEvent,
+  ReactNode,
+  WheelEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, EditIcon, RefreshIcon } from "./icons";
 import Tooltip from "./Tooltip";
 import { useTranslations } from "next-intl";
 import { ArrowKey, findSpatialNeighbor, isArrowKey } from "@/lib/utils/spatial-navigation";
@@ -27,6 +36,10 @@ const FOCUSABLE_SELECTOR =
 // Controls whose own arrow-key behaviour (caret movement, option picking) must win over navigation.
 const NATIVE_ARROW_SELECTOR = 'textarea, select, [contenteditable="true"]';
 const ARROW_SCROLL_STEP = 80;
+const PAGE_SCROLL_RATIO = 0.8;
+
+const SCROLL_BUTTON_CLASS =
+  "bg-surface text-secondary-foreground absolute left-1/2 z-10 flex h-10 w-10 -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-border shadow-md";
 
 export default function Modal({
   title,
@@ -60,9 +73,49 @@ export default function Modal({
     };
   }, []);
 
+  // Some TV browsers (e.g. Vivax) turn the remote into a mouse-like cursor and never send arrow keys,
+  // so a scrollable body also gets clickable scroll buttons.
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+
+  const updateScrollButtons = useCallback(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+    setCanScrollUp(body.scrollTop > 1);
+    setCanScrollDown(body.scrollTop + body.clientHeight < body.scrollHeight - 1);
+  }, []);
+
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+
+    updateScrollButtons();
+    const resizeObserver = new ResizeObserver(updateScrollButtons);
+    resizeObserver.observe(body);
+    const mutationObserver = new MutationObserver(updateScrollButtons);
+    mutationObserver.observe(body, { childList: true, subtree: true, characterData: true });
+
+    return () => {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+    };
+  }, [updateScrollButtons]);
+
+  const scrollBodyByPage = (direction: 1 | -1) => {
+    const body = bodyRef.current;
+    if (!body) return;
+    body.scrollBy({ top: direction * body.clientHeight * PAGE_SCROLL_RATIO, behavior: "smooth" });
+  };
+
+  // A pointer at the screen edge sits over the backdrop, not the list; forward that scrolling.
+  const handleBackdropWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (bodyRef.current?.contains(event.target as Node)) return;
+    bodyRef.current?.scrollBy({ top: event.deltaY });
+  };
+
   const getFocusable = () =>
     Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
-      (el) => el.offsetParent !== null,
+      (el) => el.offsetParent !== null && el.tabIndex >= 0,
     );
 
   // TV remotes only send arrow keys (no Tab), so move focus spatially between controls; focusing an
@@ -149,7 +202,10 @@ export default function Modal({
   };
 
   return (
-    <div className="bg-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      onWheel={handleBackdropWheel}
+      className="bg-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
       <div
         ref={dialogRef}
         role={role}
@@ -205,11 +261,42 @@ export default function Modal({
           </div>
         </div>
 
-        <div
-          ref={bodyRef}
-          className="themed-scrollbar -mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1"
-        >
-          {children}
+        <div className="relative -mx-1 mt-3 -mb-1 flex min-h-0 flex-1 flex-col">
+          <div
+            ref={bodyRef}
+            onScroll={updateScrollButtons}
+            className="themed-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-1"
+          >
+            {children}
+          </div>
+
+          {/* Pointer-only helpers: keyboard/remote-key users already scroll via focus. */}
+          {canScrollUp && (
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => scrollBodyByPage(-1)}
+              aria-label={t("scrollUp")}
+              className={`${SCROLL_BUTTON_CLASS} top-1`}
+            >
+              <span className="flex rotate-90">
+                <ChevronLeftIcon />
+              </span>
+            </button>
+          )}
+          {canScrollDown && (
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => scrollBodyByPage(1)}
+              aria-label={t("scrollDown")}
+              className={`${SCROLL_BUTTON_CLASS} bottom-1`}
+            >
+              <span className="flex rotate-90">
+                <ChevronRightIcon />
+              </span>
+            </button>
+          )}
         </div>
 
         {footer && (
