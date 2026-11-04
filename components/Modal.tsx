@@ -38,8 +38,9 @@ const NATIVE_ARROW_SELECTOR = 'textarea, select, [contenteditable="true"]';
 const ARROW_SCROLL_STEP = 80;
 const PAGE_SCROLL_RATIO = 0.8;
 
+// Small arrows capping the scrollbar track (top and bottom of the right edge), like classic scrollbar buttons.
 const SCROLL_BUTTON_CLASS =
-  "bg-surface text-secondary-foreground absolute left-1/2 z-10 flex h-10 w-10 -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-border shadow-md";
+  "bg-surface text-secondary-foreground hover:text-foreground absolute right-0 z-10 flex h-5 w-4 cursor-pointer items-center justify-center [&_svg]:h-3 [&_svg]:w-3";
 
 export default function Modal({
   title,
@@ -277,7 +278,7 @@ export default function Modal({
               tabIndex={-1}
               onClick={() => scrollBodyByPage(-1)}
               aria-label={t("scrollUp")}
-              className={`${SCROLL_BUTTON_CLASS} top-1`}
+              className={`${SCROLL_BUTTON_CLASS} top-0`}
             >
               <span className="flex rotate-90">
                 <ChevronLeftIcon />
@@ -290,7 +291,7 @@ export default function Modal({
               tabIndex={-1}
               onClick={() => scrollBodyByPage(1)}
               aria-label={t("scrollDown")}
-              className={`${SCROLL_BUTTON_CLASS} bottom-1`}
+              className={`${SCROLL_BUTTON_CLASS} bottom-0`}
             >
               <span className="flex rotate-90">
                 <ChevronRightIcon />
